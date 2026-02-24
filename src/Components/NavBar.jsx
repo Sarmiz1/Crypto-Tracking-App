@@ -12,6 +12,7 @@ import SearchBar from "./NavBar_Components/SearchBar";
 import MobileDrawer from "./NavBar_Components/MobileDrawer";
 import DarkModeIcon from "@mui/icons-material/DarkMode";
 import LightModeIcon from "@mui/icons-material/LightMode";
+import Switch  from "@mui/material/Switch";
 
 export default function NavBar({ setMode, mode }) {
 

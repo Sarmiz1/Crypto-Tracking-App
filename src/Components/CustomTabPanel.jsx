@@ -9,7 +9,12 @@ export default function CustomTabPanel({ children, value, index, ...other }) {
       aria-labelledby={`simple-tab-${index}`}
       {...other}
     >
-      {value === index && <Box sx={{ p: 3 }}>{children}</Box>}
+      {value === index && (
+        // Removed horizontal padding + added overflow hidden as safety
+        <Box sx={{ py: 3, px: 0, overflowX: "hidden" }}>
+          {children}
+        </Box>
+      )}
     </div>
   );
 }

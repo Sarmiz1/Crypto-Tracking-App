@@ -8,6 +8,7 @@ import Watchlist from './Pages/Watchlist/Watchlist'
 import { useState } from 'react'
 import appContext from './Context/appContext'
 import Footer from './Components/Footer'
+import DashboardPage from './Pages/Dashboard/DashboardPage';
 
 function App() {
 
@@ -42,11 +43,21 @@ function App() {
         tabValue,
         handleTabChange,
       }}>
-        <NavBar setMode={setMode} mode={mode} />
-
+        
         <Routes>
-          <Route path='/' element={<HomePage />} />
-          <Route path='/watchlist' element={<Watchlist />} />
+          <Route path='/' element={
+            <>
+              <NavBar setMode={setMode} mode={mode} />
+              <HomePage />
+            </>
+            } />
+          <Route path='/watchlist' element={
+            <>
+              <NavBar setMode={setMode} mode={mode} />
+              <Watchlist />
+            </>
+          } />
+          <Route path='/dashboard' element={<DashboardPage />} />
         </Routes>
 
         <Footer />
