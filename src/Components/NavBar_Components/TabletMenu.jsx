@@ -21,7 +21,13 @@ export default function TabletMenu() {
   const handleMenuClose = () => {
   setAnchorEl(null);
   };
-  
+
+
+  const menuItems = [
+    { label: "Dashboard", path: "/dashboard" },
+    { label: "Create an account", path: "/createAccount"},
+    { label: "Log in", path: "/login" },
+  ];
 
   return (
     <Box sx={{ display: { 
@@ -52,36 +58,24 @@ export default function TabletMenu() {
           }
         }}
       > 
-        <MenuItem 
-          component={Link} 
-          to="/createAccount" 
-          onClick={handleMenuClose}
-          sx={{
-            '&:hover': {
-              color: 'black',
-              bgcolor: 'primary.light',
-              fontWeight: 500
-            }
-          }} 
-        > 
-          Create an account 
-        </MenuItem> 
-        <MenuItem 
-          component={Link} 
-          to="/login" 
-          onClick={handleMenuClose}
-          sx={{
-            display: 'flex',
-            justifyContent: 'center',
-            '&:hover': {
-              color: 'black',
-              bgcolor: 'primary.light',
-              fontWeight: 500
-            }
-          }} 
-        > 
-          Login 
-        </MenuItem> 
+        {menuItems.map((item) => ( 
+          <MenuItem 
+            key={item.path}
+            component={Link} 
+            to={item.path} 
+            onClick={handleMenuClose}
+            sx={{
+              '&:hover': {
+                color: 'black',
+                bgcolor: 'orange',
+                fontWeight: 500
+              },
+              justifyContent: 'center'
+            }} 
+          > 
+            {item.label}
+          </MenuItem> 
+        ))}
       </Menu>
     </Box>
   )

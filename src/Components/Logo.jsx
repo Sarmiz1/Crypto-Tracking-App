@@ -1,13 +1,12 @@
-import { Link } from "react-router-dom";
 import Box from "@mui/material/Box";
 import Typography from "@mui/material/Typography";
-import logoPng from "../../assets/crypto_logo.png";
+import logoPng from "../assets/crypto_logo.png";
 
-export default function Logo() {
+export default function Logo({ component, display }) {
 
   return (
     <Box
-      component={Link}
+      component={component}
       to="/"
       sx={{
         display: "flex",
@@ -15,7 +14,7 @@ export default function Logo() {
         textDecoration: "none",
         color: "inherit",
         ml: -1,
-        mr: 1,
+        mr: 5,
         transition: "opacity 0.3s ease",
         '&:hover': {
           opacity: 0.8
@@ -35,7 +34,7 @@ export default function Logo() {
       <Typography
         variant="h6"
         sx={{
-          display: { xs: "none", sm: "block" },
+          display: display,
         }}
       >
         CoinVerse

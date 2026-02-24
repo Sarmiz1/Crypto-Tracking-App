@@ -5,7 +5,6 @@ import { useTheme } from "@mui/material/styles";
 
 
 
-
 function a11yProps(index) {
   return {
     id: `simple-tab-${index}`,
@@ -14,7 +13,7 @@ function a11yProps(index) {
 }
 
 
-export default function TabsSection({value, handleChange}) {
+export default function TabsSection({ value, handleChange }) {
 
   const theme = useTheme();
   const isDark = theme.palette.mode === "dark";
@@ -25,7 +24,7 @@ export default function TabsSection({value, handleChange}) {
       <Box sx={{ borderBottom: 1, borderColor: 'divider', mb: 3}}>
         <Tabs 
           value={value} 
-          onChange={handleChange} 
+          onChange={handleChange}
           aria-label="homepage scroll tabs"
           variant="scrollable"
           scrollButtons

@@ -1,13 +1,7 @@
-import { Container } from "@mui/material"
-import TabsSection from "../../Components/TabsSection"
-import MetricCards from "../../Components/MetricCards"
-import { useContext } from "react";
-import appContext from "../../Context/appContext";
+import { Box } from "@mui/material";
 import CustomTable from "../../Components/CustomTable";
 
-
 export default function Watchlist() {
-
   const coins = [
     {
       rank: 1,
@@ -18,22 +12,22 @@ export default function Watchlist() {
       marketCap: "$99,995,578,123",
       volume: "$18,734,000,000",
       supply: "83.7B USDT",
-      chart: [30, 25, 22, 18, 15, 12, 10]
+      chart: [30, 25, 22, 18, 15, 12, 10],
     },
   ];
 
-  const { tabValue } = useContext(appContext)
-
-
-  return(
-    <Container 
-      spacing='2'
+  return (
+    <Box
       sx={{
-        mt: 10
+        mt: 0,
+        width: "100%",
+        display: "flex",
+        flexDirection: "column",
+        gap: 4,
+        p: 2,
       }}
-    > 
-      {tabValue !== 2 && <MetricCards />}
+    >
       <CustomTable coins={coins} />
-    </Container>
-  )
+    </Box>
+  );
 }

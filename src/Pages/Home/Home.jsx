@@ -1,4 +1,4 @@
-import {  Container, Divider } from "@mui/material";
+import { Container, Divider } from "@mui/material";
 import HeroSection from "./Components/HeroSection";
 import TabsSection from "../../Components/TabsSection";
 import MetricCards from "../../Components/MetricCards";
@@ -12,41 +12,36 @@ import CustomTabPanel from "../../Components/CustomTabPanel";
 import { useContext } from "react";
 import appContext from "../../Context/appContext";
 import InfoSection from "./Components/InfoSection";
+import SubscribeSection from "./Components/SubscribeSection";
 
 export default function HomePage() {
+  const { tabValue, handleTabChange } = useContext(appContext);
 
-  const { tabValue, handleTabChange } = useContext(appContext)
+  return (
+    <>
+      <HeroSection />
 
-  return(
-  <>
-    {/* Hero Section */}
-    <HeroSection />
+      <Container maxWidth="xl" sx={{ mt: 3 }}>
+        <TabsSection value={tabValue} handleChange={handleTabChange} />
 
-    {/* Main Content */}
-    <Container maxWidth="xl" sx={{ mt:3}}>
-      {/* Tabs */}
-      <TabsSection value={tabValue} handleChange={handleTabChange}/>
-      {/* Market Grid */}
-      {tabValue !== 3 && <MetricCards />}
-      {/* Filters Row */}
-      <TopCoinTable value={tabValue}/>
-      <TrendingCoinTable value={tabValue} />
-      <CustomTabPanel value={tabValue} index={2}>
-        <Watchlist />
-      </CustomTabPanel>
-      <MostVisitedCoinTable value={tabValue} />
-      <NewCoinTable value={tabValue} />
-      <PredictionMarket value={tabValue} />
-      <InfoSection />
-      <Divider sx={{
-        my: 3,
-        borderBottomWidth: 2
-        }} 
-      />
+        {/* Show metrics on all tabs except index 2 (Watchlist tab) */}
+        {tabValue !== 2 && <MetricCards />}
 
+        <TopCoinTable value={tabValue} />
+        <TrendingCoinTable value={tabValue} />
 
-    </Container>
-  </>
+        <CustomTabPanel value={tabValue} index={2}>
+          <Watchlist />
+        </CustomTabPanel>
 
-  )
+        <MostVisitedCoinTable value={tabValue} />
+        <NewCoinTable value={tabValue} />
+        <PredictionMarket value={tabValue} />
+
+        <InfoSection />
+        <Divider sx={{ my: 3, borderBottomWidth: 2 }} />
+        <SubscribeSection />
+      </Container>
+    </>
+  );
 }

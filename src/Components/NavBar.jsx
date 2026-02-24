@@ -4,7 +4,8 @@ import Box from "@mui/material/Box";
 import IconButton from "@mui/material/IconButton";
 import MenuIcon from "@mui/icons-material/Menu";
 import { useState } from "react";
-import Logo from "./NavBar_Components/Logo";
+import { Link } from "react-router-dom";
+import Logo from "./Logo";
 import DesktopNavLinks from "./NavBar_Components/DesktopNavLinks";
 import TabletMenu from "./NavBar_Components/TabletMenu";
 import SearchBar from "./NavBar_Components/SearchBar";
@@ -13,11 +14,14 @@ import DarkModeIcon from "@mui/icons-material/DarkMode";
 import LightModeIcon from "@mui/icons-material/LightMode";
 
 export default function NavBar({ setMode, mode }) {
+
   const [open, setOpen] = useState(false);
 
   const toggleDrawer = (state) => () => {
     setOpen(state);
   };
+  
+  const display = { xs: "none", sm: "block" }
 
   return (
     <>
@@ -29,7 +33,7 @@ export default function NavBar({ setMode, mode }) {
             justifyContent: "space-between",
           }}
         >
-          <Logo />
+          <Logo component={Link} display={display} />
           <DesktopNavLinks />
           <TabletMenu />
           <SearchBar />

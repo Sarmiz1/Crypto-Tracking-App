@@ -1,163 +1,53 @@
-import {
-  List,
-  ListItem,
-  ListItemText,
-  Box
-} from "@mui/material";
-import { Link } from "react-router-dom";
+import { Box, List, ListItem, ListItemText } from "@mui/material";
+import { Link, useLocation } from "react-router-dom";
+import { useTheme } from "@mui/material/styles";
 
 
+export default function DesktopNav() {
+  
+  const location = useLocation();
+  const theme = useTheme();
+  const isDark = theme.palette.mode === "dark";
 
+  const navItems = [
+    { label: "Home", path: "/" },
+    { label: "Dashboard", path: "/dashboard" },
+    { label: "DexScan", path: "/dexscan" },
+    { label: "Exchanges", path: "/exchanges" },
+    { label: "Portfolio", path: "/portfolio" },
+    { label: "Watchlist", path: "/watchlist" },
+    { label: "Log In", path: "/login" },
+  ];
 
-export default function DesktopNavLinks() {
+  return (
+    <Box sx={{ display: { xs: "none", md: "block" } }}>
+      <List sx={{ display: "flex", gap: {md: 1, lg: 2} }}>
+        {navItems.map((item) => {
+          const isActive = location.pathname === item.path;
 
-  return(
-    <List sx={{
-      display: {
-        xs: 'none',
-        md: 'flex'
-      },
-      ml: 4
-    }}>
-
-      <ListItem
-        component={Link}
-        to="/dashboard"
-        sx={{ 
-          textAlign: "center",
-          '&:hover': {
-            opacity: 0.8
-          } 
-        }}
-      >
-        <ListItemText 
-          primary="Dashboard" 
-          primaryTypographyProps={{fontWeight: 500}} 
-        />
-      </ListItem>
-
-      <ListItem
-        component={Link}
-        to="/dexscan"
-        sx={{ 
-          textAlign: "center" ,
-          '&:hover': {
-            opacity: 0.8
-          }  
-        }}
-      >
-        <ListItemText 
-          primary="DexScan" 
-          primaryTypographyProps={{fontWeight: 500}} 
-        />
-      </ListItem>
-
-      <ListItem
-        component={Link}
-        to="/exchanges"
-        sx={{ 
-          textAlign: "center" ,
-          '&:hover': {
-            opacity: 0.8
-          }
-        }}
-      >
-        <ListItemText 
-        primary="Exchanges" 
-        primaryTypographyProps={{fontWeight: 500}} 
-        />
-      </ListItem>
-
-
-      <ListItem
-        component={Link}
-        to="/portfolio"
-        sx={{ 
-          textAlign: "center",
-          '&:hover': {
-            opacity: 0.8
-          }
-        }}
-      >
-        <ListItemText 
-          primary="Portfolio" 
-          primaryTypographyProps={{fontWeight: 500}} 
-        />
-      </ListItem>
-
-      <ListItem
-        component={Link}
-        to="/watchlist"
-        sx={{ 
-          textAlign: "center",
-          '&:hover': {
-            opacity: 0.8
-          }
-        }}
-      >
-        <ListItemText 
-          primary="Watchlist"
-          primaryTypographyProps={{fontWeight: 500}} 
-        />
-      </ListItem>
-
-      <Box
-        sx={{
-          display: {
-            md: 'none',
-            lg: 'flex'
-          },
-          ml: 2,
-          gap: 3,                
-        }}
-      >
-
-        <ListItem
-          component={Link}
-          to="/create-account"
-          sx={{ 
-            textAlign: "center",
-            bgcolor: '#6C3BAA',
-            borderRadius: 2,
-            color: 'white',
-            fontWeight: 700,
-            '&:hover': {
-              bgcolor: '#9932CC',
-              outline: 2,
-              borderColor: 'purple',
-              color: 'rgba(255, 255, 255, 0.8)'
-            }
-          }}
-        >
-          <ListItemText 
-            primary="Sign up"
-            primaryTypographyProps={{fontWeight: 600}}  
-          />
-        </ListItem>
-
-        <ListItem
-          component={Link}
-          to="/logIn"
-          sx={{ 
-            textAlign: "center",
-            bgcolor: 'primary.main',
-            borderRadius: 2,
-            color: 'white',
-            fontWeight: 700,
-            '&:hover': {
-              bgcolor: 'primary.dark',
-              outline: 2,
-              borderColor: 'purple',
-              color: 'rgba(255, 255, 255, 0.8)'
-            }
-          }}
-        >
-          <ListItemText 
-            primary="Log in"
-            primaryTypographyProps={{fontWeight: 600}}  
-          />
-        </ListItem>
-      </Box>
-    </List>
-  )
+          return (
+            <ListItem
+              key={item.path}
+              component={Link}
+              to={item.path}
+              sx={{
+                cursor: "pointer",
+                width: "auto",
+                color: isActive ? "orange" : isDark ? "rgb(255,255,255)" : "rgb(0,0,0)",
+                fontWeight: isActive ? "700" : "normal",
+                "&:hover": {
+                  color: isActive ? "rgba(255, 140, 0, 0.9)" : isDark ? "rgba(255,255,255,0.4)" : "rgba(0,0,0,0.4)",
+                },
+                ...(item.label === "Home" && { display: { md: "none", lg: "flex" } }),
+                ...(item.label === "Dashboard" && { display: { md: "none", lg: "flex" } }),
+                ...(item.label === "Log In" && { display: { md: "none", lg: "flex" } }),
+              }}
+            >
+              <ListItemText primary={item.label} />
+            </ListItem>
+          );
+        })}
+      </List>
+    </Box>
+  );
 }
