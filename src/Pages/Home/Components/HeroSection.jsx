@@ -72,11 +72,15 @@ export default function HeroSection() {
       </Box>
 
       {/* Foreground Content */}
-      <Container maxWidth="lg" sx={{ position: "relative", zIndex: 1 }}>
+      <Container maxWidth="lg" sx={{ 
+        position: "relative", 
+        zIndex: 1,
+        textAlign:{xs: "center", sm: "left"}}}
+      >
         <Typography variant="h3" color="blue" fontWeight={700}>
           CoinVerse
         </Typography>
-        <Typography variant="h6" color="blue.100" sx={{ mt: 2 }}>
+        <Typography variant="h6" color="black" sx={{ mt: 2, fontWeight: 500 }}>
           Track crypto markets in real-time.
         </Typography>
         <Button
