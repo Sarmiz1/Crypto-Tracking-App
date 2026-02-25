@@ -2,7 +2,6 @@ import { Box, Drawer, useMediaQuery } from "@mui/material";
 import { useState } from "react";
 
 import MarketTable from "./Components/MarketTable";
-import AltcoinSeasonBar from "./Components/AltcoinSeasonBar";
 import TabSection from "./Components/TabSection";
 import TopAppBar from "./Components/TopAppBar";
 import ModalSection from "./Components/ModalSection";
@@ -11,6 +10,7 @@ import CustomTabPanel from "../../Components/CustomTabPanel";
 import OverviewHeader from "./Components/OverviewHeader";
 import TopMarketCards from "./Components/TopMarketCards";
 import IndexSection from "./Components/IndexSection";
+import CryptoMarketCapChart from "./Components/CryptoMarketCapChart";
 
 export default function DashboardPage() {
   const [tab, setTab] = useState(0);
@@ -78,6 +78,7 @@ export default function DashboardPage() {
             <OverviewHeader darkMode={darkMode} />
             <TopMarketCards setSelectedCoin={setSelectedCoin} darkMode={darkMode} />
             <IndexSection darkMode={darkMode} />
+            <CryptoMarketCapChart />
             {/* <AltcoinSeasonBar /> */}
             <MarketTable />
           </CustomTabPanel>

@@ -10,7 +10,7 @@ import NewCoinTable from "./Components/NewCoinTable";
 import PredictionMarket from "./Components/PredictionMarket";
 import CustomTabPanel from "../../Components/CustomTabPanel";
 import { useContext } from "react";
-import appContext from "../../Context/appContext";
+import { appContext } from "../../Context/AppContextProvider";
 import InfoSection from "./Components/InfoSection";
 import SubscribeSection from "./Components/SubscribeSection";
 

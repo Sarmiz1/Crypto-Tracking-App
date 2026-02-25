@@ -3,7 +3,7 @@ import Toolbar from "@mui/material/Toolbar";
 import Box from "@mui/material/Box";
 import IconButton from "@mui/material/IconButton";
 import MenuIcon from "@mui/icons-material/Menu";
-import { useState } from "react";
+import { useState, useContext } from "react";
 import { Link } from "react-router-dom";
 import Logo from "./Logo";
 import DesktopNavLinks from "./NavBar_Components/DesktopNavLinks";
@@ -12,9 +12,12 @@ import SearchBar from "./NavBar_Components/SearchBar";
 import MobileDrawer from "./NavBar_Components/MobileDrawer";
 import DarkModeIcon from "@mui/icons-material/DarkMode";
 import LightModeIcon from "@mui/icons-material/LightMode";
-import Switch  from "@mui/material/Switch";
+import { appContext } from "../Context/AppContextProvider";
 
-export default function NavBar({ setMode, mode }) {
+
+export default function NavBar() {
+
+  const { mode, setMode } = useContext(appContext)
 
   const [open, setOpen] = useState(false);
 

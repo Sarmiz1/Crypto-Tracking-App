@@ -5,17 +5,25 @@ import {
   MenuItem, 
 } from "@mui/material";
 import Logo from "../Logo";
-
+import { useContext } from "react";
+import { appContext } from "../../Context/AppContextProvider";
 export default function LeftSideGrid({ isDark, textColor }) {
+  const {currency, setCurrency} = useContext(appContext);
+
+  const handleCurrencyChange = (event) => {
+    setCurrency(event.target.value);
+  };
+
   return (
     <Grid item xs={12} md={3}>
       <Box sx={{ display: "flex", flexDirection: "column", gap: 3 }}>
         {/* Logo */}
         <Logo />
 
-        {/* Language Select */}
+        {/* Currency Select */}
         <Select
-          defaultValue="USD"
+          defaultValue={currency}
+          onChange={handleCurrencyChange}
           size="small"
           sx={{
             width: 180,
