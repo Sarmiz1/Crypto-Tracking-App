@@ -1,6 +1,6 @@
 import { Box, Drawer, useMediaQuery } from "@mui/material";
-import { useState } from "react";
-
+import { useState, useContext } from "react";
+import { appContext } from "../../Context/AppContextProvider";
 import MarketTable from "./Components/MarketTable";
 import TabSection from "./Components/TabSection";
 import TopAppBar from "./Components/TopAppBar";
@@ -17,7 +17,8 @@ export default function DashboardPage() {
   const [mobileOpen, setMobileOpen] = useState(false);
 
   const [selectedCoin, setSelectedCoin] = useState(null);
-  const [darkMode, setDarkMode] = useState(false);
+
+  const { mode, setMode } = useContext(appContext);
 
   const isMobile = useMediaQuery("(max-width:900px)");
 
@@ -27,8 +28,8 @@ export default function DashboardPage() {
     <Box
       sx={{
         display: "flex",
-        backgroundColor: darkMode ? "#121212" : "#f5f5f5",
-        color: darkMode ? "#fff" : "#000",
+        backgroundColor: mode === "dark" ? "#121212" : "#f5f5f5",
+        color: mode === "dark" ? "#fff" : "#000",
         minHeight: "100vh",
         overflowX: "hidden",
         mb: -10 
@@ -65,19 +66,19 @@ export default function DashboardPage() {
       {/* MAIN CONTENT */}
       <Box sx={{ flex: 1, overflowX: "hidden" }}>
         <TopAppBar
-          darkMode={darkMode}
-          setDarkMode={setDarkMode}
+          mode={mode}
+          setMode={setMode}
           isMobile={isMobile}
           setMobileOpen={setMobileOpen}
         />
 
         <Box sx={{ px: { xs: 2, md: 4 }, py: 3,}}>
-          <TabSection tab={tab} setTab={setTab} darkMode={darkMode} />
+          <TabSection tab={tab} setTab={setTab} darkMode={mode === "dark"} />
 
           <CustomTabPanel value={tab} index={0}>
-            <OverviewHeader darkMode={darkMode} />
-            <TopMarketCards setSelectedCoin={setSelectedCoin} darkMode={darkMode} />
-            <IndexSection darkMode={darkMode} />
+            <OverviewHeader mode={mode} />
+            <TopMarketCards setSelectedCoin={setSelectedCoin} mode={mode} />
+            <IndexSection mode={mode} />
             <CryptoMarketCapChart />
             {/* <AltcoinSeasonBar /> */}
             <MarketTable />

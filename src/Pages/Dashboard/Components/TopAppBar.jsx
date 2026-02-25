@@ -8,7 +8,7 @@ import {
 import MenuIcon from "@mui/icons-material/Menu";
 import { useState, useEffect } from "react";
 
-export default function TopAppBar({ darkMode, setDarkMode, isMobile, setMobileOpen }) {
+export default function TopAppBar({ mode, setMode, isMobile, setMobileOpen }) {
 
   const [scrolled, setScrolled] = useState(false);
 
@@ -24,14 +24,18 @@ export default function TopAppBar({ darkMode, setDarkMode, isMobile, setMobileOp
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);
 
+  const handleSwitchChange = () => {
+    setMode(mode === "dark" ? "light" : "dark");
+  }
+
 
   return(
     <AppBar
       position="sticky"
       elevation={scrolled ? 4 : 0}
       sx={{
-        backgroundColor: darkMode ? "#1e1e1e" : "#fff",
-        color: darkMode ? "#fff" : "#000",
+        backgroundColor: mode === "dark" ? "#1e1e1e" : "#fff",
+        color: mode === "dark" ? "#fff" : "#000",
       }}
     >
       <Toolbar>
@@ -45,10 +49,10 @@ export default function TopAppBar({ darkMode, setDarkMode, isMobile, setMobileOp
           Crypto Dashboard
         </Typography>
 
-        <Typography mr={1}> {darkMode ? "Light" : "Dark"}</Typography>
+        <Typography mr={1}> {mode === "dark" ? "Light" : "Dark"}</Typography>
         <Switch
-          checked={darkMode}
-          onChange={() => setDarkMode(!darkMode)}
+          checked={mode}
+          onChange={handleSwitchChange}
         />
       </Toolbar>
     </AppBar>
