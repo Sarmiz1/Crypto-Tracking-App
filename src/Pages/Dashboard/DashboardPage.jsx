@@ -10,6 +10,7 @@ import SidebarContent from "./Components/SidebarContent";
 import CustomTabPanel from "../../Components/CustomTabPanel";
 import OverviewHeader from "./Components/OverviewHeader";
 import TopMarketCards from "./Components/TopMarketCards";
+import IndexSection from "./Components/IndexSection";
 
 export default function DashboardPage() {
   const [tab, setTab] = useState(0);
@@ -30,6 +31,7 @@ export default function DashboardPage() {
         color: darkMode ? "#fff" : "#000",
         minHeight: "100vh",
         overflowX: "hidden",
+        mb: -10 
       }}
     >
       {/* MOBILE DRAWER */}
@@ -69,13 +71,14 @@ export default function DashboardPage() {
           setMobileOpen={setMobileOpen}
         />
 
-        <Box sx={{ px: { xs: 2, md: 4 }, py: 3 }}>
+        <Box sx={{ px: { xs: 2, md: 4 }, py: 3,}}>
           <TabSection tab={tab} setTab={setTab} darkMode={darkMode} />
 
           <CustomTabPanel value={tab} index={0}>
             <OverviewHeader darkMode={darkMode} />
             <TopMarketCards setSelectedCoin={setSelectedCoin} darkMode={darkMode} />
-            <AltcoinSeasonBar />
+            <IndexSection darkMode={darkMode} />
+            {/* <AltcoinSeasonBar /> */}
             <MarketTable />
           </CustomTabPanel>
 

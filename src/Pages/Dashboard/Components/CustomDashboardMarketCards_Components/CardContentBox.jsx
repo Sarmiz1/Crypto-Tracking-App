@@ -13,8 +13,8 @@ export default function CardContentBox({ coins, scrollRef, setSelectedCoin }) {
       sx={{
         display: "flex",
         overflowX: "auto",
-        gap: 2,
-        pb: 1,
+        gap: 2.5,                      // a bit more gap between cards
+        pb: 1.5,
         scrollBehavior: "smooth",
         scrollbarWidth: "none",
         msOverflowStyle: "none",
@@ -30,7 +30,7 @@ export default function CardContentBox({ coins, scrollRef, setSelectedCoin }) {
             key={coin.name}
             onClick={() => setSelectedCoin(coin)}
             sx={{
-              minWidth: 280,
+              minWidth: 290,               // slightly wider to avoid squeezing
               flex: "0 0 auto",
               borderRadius: 3,
               boxShadow: 1,
@@ -41,7 +41,12 @@ export default function CardContentBox({ coins, scrollRef, setSelectedCoin }) {
             }}
           >
             <CardContent
-              sx={{ p: 2, display: "flex", alignItems: "center", gap: 2 }}
+              sx={{
+                p: 2,                      // back to comfortable padding
+                display: "flex",
+                alignItems: "center",
+                gap: 2.5,                  // more space between left info and chart
+              }}
             >
               {/* Left side – info */}
               <Box sx={{ flex: 1, minWidth: 0 }}>
@@ -51,8 +56,8 @@ export default function CardContentBox({ coins, scrollRef, setSelectedCoin }) {
                     src={coin.logo}
                     alt={coin.name}
                     sx={{
-                      width: 28,
-                      height: 28,
+                      width: 32,           // better visible size
+                      height: 32,
                       mr: 1.5,
                       borderRadius: "50%",
                       objectFit: "contain",
@@ -63,7 +68,7 @@ export default function CardContentBox({ coins, scrollRef, setSelectedCoin }) {
                   </Typography>
                 </Box>
 
-                <Typography variant="h6" fontWeight={700}>
+                <Typography variant="h6" fontWeight={700} sx={{ mb: 0.5 }}>
                   ${coin.price}
                 </Typography>
 
@@ -75,32 +80,33 @@ export default function CardContentBox({ coins, scrollRef, setSelectedCoin }) {
                     display: "flex",
                     alignItems: "center",
                     gap: 0.5,
+                    mb: 1,
                   }}
                 >
                   {isPositive ? "↑" : "↓"} {Math.abs(coin.change)}%
                 </Typography>
 
                 <Box
-                  sx={{ mt: 1.5, fontSize: "0.75rem", color: "text.secondary" }}
+                  sx={{
+                    fontSize: "0.775rem",   // balanced small text
+                    color: "text.secondary",
+                    lineHeight: 1.3,
+                  }}
                 >
-                  <div>
-                    Market Cap: <strong>{coin.marketCap}</strong>
-                  </div>
-                  <div>
-                    Vol 24h: <strong>{coin.volume24h}</strong>
-                  </div>
+                  <div>Market Cap: <strong>{coin.marketCap}</strong></div>
+                  <div>Vol 24h: <strong>{coin.volume24h}</strong></div>
                 </Box>
               </Box>
 
               {/* Right side – small chart */}
-              <Box sx={{ width: 110, height: 60, flexShrink: 0 }}>
+              <Box sx={{ width: 110, height: 60, flexShrink: 0 }}> {/* 60px gives room without excess height */}
                 <ResponsiveContainer width="100%" height="100%">
                   <LineChart data={coin.sparkline}>
                     <Line
                       type="monotone"
                       dataKey="value"
                       stroke={isPositive ? "#16c784" : "#ea3943"}
-                      strokeWidth={2}
+                      strokeWidth={2.2}
                       dot={false}
                     />
                   </LineChart>
