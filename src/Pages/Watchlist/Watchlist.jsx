@@ -27,7 +27,7 @@ export default function Watchlist() {
         p: 2,
       }}
     >
-      <CustomTable coins={coins} />
+      <CustomTable coins={coins} currency={'USD'}/>
     </Box>
   );
 }

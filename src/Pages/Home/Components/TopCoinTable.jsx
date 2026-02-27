@@ -6,10 +6,10 @@ import { appContext } from "../../../Context/AppContextProvider";
 export default function TopCoinTable({ value }) {
   
   const {cryptoListing, currency} = useContext(appContext);
-  const {data, loading, error} = cryptoListing;
+  const {data: topCoins, loading:topLoading, error: topError} = cryptoListing;
 
-   // Map CoinGecko data to match your table
-  const mappedData = data?.map((coin) => ({
+  // Map CoinGecko data to match your table
+  const mappedData = topCoins?.map((coin) => ({
     id: coin.id,
     market_cap_rank: coin.market_cap_rank,
     name: coin.name,
@@ -25,8 +25,8 @@ export default function TopCoinTable({ value }) {
 
   return (
     <CustomTabPanel value={value} index={0}>
-      {loading && <p>Loading coins...</p>}
-      {error && <p>Error: {error}</p>}
+      {topLoading && <p>Loading coins...</p>}
+      {topError && <p>Error: {topError}</p>}
       {mappedData && <CustomTable coins={mappedData} currency={currency}/>}
     </CustomTabPanel>
   );

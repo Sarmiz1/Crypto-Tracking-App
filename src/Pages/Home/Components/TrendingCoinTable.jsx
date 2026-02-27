@@ -1,49 +1,32 @@
 
 import CustomTabPanel from "../../../Components/CustomTabPanel";
 import CustomTable from "../../../Components/CustomTable";
-
+import { useContext } from "react";
+import { appContext } from "../../../Context/AppContextProvider";
 
 export default function TrendingCoinTable({ value }) { 
+  const { trendingCryptos, currency } = useContext(appContext);
 
-  const coins = [
-    {
-      rank: 1,
-      name: "Bitcoin",
-      symbol: "BTC",
-      price: 67903.32,
-      change24h: -0.13,
-      marketCap: "$1,357,550,467,871",
-      volume: "$47,071,745,849",
-      supply: "19.9M BTC",
-      chart: [10, 20, 18, 25, 22, 28, 26]
-    },
-    {
-      rank: 2,
-      name: "Tether",
-      symbol: "USDT",
-      price: 0.99,
-      change24h: 0.02,
-      marketCap: "$99,995,578,123",
-      volume: "$18,734,000,000",
-      supply: "83.7B USDT",
-      chart: [30, 25, 22, 18, 15, 12, 10]
-    },
-    {
-      rank: 3,
-      name: "Ethereum",
-      symbol: "ETH",
-      price: 1965.09,
-      change24h: -0.10,
-      marketCap: "$237,171,690,401",
-      volume: "$21,397,607,899",
-      supply: "120.69M ETH",
-      chart: [15, 18, 17, 19, 16, 20, 18]
-    },
-  ];
+  const {data, loading, error} = trendingCryptos;
+
+  // Map CoinGecko data to match your table
+  const trendingCoin = data?.map((coin) => ({
+    id: coin.id,
+    market_cap_rank: coin.market_cap_rank,
+    name: coin.name,
+    image: coin.image,
+    current_price: coin.current_price,
+    price_change_percentage_24h: coin.price_change_percentage_24h,
+    market_cap: coin.market_cap,
+    total_volume: coin.total_volume,
+    total_supply: coin.total_supply,
+    chart: coin.sparkline_in_7d?.price || [], // line chart
+  }));
+  
 
   return (
     <CustomTabPanel value={value} index={1}>
-      <CustomTable coins={coins} />
+      <CustomTable coins={trendingCoin} currency={currency} />
     </CustomTabPanel>
   );
 }
