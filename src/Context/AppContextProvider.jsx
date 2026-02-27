@@ -52,7 +52,7 @@ export default function AppContextProvider({ children }) {
       .filter(Boolean); // only keep coins we have data for
   }, [topCoins, trendingData]);
 
-  // --- Prediction Markets From ---
+  // --- Prediction Markets From Manifold---
   const {
     data: predictionMarket,
     loading: predictionLoading,
@@ -61,7 +61,7 @@ export default function AppContextProvider({ children }) {
     "https://api.manifold.markets/v0/markets?limit=20&sort=last-bet-time"
   );
           
-  console.log(predictionMarket)
+  console.log(globalData)
   console.log(predictionError)
 
   const value = {

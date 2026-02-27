@@ -1,48 +1,34 @@
 import CustomTable from "../../../Components/CustomTable";
 import CustomTabPanel from "../../../Components/CustomTabPanel";
-
+import { useContext, useMemo } from "react";
+import { appContext } from "../../../Context/AppContextProvider";
+import { CircularProgress, Box, Alert } from "@mui/material";
 
 export default function NewCoinTable({ value }) { 
+  const { currency, cryptoListing } = useContext(appContext);
+  const { data, loading, error } = cryptoListing || {};
 
-  const coins = [
-    {
-      rank: 1,
-      name: "Bitcoin",
-      symbol: "BTC",
-      price: 67903.32,
-      change24h: -0.13,
-      marketCap: "$1,357,550,467,871",
-      volume: "$47,071,745,849",
-      supply: "19.9M BTC",
-      chart: [10, 20, 18, 25, 22, 28, 26]
-    },
-    {
-      rank: 2,
-      name: "Tether",
-      symbol: "USDT",
-      price: 0.99,
-      change24h: 0.02,
-      marketCap: "$99,995,578,123",
-      volume: "$18,734,000,000",
-      supply: "83.7B USDT",
-      chart: [30, 25, 22, 18, 15, 12, 10]
-    },
-    {
-      rank: 3,
-      name: "Ethereum",
-      symbol: "ETH",
-      price: 1965.09,
-      change24h: -0.10,
-      marketCap: "$237,171,690,401",
-      volume: "$21,397,607,899",
-      supply: "120.69M ETH",
-      chart: [15, 18, 17, 19, 16, 20, 18]
-    },
-  ];
+  // Sort by highest market_cap_rank (newest/lowest ranked coins)
+  const newCoins = useMemo(() => {
+    if (!data) return [];
+
+    return [...data]
+      .filter((coin) => coin.market_cap_rank) // remove null ranks
+      .sort((a, b) => b.market_cap_rank - a.market_cap_rank)
+      .slice(0, 50); // limit to 50 newest
+  }, [data]);
 
   return (
     <CustomTabPanel value={value} index={5}>
-      <CustomTable coins={coins} />
+      {loading ? (
+        <Box sx={{ textAlign: "center", py: 6 }}>
+          <CircularProgress />
+        </Box>
+      ) : error ? (
+        <Alert severity="error">{error}</Alert>
+      ) : (
+        <CustomTable coins={newCoins} currency={currency} />
+      )}
     </CustomTabPanel>
   );
 }
