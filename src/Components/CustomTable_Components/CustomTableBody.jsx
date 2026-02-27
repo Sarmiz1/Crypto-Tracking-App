@@ -12,22 +12,28 @@ import { useTheme } from "@mui/material/styles";
 import {
   LineChart,
   Line,
-  ResponsiveContainer
+  ResponsiveContainer,
+  XAxis,
+  YAxis
 } from "recharts";
 
-export default function CustomTableBody({ coins, stickyBg }) {
-
+export default function CustomTableBody({ coins, stickyBg, currency }) {
   const theme = useTheme();
   const isDark = theme.palette.mode === "dark";
 
+  
   return (
     <TableBody>
       {coins.map((coin) => {
-        const isPositive = coin.change24h >= 0;
+        const isPositive = coin.price_change_percentage_24h >= 0;
+        const chartData = (coin.chart || []).map((price, idx) => ({
+          time: idx,   // X-axis: index of price in sparkline array
+          value: price
+        }));
 
         return (
           <TableRow
-            key={coin.rank}
+            key={coin.id}
             hover
             sx={{
               "&:hover": {
@@ -52,7 +58,7 @@ export default function CustomTableBody({ coins, stickyBg }) {
                 <IconButton size="small">
                   <StarBorderIcon fontSize="small" />
                 </IconButton>
-                {coin.rank}
+                {coin.market_cap_rank}
               </Stack>
             </TableCell>
 
@@ -68,73 +74,49 @@ export default function CustomTableBody({ coins, stickyBg }) {
               }}
             >
               <Stack direction="row" spacing={2} alignItems="center">
-                <Box
+                <Box component={'img'}
+                  alt={`${coin.name} logo`}
+                  src={coin.image}
                   sx={{
                     width: 32,
                     height: 32,
                     borderRadius: "50%",
-                    backgroundColor: "#f7931a"
+                    backgroundColor: "transparent"
                   }}
                 />
                 <Box>
                   <Typography>{coin.name}</Typography>
-                  <Typography
-                    variant="caption"
-                    color="text.secondary"
-                  >
-                    {coin.symbol}
-                  </Typography>
                 </Box>
               </Stack>
             </TableCell>
 
-            <TableCell align="right">
-              ${coin.price.toLocaleString()}
-            </TableCell>
+            <TableCell align="right">{currency.symbol}{coin.current_price}</TableCell>
 
             <TableCell
               align="right"
-              sx={{
-                color: isPositive
-                  ? "success.main"
-                  : "error.main"
-              }}
+              sx={{ color: isPositive ? "success.main" : "error.main" }}
             >
               {isPositive ? "+" : ""}
-              {coin.change24h}%
+              {coin.price_change_percentage_24h?.toFixed(2)}%
             </TableCell>
 
-            <TableCell align="right">
-              {coin.marketCap}
-            </TableCell>
+            <TableCell align="right">{coin.market_cap}</TableCell>
 
-            <TableCell align="right">
-              {coin.volume}
-            </TableCell>
+            <TableCell align="right">{coin.total_volume}</TableCell>
 
-            <TableCell align="right">
-              {coin.supply}
-            </TableCell>
+            <TableCell align="right">{coin.total_supply}</TableCell>
 
+            {/* Sparkline chart */}
             <TableCell align="right">
               <Box sx={{ height: 50, width: 120 }}>
-                <ResponsiveContainer
-                  width="100%"
-                  height="100%"
-                >
-                  <LineChart
-                    data={coin.chart.map((v) => ({
-                      value: v
-                    }))}
-                  >
+                <ResponsiveContainer width="100%" height="100%">
+                  <LineChart data={chartData}>
+                    <XAxis dataKey="time" hide />
+                    <YAxis hide domain={["dataMin", "dataMax"]} />
                     <Line
                       type="monotone"
                       dataKey="value"
-                      stroke={
-                        isPositive
-                          ? "#00c853"
-                          : "#d32f2f"
-                      }
+                      stroke={isPositive ? "#00c853" : "#d32f2f"}
                       strokeWidth={2}
                       dot={false}
                     />
@@ -146,5 +128,5 @@ export default function CustomTableBody({ coins, stickyBg }) {
         );
       })}
     </TableBody>
-  )
+  );
 }

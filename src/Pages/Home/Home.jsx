@@ -16,6 +16,7 @@ import SubscribeSection from "./Components/SubscribeSection";
 
 export default function HomePage() {
   const { tabValue, handleTabChange } = useContext(appContext);
+  
 
   return (
     <>

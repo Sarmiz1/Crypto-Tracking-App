@@ -11,7 +11,11 @@ export default function LeftSideGrid({ isDark, textColor }) {
   const {currency, setCurrency} = useContext(appContext);
 
   const handleCurrencyChange = (event) => {
-    setCurrency(event.target.value);
+    const newValue = {
+      name: event.target.value,
+      symbol: event.target.value === "USD" ? "$" : event.target.value === "NGN" ? "₦" : "€"
+    }
+    setCurrency(newValue);
   };
 
   return (
@@ -22,7 +26,7 @@ export default function LeftSideGrid({ isDark, textColor }) {
 
         {/* Currency Select */}
         <Select
-          defaultValue={currency}
+          defaultValue={currency.name}
           onChange={handleCurrencyChange}
           size="small"
           sx={{

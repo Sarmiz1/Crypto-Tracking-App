@@ -11,6 +11,7 @@ import OverviewHeader from "./Components/OverviewHeader";
 import TopMarketCards from "./Components/TopMarketCards";
 import IndexSection from "./Components/IndexSection";
 import CryptoMarketCapChart from "./Components/CryptoMarketCapChart";
+import CryptoETFsNetFlow from "./Components/CryptoETFsNetFlow";
 
 export default function DashboardPage() {
   const [tab, setTab] = useState(0);
@@ -79,7 +80,8 @@ export default function DashboardPage() {
             <OverviewHeader mode={mode} />
             <TopMarketCards setSelectedCoin={setSelectedCoin} mode={mode} />
             <IndexSection mode={mode} />
-            <CryptoMarketCapChart />
+            <CryptoMarketCapChart mode={mode} />
+            <CryptoETFsNetFlow mode={mode} />
             {/* <AltcoinSeasonBar /> */}
             <MarketTable />
           </CustomTabPanel>

@@ -1,14 +1,9 @@
-import { useRef, useState, useEffect } from "react";
 import {
   Box,
   Card,
   CardContent,
   Typography,
-  IconButton,
-  Container,
 } from "@mui/material";
-import ChevronLeftIcon from "@mui/icons-material/ChevronLeft";
-import ChevronRightIcon from "@mui/icons-material/ChevronRight";
 import { LineChart, Line, ResponsiveContainer } from "recharts";
 
 export default function ContentCardsBox({ items, scrollRef }) {

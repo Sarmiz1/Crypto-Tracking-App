@@ -6,6 +6,7 @@ import HomePage from "./Pages/Home/Home";
 import Watchlist from "./Pages/Watchlist/Watchlist";
 import Footer from "./Components/Footer";
 import DashboardPage from "./Pages/Dashboard/DashboardPage";
+import Exchange from "./Pages/Exchanges/Exchanges";
 import ThemeContextProvider from "./Context/ThemeContextProvider";
 import { appContext } from "./Context/AppContextProvider";
 import { useContext } from "react";
@@ -36,6 +37,7 @@ function App() {
           }
         />
         <Route path="/dashboard" element={<DashboardPage />} />
+        <Route path="/exchanges" element={<Exchange />} />
       </Routes>
 
       <Footer />

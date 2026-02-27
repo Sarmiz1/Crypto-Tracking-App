@@ -1,216 +1,131 @@
-import { useEffect, useRef, useState } from "react";
-import { Stack, Card, Typography, Box } from "@mui/material";
-import { useTheme } from "@mui/material/styles";
-import {
-  LineChart,
-  Line,
-  ResponsiveContainer
-} from "recharts";
-
-function CountUp({ value }) {
-  const [display, setDisplay] = useState(0);
-
-  useEffect(() => {
-    let start = 0;
-    const end = parseFloat(value.replace(/[^0-9.]/g, ""));
-    const duration = 1000;
-    const increment = end / (duration / 16);
-
-    const counter = setInterval(() => {
-      start += increment;
-      if (start >= end) {
-        setDisplay(end);
-        clearInterval(counter);
-      } else {
-        setDisplay(start);
-      }
-    }, 16);
-
-    return () => clearInterval(counter);
-  }, [value]);
-
-  return (
-    <>
-      {value.includes("$")
-        ? `$${display.toFixed(2)}`
-        : display.toFixed(0)}
-    </>
-  );
-}
+import { useEffect, useRef, useState, useContext, useMemo } from "react";
+import { Stack, Box } from "@mui/material";
+import { appContext } from "../Context/AppContextProvider";
+import { MetricCard } from "./MetricCards_Components/MetricCard";
 
 export default function MetricCards() {
-  const theme = useTheme();
-  const isDark = theme.palette.mode === "dark";
+  const { globalMetrics, currency } = useContext(appContext);
+  const isMobile = window.innerWidth < 900; // simple check
 
   const scrollRef = useRef(null);
-  const [isHovered, setIsHovered] = useState(false);
+  const [isDragging, setIsDragging] = useState(false);
+  const [startX, setStartX] = useState(0);
+  const [scrollLeft, setScrollLeft] = useState(0);
 
-  const metrics = [
-    {
-      title: "Market Cap",
-      value: "$2.32",
-      suffix: "T",
-      change: -1.65,
-      data: [10, 20, 18, 25, 22, 28, 26]
-    },
-    {
-      title: "CMC20",
-      value: "$139.56",
-      suffix: "",
-      change: -1.39,
-      data: [15, 18, 17, 19, 16, 20, 18]
-    },
-    {
-      title: "Fear & Greed",
-      value: "12",
-      suffix: "",
-      change: 2,
-      data: [30, 25, 22, 18, 15, 12, 10]
-    }
-  ];
+  const isLoading = !globalMetrics?.data?.data;
 
-  // Smooth infinite scroll
+  /* =========================
+    Metrics Memo
+  ========================= */
+  const metrics = useMemo(() => {
+    if (isLoading) return [];
+    const globalData = globalMetrics.data.data;
+
+    return [
+      {
+        title: "Market Cap",
+        value:
+          globalData.total_market_cap?.[currency?.name?.toLowerCase?.()] || 0,
+        change: globalData.market_cap_change_percentage_24h_usd || 0,
+        data:
+          globalMetrics.topCoins?.map(
+            (c) => c.sparkline_in_7d?.price?.[0] || 0,
+          ) || [],
+      },
+      {
+        title: "Active Cryptos",
+        value: globalData.active_cryptocurrencies || 0,
+        change: 0,
+        data: globalMetrics.topCoins?.map((c) => c.market_cap || 0) || [],
+      },
+      {
+        title: "Fear & Greed",
+        value: globalMetrics.fearGreed?.value || 0,
+        change: 0,
+        data: Array.from(
+          { length: 7 },
+          () =>
+            (parseInt(globalMetrics.fearGreed?.value) || 0) +
+            Math.random() * 5 -
+            2,
+        ),
+      },
+    ];
+  }, [globalMetrics, currency, isLoading]);
+
+  /* =========================
+     Apple-style Drag on Desktop
+  ========================= */
   useEffect(() => {
-    const container = scrollRef.current;
-    let animationFrame;
+    const slider = scrollRef.current;
+    if (!slider || isMobile) return;
 
-    const scroll = () => {
-      if (!isHovered && container) {
-        container.scrollLeft += 0.5;
-        if (container.scrollLeft >= container.scrollWidth / 2) {
-          container.scrollLeft = 0;
-        }
-      }
-      animationFrame = requestAnimationFrame(scroll);
+    const handleMouseDown = (e) => {
+      setIsDragging(true);
+      setStartX(e.pageX - slider.offsetLeft);
+      setScrollLeft(slider.scrollLeft);
+    };
+    const handleMouseUp = () => setIsDragging(false);
+    const handleMouseLeave = () => setIsDragging(false);
+    const handleMouseMove = (e) => {
+      if (!isDragging) return;
+      e.preventDefault();
+      const x = e.pageX - slider.offsetLeft;
+      const walk = (x - startX) * 1.5;
+      slider.scrollLeft = scrollLeft - walk;
     };
 
-    scroll();
-    return () => cancelAnimationFrame(animationFrame);
-  }, [isHovered]);
+    slider.addEventListener("mousedown", handleMouseDown);
+    slider.addEventListener("mouseup", handleMouseUp);
+    slider.addEventListener("mouseleave", handleMouseLeave);
+    slider.addEventListener("mousemove", handleMouseMove);
+
+    return () => {
+      slider.removeEventListener("mousedown", handleMouseDown);
+      slider.removeEventListener("mouseup", handleMouseUp);
+      slider.removeEventListener("mouseleave", handleMouseLeave);
+      slider.removeEventListener("mousemove", handleMouseMove);
+    };
+  }, [isDragging, startX, scrollLeft, isMobile]);
 
   return (
     <Box sx={{ overflow: "hidden" }}>
       <Stack
+        ref={scrollRef}
         direction="row"
         spacing={3}
-        ref={scrollRef}
-        onMouseEnter={() => setIsHovered(true)}
-        onMouseLeave={() => setIsHovered(false)}
         sx={{
           overflowX: "auto",
-          pb: 3,
-          "&::-webkit-scrollbar": { display: "none" }
+          scrollBehavior: "smooth",
+          cursor: isMobile ? "auto" : "grab",
+          "&:active": { cursor: "grabbing" },
+          "&::-webkit-scrollbar": { display: "none" },
+          scrollSnapType: isMobile ? "x mandatory" : "none",
         }}
       >
-        {[...metrics, ...metrics].map((metric, index) => {
-          const isPositive = metric.change >= 0;
-
-          return (
-            <Card
-              key={index}
-              sx={{
-                minWidth: 280,
-                p: 3,
-                borderRadius: 4,
-                position: "relative",
-                overflow: "hidden",
-                transition: "all 0.4s ease",
-
-                background: isDark
-                  ? "rgba(255,255,255,0.05)"
-                  : "rgba(0,0,0,0.05)",
-
-                backdropFilter: "blur(12px)",
-
-                border: isDark
-                  ? "1px solid rgba(255,255,255,0.1)"
-                  : "1px solid rgba(0,0,0,0.1)",
-
-                "&::before": {
-                  content: '""',
-                  position: "absolute",
-                  inset: "-2px",
-                  borderRadius: "inherit",
-                  background:
-                    "linear-gradient(270deg, #00f5ff, #7b00ff, #00f5ff)",
-                  backgroundSize: "400% 400%",
-                  animation: "borderMove 6s linear infinite",
-                  zIndex: -1
-                },
-
-                boxShadow: isDark
-                  ? "0 0 25px rgba(0,255,170,0.2)"
-                  : "0 0 20px rgba(0,0,0,0.1)",
-
-                "&:hover": {
-                  transform: "translateY(-8px) scale(1.03)",
-                  boxShadow: isDark
-                    ? "0 0 45px rgba(0,255,170,0.5)"
-                    : "0 0 35px rgba(0,0,0,0.2)"
-                },
-
-                "@keyframes borderMove": {
-                  "0%": { backgroundPosition: "0% 50%" },
-                  "100%": { backgroundPosition: "400% 50%" }
-                }
-              }}
-            >
-              <Typography variant="subtitle2" color="text.secondary">
-                {metric.title}
-              </Typography>
-
-              <Typography
-                variant="h5"
-                sx={{ mt: 1, fontWeight: "bold" }}
-              >
-                <CountUp value={metric.value} />
-                {metric.suffix}
-              </Typography>
-
-              <Typography
-                variant="caption"
+        {isLoading
+          ? Array.from({ length: 3 }).map((_, i) => (
+              <Box
+                key={i}
                 sx={{
-                  color: isPositive
-                    ? isDark
-                      ? "#00ff99"
-                      : "#009966"
-                    : isDark
-                    ? "#ff4d4f"
-                    : "#cc0000"
+                  minWidth: 280,
+                  height: 180,
+                  bgcolor: "#ccc",
+                  borderRadius: 2,
+                }}
+              />
+            ))
+          : metrics.map((metric, index) => (
+              <Box
+                key={index}
+                sx={{
+                  flex: "0 0 auto",
+                  scrollSnapAlign: isMobile ? "start" : "none",
                 }}
               >
-                {isPositive ? "+" : ""}
-                {metric.change}%
-              </Typography>
-
-              <Box sx={{ height: 70, mt: 3 }}>
-                <ResponsiveContainer width="100%" height="100%">
-                  <LineChart
-                    data={metric.data.map((v) => ({
-                      value: v
-                    }))}
-                  >
-                    <Line
-                      type="monotone"
-                      dataKey="value"
-                      stroke={
-                        isPositive
-                          ? isDark
-                            ? "#00ff99"
-                            : "#009966"
-                          : isDark
-                          ? "#ff4d4f"
-                          : "#cc0000"
-                      }
-                      strokeWidth={2}
-                      dot={false}
-                    />
-                  </LineChart>
-                </ResponsiveContainer>
+                <MetricCard metric={metric} />
               </Box>
-            </Card>
-          );
-        })}
+            ))}
       </Stack>
     </Box>
   );
