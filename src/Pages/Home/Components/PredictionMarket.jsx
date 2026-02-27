@@ -1,168 +1,75 @@
-import { useState } from "react";
-import {
-  Box,
-  Tabs,
-  Tab,
-  Grid,
-  Card,
-  CardContent,
-  Typography,
-  LinearProgress,
-  Drawer,
-  IconButton,
-  List,
-  ListItem,
-  ListItemText,
-  useMediaQuery
-} from "@mui/material";
-import MenuIcon from "@mui/icons-material/Menu";
-import { useTheme } from "@mui/material/styles";
-import MarketCard from "../../../Components/MarketCard";
+import { useState, useContext } from "react";
+import { Box, Typography, CircularProgress, Alert } from "@mui/material";
 import CustomTabPanel from "../../../Components/CustomTabPanel";
+import { appContext } from "../../../Context/AppContextProvider";
+import { categoryKeywords } from "./PredictionMarkets_Components/categoriesKeywords";
+import TopTabs from "./PredictionMarkets_Components/TopTabs";
+import DrawerForMobile from "./PredictionMarkets_Components/DrawerForMobile";
+import GridContainer from "./PredictionMarkets_Components/GridContainer";
 
 export default function PredictionMarket({ value }) {
-  const isMobile = useMediaQuery("(max-width:900px)");
   const [tab, setTab] = useState(0);
   const [openDrawer, setOpenDrawer] = useState(false);
-  const theme = useTheme();
-  const isDark = theme.palette.mode === "dark";
+
+  const { mode, predictionMarkets } = useContext(appContext);
+  const {
+    data: predictionMarket,
+    loading: predictionLoading,
+    error: predictionError,
+  } = predictionMarkets || {};
 
   const categories = ["all", "crypto", "politics", "economy", "sports"];
 
-  const markets = [
-    {
-      title: "Bitcoin above $100k in 2026?",
-      category: "crypto",
-      days: "210d",
-      totalVol: "$892.11M",
-      dayVol: "$42.8M",
-      options: [
-        { name: "Yes", value: 58.4 },
-        { name: "No", value: 41.6 }
-      ]
-    },
-    {
-      title: "Ethereum ETF approved?",
-      category: "crypto",
-      days: "97d",
-      totalVol: "$402.8M",
-      dayVol: "$18.9M",
-      options: [
-        { name: "Approved", value: 63.9 },
-        { name: "Rejected", value: 36.1 }
-      ]
-    },
-    {
-      title: "Next US President (2028)",
-      category: "politics",
-      days: "540d",
-      totalVol: "$1.2B",
-      dayVol: "$23.7M",
-      options: [
-        { name: "Democrat", value: 51.2 },
-        { name: "Republican", value: 44.7 }
-      ]
-    },
-    {
-      title: "US recession in 2026?",
-      category: "economy",
-      days: "189d",
-      totalVol: "$289.44M",
-      dayVol: "$9.8M",
-      options: [
-        { name: "Yes", value: 47.3 },
-        { name: "No", value: 52.7 }
-      ]
-    },
-    {
-      title: "2026 World Cup Winner",
-      category: "sports",
-      days: "148d",
-      totalVol: "$171.22M",
-      dayVol: "$5.52M",
-      options: [
-        { name: "Spain", value: 16.1 },
-        { name: "England", value: 13.3 },
-        { name: "Argentina", value: 11.8 }
-      ]
-    }
-  ];
-
   const filteredMarkets =
     categories[tab] === "all"
-      ? markets
-      : markets.filter(
-          (market) => market.category === categories[tab]
-        );
+      ? predictionMarket || []
+      : (predictionMarket || []).filter((market) => {
+          const questionLower = market.question?.toLowerCase() || "";
+          return categoryKeywords[categories[tab]].some((kw) =>
+            questionLower.includes(kw),
+          );
+        });
 
   return (
     <CustomTabPanel value={value} index={3}>
       <Box sx={{ p: 3 }}>
-        {/* Top Bar */}
-        <Box
-          sx={{
-            display: "flex",
-            alignItems: "center",
-            justifyContent: "space-between",
-            mb: 3
-          }}
-        >
-          {isMobile && (
-            <IconButton onClick={() => setOpenDrawer(true)}>
-              <MenuIcon sx={{ color: isDark ? "#fff" : "#000" }} />
-            </IconButton>
-          )}
+        {/* Top Tabs */}
+        <TopTabs
+          setOpenDrawer={setOpenDrawer}
+          setTab={setTab}
+          tab={tab}
+          mode={mode}
+        />
 
-          <Tabs
-            value={tab}
-            onChange={(e, newValue) => setTab(newValue)}
-            textColor="inherit"
-            indicatorColor="primary"
-            variant={isMobile ? "scrollable" : "standard"}
-          >
-            <Tab label="All" />
-            <Tab label="Crypto" />
-            <Tab label="Politics" />
-            <Tab label="Economy" />
-            <Tab label="Sports" />
-          </Tabs>
-        </Box>
+        {/* Drawer for mobile */}
+        <DrawerForMobile
+          openDrawer={openDrawer}
+          setOpenDrawer={setOpenDrawer}
+          setTab={setTab}
+          categories={categories}
+        />
 
-        {/* Drawer (Mobile Sidebar) */}
-        <Drawer
-          anchor="left"
-          open={openDrawer}
-          onClose={() => setOpenDrawer(false)}
-        >
-          <Box sx={{ width: 250, p: 2 }}>
-            <Typography variant="h6" sx={{ mb: 2 }}>
-              Categories
+        {/* Content */}
+        {predictionLoading ? (
+          <Box sx={{ textAlign: "center", py: 8 }}>
+            <CircularProgress />
+            <Typography sx={{ mt: 2 }}>
+              Loading prediction markets...
             </Typography>
-            <List>
-              {categories.map((cat, index) => (
-                <ListItem
-                  button
-                  key={cat}
-                  onClick={() => {
-                    setTab(index);
-                    setOpenDrawer(false);
-                  }}
-                >
-                  <ListItemText primary={cat.toUpperCase()} />
-                </ListItem>
-              ))}
-            </List>
           </Box>
-        </Drawer>
-
-        {/* Market Grid */}
-        <Grid container spacing={3}>
-          {filteredMarkets.map((market, index) => (
-            <Grid item xs={12} md={6} key={index}>
-              <MarketCard {...market} isDark={isDark} />
-            </Grid>
-          ))}
-        </Grid>
+        ) : predictionError ? (
+          <Alert severity="error">{predictionError}</Alert>
+        ) : filteredMarkets.length === 0 ? (
+          <Typography sx={{ textAlign: "center", py: 8 }}>
+            No markets found in {categories[tab]}
+          </Typography>
+        ) : (
+          <GridContainer
+            Date={Date}
+            mode={mode}
+            filteredMarkets={filteredMarkets}
+          />
+        )}
       </Box>
     </CustomTabPanel>
   );

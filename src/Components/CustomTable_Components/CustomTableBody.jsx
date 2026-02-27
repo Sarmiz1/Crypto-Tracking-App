@@ -5,30 +5,43 @@ import {
   Typography,
   Stack,
   Box,
-  IconButton
+  IconButton,
 } from "@mui/material";
 import StarBorderIcon from "@mui/icons-material/StarBorder";
+import StarIcon from "@mui/icons-material/Star";
 import { useTheme } from "@mui/material/styles";
-import {
-  LineChart,
-  Line,
-  ResponsiveContainer,
-  XAxis,
-  YAxis
-} from "recharts";
+import { LineChart, Line, ResponsiveContainer, XAxis, YAxis } from "recharts";
+import currencyFormat from "../../utils/currencyFormat";
+import { useContext } from "react";
+import { appContext } from "../../Context/AppContextProvider";
 
-export default function CustomTableBody({ coins, stickyBg, currency }) {
+
+export default function CustomTableBody({ coins, stickyBg, currency, section ='table' }) {
   const theme = useTheme();
   const isDark = theme.palette.mode === "dark";
 
-  
+  const {
+    watchList: { watchlist, setWatchlist },
+  } = useContext(appContext);
+
+  const handleWatchlistToggle = (coin) => {
+    // Implement watchlist toggle logic here
+    const newCoin = coin;
+    if (watchlist.some((c) => c.id === coin.id)) {
+      setWatchlist(watchlist.filter((c) => c.id !== coin.id));
+    } else {
+      setWatchlist([...watchlist, newCoin]);
+    }
+  };
+
   return (
     <TableBody>
       {coins.map((coin) => {
+        const isWatched = watchlist.some((c) => c.id === coin.id);
         const isPositive = coin.price_change_percentage_24h >= 0;
         const chartData = (coin.chart || []).map((price, idx) => ({
-          time: idx,   // X-axis: index of price in sparkline array
-          value: price
+          time: idx, // X-axis: index of price in sparkline array
+          value: price,
         }));
 
         return (
@@ -39,8 +52,8 @@ export default function CustomTableBody({ coins, stickyBg, currency }) {
               "&:hover": {
                 backgroundColor: isDark
                   ? "rgba(255,255,255,0.05)"
-                  : "rgba(0,0,0,0.04)"
-              }
+                  : "rgba(0,0,0,0.04)",
+              },
             }}
           >
             {/* Sticky Rank */}
@@ -51,15 +64,26 @@ export default function CustomTableBody({ coins, stickyBg, currency }) {
                 backgroundColor: stickyBg,
                 zIndex: 4,
                 width: 80,
-                boxShadow: "2px 0 5px rgba(0,0,0,0.05)"
+                boxShadow: "2px 0 5px rgba(0,0,0,0.05)",
               }}
             >
               <Stack direction="row" alignItems="center" spacing={1}>
-                <IconButton size="small">
-                  <StarBorderIcon fontSize="small" />
-                </IconButton>
-                {coin.market_cap_rank}
-              </Stack>
+                <IconButton
+                  size="small"
+                  onClick={() => handleWatchlistToggle(coin)}
+                >
+                  {isWatched ? (
+                    <StarIcon sx={{ color: "#FFD700" }} fontSize="small" />
+                  ) : (
+                    <StarBorderIcon fontSize="small" />
+                  )}
+                  </IconButton>
+                {section === "watchlist" ? 
+                  <Typography variant="body1">__</Typography> 
+                      : 
+                  <Typography variant="body1">{coin.market_cap_rank}</Typography>
+                }
+              </Stack>  
             </TableCell>
 
             {/* Sticky Name */}
@@ -70,18 +94,19 @@ export default function CustomTableBody({ coins, stickyBg, currency }) {
                 backgroundColor: stickyBg,
                 zIndex: 4,
                 width: 220,
-                boxShadow: "2px 0 5px rgba(0,0,0,0.03)"
+                boxShadow: "2px 0 5px rgba(0,0,0,0.03)",
               }}
             >
               <Stack direction="row" spacing={2} alignItems="center">
-                <Box component={'img'}
+                <Box
+                  component={"img"}
                   alt={`${coin.name} logo`}
                   src={coin.image}
                   sx={{
                     width: 32,
                     height: 32,
                     borderRadius: "50%",
-                    backgroundColor: "transparent"
+                    backgroundColor: "transparent",
                   }}
                 />
                 <Box>
@@ -90,14 +115,17 @@ export default function CustomTableBody({ coins, stickyBg, currency }) {
               </Stack>
             </TableCell>
 
-            <TableCell align="right">{currency.symbol}{coin.current_price}</TableCell>
+            <TableCell align="right">
+              {currency.symbol}
+              {coin.current_price}
+            </TableCell>
 
             <TableCell
               align="right"
               sx={{ color: isPositive ? "success.main" : "error.main" }}
             >
               {isPositive ? "+" : ""}
-              {coin.price_change_percentage_24h?.toFixed(2)}%
+              {currencyFormat(coin.price_change_percentage_24h)}%
             </TableCell>
 
             <TableCell align="right">{coin.market_cap}</TableCell>

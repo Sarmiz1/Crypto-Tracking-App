@@ -3,7 +3,7 @@ import { useTheme } from "@mui/material/styles";
 import CustomTableHead from "./CustomTable_Components/CustomTableHead";
 import CustomTableBody from "./CustomTable_Components/CustomTableBody";
 
-export default function CustomTable({ coins, currency }) {
+export default function CustomTable({ coins, currency, section }) {
   const theme = useTheme();
   const isDark = theme.palette.mode === "dark";
   const stickyBg = theme.palette.background.paper;
@@ -23,7 +23,7 @@ export default function CustomTable({ coins, currency }) {
     >
       <Table stickyHeader sx={{ minWidth: 1000 }}>
         <CustomTableHead stickyBg={stickyBg} />
-        <CustomTableBody stickyBg={stickyBg} coins={coins} currency={currency} />
+        <CustomTableBody stickyBg={stickyBg} coins={coins} currency={currency} section={section} />
       </Table>
     </TableContainer>
   );

@@ -2,6 +2,7 @@ import { useEffect, useRef, useState, useContext, useMemo } from "react";
 import { Stack, Box } from "@mui/material";
 import { appContext } from "../Context/AppContextProvider";
 import { MetricCard } from "./MetricCards_Components/MetricCard";
+import currencyFormat from "../utils/currencyFormat";
 
 export default function MetricCards() {
   const { globalMetrics, currency } = useContext(appContext);

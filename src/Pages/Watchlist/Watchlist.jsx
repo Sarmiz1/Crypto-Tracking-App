@@ -1,33 +1,27 @@
-import { Box } from "@mui/material";
+import { Box, Typography } from "@mui/material";
 import CustomTable from "../../Components/CustomTable";
+import { useContext } from "react";
+import { appContext } from "../../Context/AppContextProvider";
 
 export default function Watchlist() {
-  const coins = [
-    {
-      rank: 1,
-      name: "Tether",
-      symbol: "USDT",
-      price: 0.99,
-      change24h: 0.02,
-      marketCap: "$99,995,578,123",
-      volume: "$18,734,000,000",
-      supply: "83.7B USDT",
-      chart: [30, 25, 22, 18, 15, 12, 10],
-    },
-  ];
+  const {
+    watchList: { watchlist },
+    currency,
+  } = useContext(appContext);
 
   return (
-    <Box
-      sx={{
-        mt: 0,
-        width: "100%",
-        display: "flex",
-        flexDirection: "column",
-        gap: 4,
-        p: 2,
-      }}
-    >
-      <CustomTable coins={coins} currency={'USD'}/>
+    <Box sx={{ padding: 2 }}>
+      {watchlist.length === 0 ? (
+        <Box sx={{ textAlign: "center", py: 2, mt: 2, height: '100%', display: 'block'}}>
+          <Typography variant="h6" sx={{fontWeight: 500}}>Your watchlist is empty </Typography>
+        </Box>
+      ) : (
+        <CustomTable
+          coins={watchlist}
+          currency={currency}
+          section="watchlist"
+        />
+      )}
     </Box>
   );
 }

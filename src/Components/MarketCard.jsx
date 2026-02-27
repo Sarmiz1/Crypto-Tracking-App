@@ -6,12 +6,12 @@ import {
   LinearProgress,
 } from "@mui/material";
 
-export default function MarketCard({ title, days, totalVol, dayVol, options, isDark }) {
+export default function MarketCard({ title, days, totalVol, dayVol, options, mode }) {
   return (
     <Card
       sx={{
-        backgroundColor: isDark ? "#1e1e1e" : "#fff",
-        color: isDark ? "#fff" : "#000",
+        backgroundColor: mode === 'dark' ? "#1e1e1e" : "#fff",
+        color: mode === 'dark' ? "#fff" : "#000",
         borderRadius: 3,
         boxShadow: 3,
         transition: "0.3s",
