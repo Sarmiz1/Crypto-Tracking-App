@@ -15,8 +15,12 @@ import currencyFormat from "../../utils/currencyFormat";
 import { useContext } from "react";
 import { appContext } from "../../Context/AppContextProvider";
 
-
-export default function CustomTableBody({ coins, stickyBg, currency, section ='table' }) {
+export default function CustomTableBody({
+  coins,
+  stickyBg,
+  currency,
+  section = "table",
+}) {
   const theme = useTheme();
   const isDark = theme.palette.mode === "dark";
 
@@ -36,9 +40,20 @@ export default function CustomTableBody({ coins, stickyBg, currency, section ='t
 
   return (
     <TableBody>
-      {coins.map((coin) => {
+      {coins.map((coin, index) => {
+        let rankDisplay;
+
+        if (section === "watchlist") {
+          rankDisplay = "__";
+        } else if (section === "most-visited" || section === "new") {
+          rankDisplay = index + 1;
+        } else {
+          rankDisplay = coin.market_cap_rank;
+        }
+        
         const isWatched = watchlist.some((c) => c.id === coin.id);
-        const isPositive = coin.price_change_percentage_24h >= 0;
+        const change = Number(coin.price_change_percentage_24h);
+        const isPositive = !isNaN(change) && change >= 0;
         const chartData = (coin.chart || []).map((price, idx) => ({
           time: idx, // X-axis: index of price in sparkline array
           value: price,
@@ -77,13 +92,9 @@ export default function CustomTableBody({ coins, stickyBg, currency, section ='t
                   ) : (
                     <StarBorderIcon fontSize="small" />
                   )}
-                  </IconButton>
-                {section === "watchlist" ? 
-                  <Typography variant="body1">__</Typography> 
-                      : 
-                  <Typography variant="body1">{coin.market_cap_rank}</Typography>
-                }
-              </Stack>  
+                </IconButton>
+                <Typography variant="body1">{rankDisplay}</Typography>
+              </Stack>
             </TableCell>
 
             {/* Sticky Name */}

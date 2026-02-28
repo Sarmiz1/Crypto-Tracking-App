@@ -27,7 +27,7 @@ export default function NewCoinTable({ value }) {
       ) : error ? (
         <Alert severity="error">{error}</Alert>
       ) : (
-        <CustomTable coins={newCoins} currency={currency} />
+        <CustomTable coins={newCoins} currency={currency} section='new' />
       )}
     </CustomTabPanel>
   );

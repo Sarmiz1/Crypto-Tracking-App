@@ -58,11 +58,35 @@ export default function AppContextProvider({ children }) {
     loading: predictionLoading,
     error: predictionError,
   } = useFetch(
-    "https://api.manifold.markets/v0/markets?limit=20&sort=last-bet-time"
+    "https://api.manifold.markets/v0/markets?limit=20&sort=last-bet-time",
   );
-          
-  console.log(globalData)
-  console.log(predictionError)
+
+  // --- Defi from Coin Geko---
+  const {
+    data: defiData,
+    loading: defiLoading,
+    error: defiError,
+  } = useFetch(
+    "https://api.coingecko.com/api/v3/global/decentralized_finance_defi",
+  );
+
+  // --- Stable Coins from Geko---
+  const {
+    data: stableCoinData,
+    loading: stableCoinLoading,
+    error: stableCoinError,
+  } = useFetch(
+    "https://api.coingecko.com/api/v3/coins/markets?vs_currency=usd&category=stablecoins",
+  );
+
+  // --- Bit Coins from Geko---
+  const {
+    data: bitCoinData,
+    loading: bitCoinLoading,
+    error: bitCoinError,
+  } = useFetch(
+    "https://api.coingecko.com//api/v3/coins/markets?vs_currency=usd&ids=bitcoin",
+  );
 
   const value = {
     tabValue,
@@ -92,6 +116,21 @@ export default function AppContextProvider({ children }) {
       data: predictionMarket,
       loading: predictionLoading,
       error: predictionError,
+    },
+    defi: {
+      data: defiData,
+      loading: defiLoading,
+      error: defiError,
+    },
+    stableCoins: {
+      data: stableCoinData,
+      loading: stableCoinLoading,
+      error: stableCoinError,
+    },
+    bitcoin: {
+      data: bitCoinData,
+      loading: bitCoinLoading,
+      error: bitCoinError,
     },
   };
 
