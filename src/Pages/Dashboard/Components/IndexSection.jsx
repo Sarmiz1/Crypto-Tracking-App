@@ -3,7 +3,7 @@ import { Box, Container } from "@mui/material";
 import ContentCardsBox from "./IndexSection_Components/ContentCardsBox";
 import IndexIconsButton from "./IndexSection_Components/IndexIconsButton";
 
-export default function Dashboard() {
+export default function IndexSection() {
   const scrollRef = useRef(null);
 
   const items = [

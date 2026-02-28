@@ -1,12 +1,69 @@
-import {
-  Box,
-  Card,
-  CardContent,
-  Typography,
-} from "@mui/material";
+import { Box, Card, CardContent, Typography } from "@mui/material";
 import { LineChart, Line, ResponsiveContainer } from "recharts";
+import { appContext } from "../../../../Context/AppContextProvider";
+import { useContext } from "react";
+import { formatLargeDigits } from '../../../../utils/formatLargeDigits'
 
-export default function ContentCardsBox({ items, scrollRef }) {
+export default function ContentCardsBox({ scrollRef }) {
+  const { globalMetrics, currency } = useContext(appContext);
+
+  const { symbol: currencySymbol } = currency || {};
+  const { data, loading, error, fearGreed } = globalMetrics || {};
+
+
+  // ✅ Loading state
+  if (loading) {
+    return (
+      <Box sx={{ px: 6, py: 4 }}>
+        <Typography>Loading metrics...</Typography>
+      </Box>
+    );
+  }
+
+  // ✅ Error state
+  if (error || !data) {
+    return (
+      <Box sx={{ px: 6, py: 4 }}>
+        <Typography color="error">Failed to load global metrics.</Typography>
+      </Box>
+    );
+  }
+
+  // 🔥 Build cards array manually
+  const cards = [
+    {
+      name: "Global Market Cap",
+      value:
+        formatLargeDigits(
+        (data?.data?.total_market_cap?.usd || 0), currencySymbol),
+    },
+    {
+      name: "24h Volume",
+      value:
+        formatLargeDigits(
+        (data?.data?.total_volume?.usd || 0), currencySymbol),
+    },
+    {
+      name: "BTC Dominance",
+      value:
+        (data?.data?.market_cap_percentage?.btc || 0).toFixed(2) + "%",
+    },
+    {
+      name: "Fear & Greed Index",
+      value: fearGreed?.value || "--",
+      type: "fear",
+      gaugeValue: fearGreed?.value || 0,
+      label: fearGreed?.value_classification || "",
+    },
+    // Sparkline example (if you have one)
+    // {
+    //   name: "Sample Sparkline",
+    //   type: "sparkline",
+    //   sparkline: [{ v: 10 }, { v: 12 }, { v: 8 }, { v: 14 }],
+    //   isPositive: true,
+    // },
+  ];
+
   return (
     <Box
       ref={scrollRef}
@@ -20,11 +77,11 @@ export default function ContentCardsBox({ items, scrollRef }) {
         "&::-webkit-scrollbar": { display: "none" },
       }}
     >
-      {items.map((item) => (
+      {cards.map((item, index) => (
         <Card
-          key={item.name}
+          key={index}
           sx={{
-            minWidth: 380, // 🔥 more width
+            minWidth: 380,
             flex: "0 0 auto",
             scrollSnapAlign: "start",
             borderRadius: 3,
@@ -45,7 +102,7 @@ export default function ContentCardsBox({ items, scrollRef }) {
               {item.value}
             </Typography>
 
-            {/* Fear & Greed Bar */}
+            {/* Fear & Greed */}
             {item.type === "fear" && (
               <>
                 <Box
@@ -82,50 +139,7 @@ export default function ContentCardsBox({ items, scrollRef }) {
               </>
             )}
 
-            {/* Altcoin Season */}
-            {item.type === "season" && (
-              <>
-                <Box
-                  sx={{
-                    display: "flex",
-                    justifyContent: "space-between",
-                    fontSize: 12,
-                    color: "text.secondary",
-                    mb: 0.5,
-                  }}
-                >
-                  <span>Bitcoin Season</span>
-                  <span>Altcoin Season</span>
-                </Box>
-
-                <Box
-                  sx={{
-                    position: "relative",
-                    height: 10,
-                    borderRadius: 6,
-                    background:
-                      "linear-gradient(90deg, #f7931a 0%, #f7931a 40%, #90caf9 60%, #1e88e5 100%)",
-                  }}
-                >
-                  <Box
-                    sx={{
-                      position: "absolute",
-                      left: `${item.gaugeValue}%`,
-                      top: "50%",
-                      transform: "translate(-50%, -50%)",
-                      width: 18,
-                      height: 18,
-                      borderRadius: "50%",
-                      bgcolor: "#111",
-                      border: "3px solid white",
-                      boxShadow: 2,
-                    }}
-                  />
-                </Box>
-              </>
-            )}
-
-            {/* Sparkline */}
+            {/* Sparkline placeholder */}
             {item.type === "sparkline" && (
               <Box sx={{ height: 70 }}>
                 <ResponsiveContainer width="100%" height="100%">

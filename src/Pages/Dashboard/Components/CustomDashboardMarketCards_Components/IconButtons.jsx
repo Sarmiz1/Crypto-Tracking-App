@@ -1,66 +1,76 @@
 import { IconButton } from "@mui/material";
 import ChevronLeftIcon from "@mui/icons-material/ChevronLeft";
 import ChevronRightIcon from "@mui/icons-material/ChevronRight";
-import { useState, useEffect } from "react";
+import { useState, useEffect, useCallback } from "react";
 
 export default function IconButtons({ darkMode, scrollRef, type }) {
   const [canScrollLeft, setCanScrollLeft] = useState(false);
-  const [canScrollRight, setCanScrollRight] = useState(true);
+  const [canScrollRight, setCanScrollRight] = useState(false);
 
-  const updateScroll = () => {
+  const updateScroll = useCallback(() => {
     const el = scrollRef.current;
     if (!el) return;
-    setCanScrollLeft(el.scrollLeft > 0);
-    setCanScrollRight(el.scrollLeft + el.clientWidth < el.scrollWidth - 2);
-  };
+
+    const { scrollLeft, scrollWidth, clientWidth } = el;
+
+    setCanScrollLeft(scrollLeft > 0);
+    setCanScrollRight(scrollLeft + clientWidth < scrollWidth - 1);
+  }, [scrollRef]);
 
   useEffect(() => {
     const el = scrollRef.current;
     if (!el) return;
-    updateScroll();
+
+    updateScroll(); // run once on mount
+
     el.addEventListener("scroll", updateScroll);
     window.addEventListener("resize", updateScroll);
+
     return () => {
       el.removeEventListener("scroll", updateScroll);
       window.removeEventListener("resize", updateScroll);
     };
-  }, []);
+  }, [updateScroll]);
 
-  const scroll = (dir) => {
+  const scroll = (direction) => {
     const el = scrollRef.current;
     if (!el) return;
+
     const amount = el.clientWidth * 0.75;
+
     el.scrollBy({
-      left: dir === "left" ? -amount : amount,
+      left: direction === "left" ? -amount : amount,
       behavior: "smooth",
     });
   };
 
+  const isLeft = type === "left";
+  const isDisabled = isLeft ? !canScrollLeft : !canScrollRight;
+  const isVisible = isLeft ? canScrollLeft : canScrollRight;
+
   return (
     <IconButton
-      onClick={() => scroll(type === "left" ? "left" : "right")}
-      disabled={type === "left" ? !canScrollLeft : !canScrollRight}
+      onClick={() => scroll(isLeft ? "left" : "right")}
+      disabled={isDisabled}
       sx={{
         position: "absolute",
-        left: type === "left" ? -12 : "auto",
-        right: type === "right" ? -12 : "auto",
+        left: isLeft ? -12 : "auto",
+        right: !isLeft ? -12 : "auto",
         top: "50%",
         transform: "translateY(-50%)",
         zIndex: 10,
         bgcolor: darkMode ? "#333" : "background.paper",
-        boxShadow: 2,
-        opacity: canScrollLeft ? 0.9 : 0.35,
-        visibility:
-          type === "left"
-            ? canScrollLeft
-              ? "visible"
-              : "hidden"
-            : canScrollRight
-              ? "visible"
-              : "hidden",
+        boxShadow: 3,
+        transition: "all 0.2s ease",
+        opacity: isVisible ? 0.9 : 0,
+        visibility: isVisible ? "visible" : "hidden",
+        "&:hover": {
+          opacity: 1,
+          transform: "translateY(-50%) scale(1.05)",
+        },
       }}
     >
-      {type === "left" ? (
+      {isLeft ? (
         <ChevronLeftIcon fontSize="small" />
       ) : (
         <ChevronRightIcon fontSize="small" />

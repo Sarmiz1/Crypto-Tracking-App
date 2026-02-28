@@ -1,19 +1,55 @@
-import {
-  Box,
-  Card,
-  CardContent,
-  Typography,
-} from '@mui/material';
-import { LineChart, Line, ResponsiveContainer } from 'recharts';
+import { Box, Card, CardContent, Typography } from "@mui/material";
+import { useContext } from "react";
+import { appContext } from "../../../../Context/AppContextProvider";
 
-export default function CardContentBox({ coins, scrollRef, setSelectedCoin }) {
+
+export default function CardContentBox({ scrollRef, setSelectedCoin }) {
+  const { cryptoListing, currency } = useContext(appContext);
+
+  const { symbol:currencySymbol } = currency || {};  
+
+  const {
+    data: coins,
+    loading: coinsLoading,
+    error: coinsError,
+  } = cryptoListing || {};
+
+  // ✅ Loading State
+  if (coinsLoading) {
+    return (
+      <Box sx={{ px: 2, py: 3 }}>
+        <Typography>Loading coins...</Typography>
+      </Box>
+    );
+  }
+
+  // ✅ Error State
+  if (coinsError) {
+    return (
+      <Box sx={{ px: 2, py: 3 }}>
+        <Typography color="error">
+          Failed to load coins. Please try again.
+        </Typography>
+      </Box>
+    );
+  }
+
+  // ✅ Safety fallback
+  if (!coins || coins.length === 0) {
+    return (
+      <Box sx={{ px: 2, py: 3 }}>
+        <Typography>No coins available.</Typography>
+      </Box>
+    );
+  }
+
   return (
     <Box
       ref={scrollRef}
       sx={{
         display: "flex",
         overflowX: "auto",
-        gap: 2.5,                      // a bit more gap between cards
+        gap: 2.5,
         pb: 1.5,
         scrollBehavior: "smooth",
         scrollbarWidth: "none",
@@ -22,15 +58,16 @@ export default function CardContentBox({ coins, scrollRef, setSelectedCoin }) {
         px: 2,
       }}
     >
-      {coins.map((coin) => {
-        const isPositive = coin.change >= 0;
+      {/* ✅ Only first 11 coins */}
+      {coins?.slice(0, 11).map((coin) => {
+        const isPositive = coin.price_change_percentage_24h >= 0;
 
         return (
           <Card
-            key={coin.name}
+            key={coin.id}
             onClick={() => setSelectedCoin(coin)}
             sx={{
-              minWidth: 290,               // slightly wider to avoid squeezing
+              minWidth: 290,
               flex: "0 0 auto",
               borderRadius: 3,
               boxShadow: 1,
@@ -42,21 +79,21 @@ export default function CardContentBox({ coins, scrollRef, setSelectedCoin }) {
           >
             <CardContent
               sx={{
-                p: 2,                      // back to comfortable padding
+                p: 2,
                 display: "flex",
                 alignItems: "center",
-                gap: 2.5,                  // more space between left info and chart
+                gap: 2.5,
               }}
             >
-              {/* Left side – info */}
+              {/* Left */}
               <Box sx={{ flex: 1, minWidth: 0 }}>
                 <Box sx={{ display: "flex", alignItems: "center", mb: 1 }}>
                   <Box
                     component="img"
-                    src={coin.logo}
+                    src={coin.image}
                     alt={coin.name}
                     sx={{
-                      width: 32,           // better visible size
+                      width: 32,
                       height: 32,
                       mr: 1.5,
                       borderRadius: "50%",
@@ -69,7 +106,8 @@ export default function CardContentBox({ coins, scrollRef, setSelectedCoin }) {
                 </Box>
 
                 <Typography variant="h6" fontWeight={700} sx={{ mb: 0.5 }}>
-                  ${coin.price}
+                  {currencySymbol}
+                  {coin.current_price?.toLocaleString()}
                 </Typography>
 
                 <Typography
@@ -77,40 +115,34 @@ export default function CardContentBox({ coins, scrollRef, setSelectedCoin }) {
                   sx={{
                     color: isPositive ? "success.main" : "error.main",
                     fontWeight: 600,
-                    display: "flex",
-                    alignItems: "center",
-                    gap: 0.5,
                     mb: 1,
                   }}
                 >
-                  {isPositive ? "↑" : "↓"} {Math.abs(coin.change)}%
+                  {isPositive ? "↑" : "↓"}{" "}
+                  {Math.abs(coin.price_change_percentage_24h)?.toFixed(2)}%
                 </Typography>
 
                 <Box
                   sx={{
-                    fontSize: "0.775rem",   // balanced small text
+                    fontSize: "0.775rem",
                     color: "text.secondary",
-                    lineHeight: 1.3,
                   }}
                 >
-                  <div>Market Cap: <strong>{coin.marketCap}</strong></div>
-                  <div>Vol 24h: <strong>{coin.volume24h}</strong></div>
+                  <div>
+                    Market Cap:{" "}
+                    <strong>
+                      {currencySymbol}
+                      {coin.market_cap?.toLocaleString()}
+                    </strong>
+                  </div>
+                  <div>
+                    Vol 24h:{" "}
+                    <strong>
+                      {currencySymbol}
+                      {coin.total_volume?.toLocaleString()}
+                    </strong>
+                  </div>
                 </Box>
-              </Box>
-
-              {/* Right side – small chart */}
-              <Box sx={{ width: 110, height: 60, flexShrink: 0 }}> {/* 60px gives room without excess height */}
-                <ResponsiveContainer width="100%" height="100%">
-                  <LineChart data={coin.sparkline}>
-                    <Line
-                      type="monotone"
-                      dataKey="value"
-                      stroke={isPositive ? "#16c784" : "#ea3943"}
-                      strokeWidth={2.2}
-                      dot={false}
-                    />
-                  </LineChart>
-                </ResponsiveContainer>
               </Box>
             </CardContent>
           </Card>
@@ -119,3 +151,4 @@ export default function CardContentBox({ coins, scrollRef, setSelectedCoin }) {
     </Box>
   );
 }
+
