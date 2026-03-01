@@ -12,35 +12,40 @@ import {
 import { useFetch } from "../../../Hooks/useFetch";
 import BottomSummary from "./CryptoMarketChart_Components/BottomSummary";
 import CryptoMarketTabContent from "./CryptoMarketChart_Components/CryptoMarketTabContent";
+import { MarketInfo } from "../../../utils/marketInfo";
 
 export default function CryptoMarketCapChart({ mode }) {
-  const [tabValue, setTabValue] = useState(2);
+  const [tabValue, setTabValue] = useState(0);
 
-  // Only fetch when 30d, 1y, or All tab is selected
+  // Get BTC/ETH dominance and Fear & Greed
+  const { btcDominance, ethDominance, fearGreed } = MarketInfo() || {};
+  const { value: fearGreedValue, classification } = fearGreed || {};
+
+  const getFearGreedColor = (value) => {
+    if (!value) return "grey";
+    if (value <= 25) return "red";
+    if (value <= 45) return "orange";
+    if (value <= 55) return "yellow";
+    if (value <= 75) return "lightgreen";
+    return "green";
+  };
+  const fearGreedColor = getFearGreedColor(fearGreedValue);
+
+  // Only fetch historical data for 30d, 1y, All
   const days =
-    tabValue === 2 ? 30 :
-    tabValue === 3 ? 365 :
-    tabValue === 4 ? "max" :
-    null;
+    tabValue === 2 ? 30 : tabValue === 3 ? 365 : tabValue === 4 ? "max" : null;
 
-  const {
-    data: historical,
-    loading,
-    error,
-  } = useFetch(
+  const { data: historical, loading, error } = useFetch(
     days
       ? `https://api.coingecko.com/api/v3/coins/bitcoin/market_chart?vs_currency=usd&days=${days}`
       : null
   );
 
-  const handleTabChange = (event, newValue) => {
-    setTabValue(newValue);
-  };
+  const handleTabChange = (event, newValue) => setTabValue(newValue);
 
-  //  Transform API data safely
+  // Transform historical data for Recharts
   const chartData = useMemo(() => {
     if (!historical?.market_caps || !historical?.total_volumes) return [];
-
     return historical.market_caps.map((item, index) => ({
       date: new Date(item[0]).toLocaleDateString(),
       marketCap: item[1] / 1e12, // Trillions
@@ -48,16 +53,14 @@ export default function CryptoMarketCapChart({ mode }) {
     }));
   }, [historical]);
 
-  //  Bottom summary calculation
+  // Bottom summary
   const summaryData = useMemo(() => {
-    if (chartData.length < 2) return [];
-
+    if (!chartData || chartData.length < 2) return [];
     const latest = chartData[chartData.length - 1];
     const previous = chartData[chartData.length - 2];
 
     const marketCapChange =
       ((latest.marketCap - previous.marketCap) / previous.marketCap) * 100;
-
     const volumeChange =
       ((latest.volume - previous.volume) / previous.volume) * 100;
 
@@ -65,37 +68,40 @@ export default function CryptoMarketCapChart({ mode }) {
       {
         label: "Market Cap",
         value: `$${latest.marketCap.toFixed(2)}T`,
-        change: `${marketCapChange >= 0 ? "+" : ""}${marketCapChange.toFixed(2)}%`,
+        change: `${marketCapChange >= 0 ? "+" : ""}${marketCapChange.toFixed(
+          2
+        )}%`,
       },
       {
         label: "24h Volume",
         value: `$${latest.volume.toFixed(2)}B`,
         change: `${volumeChange >= 0 ? "+" : ""}${volumeChange.toFixed(2)}%`,
       },
-      { label: "BTC Dominance", value: "57.9%" },
-      { label: "ETH Dominance", value: "10.4%" },
-      { label: "Fear & Greed", value: "11/100" },
+      { label: "BTC Dominance", value: btcDominance || "N/A" },
+      { label: "ETH Dominance", value: ethDominance || "N/A" },
+      {
+        label: "Fear & Greed",
+        value: `${fearGreedValue || "--"}/100 ${classification || ""}`,
+        color: fearGreedColor,
+      },
     ];
-  }, [chartData]);
+  }, [chartData, btcDominance, ethDominance, fearGreedValue, classification]);
 
-  // 🟡 Loading state (only for historical tabs)
-  if ((tabValue === 2 || tabValue === 3 || tabValue === 4) && loading) {
+  // Loading state
+  if ((tabValue === 2 || tabValue === 3 || tabValue === 4) && loading)
     return (
       <Box sx={{ px: 6, py: 4 }}>
         <Typography>Loading historical market data...</Typography>
       </Box>
     );
-  }
 
-  if (error) {
+  // Error state
+  if (error)
     return (
       <Box sx={{ px: 6, py: 4 }}>
-        <Typography color="error">
-          Failed to load Bitcoin historical data.
-        </Typography>
+        <Typography color="error">Failed to load Bitcoin historical data.</Typography>
       </Box>
     );
-  }
 
   return (
     <Box
@@ -119,43 +125,45 @@ export default function CryptoMarketCapChart({ mode }) {
         <Tab label="All" />
       </Tabs>
 
-      <CryptoMarketTabContent tabValue={tabValue} />
+      <CryptoMarketTabContent
+        tabValue={tabValue}
+        loading={loading}
+        chartData={chartData}
+      />
 
-      {/* Chart only for historical tabs */}
-      {(tabValue === 2 || tabValue === 3 || tabValue === 4) && (
+      {/* Historical charts */}
+      {(tabValue === 2 || tabValue === 3 || tabValue === 4) && chartData.length > 0 && (
         <Box sx={{ height: 220, mb: 2 }}>
-          {chartData.length > 0 && (
-            <ResponsiveContainer width="100%" height="100%">
-              <LineChart data={chartData}>
-                <XAxis
-                  dataKey="date"
-                  tick={{ fontSize: 12 }}
-                  angle={-45}
-                  textAnchor="end"
-                  height={60}
-                />
-                <YAxis hide />
-                <Tooltip />
-                <Legend verticalAlign="top" height={36} />
-                <Line
-                  type="monotone"
-                  dataKey="marketCap"
-                  stroke="#4caf50"
-                  strokeWidth={2}
-                  dot={false}
-                  name="Market Cap (T)"
-                />
-                <Line
-                  type="monotone"
-                  dataKey="volume"
-                  stroke="#ef5350"
-                  strokeWidth={2}
-                  dot={false}
-                  name="Volume (B)"
-                />
-              </LineChart>
-            </ResponsiveContainer>
-          )}
+          <ResponsiveContainer width="100%" height="100%">
+            <LineChart data={chartData}>
+              <XAxis
+                dataKey="date"
+                tick={{ fontSize: 12 }}
+                angle={-45}
+                textAnchor="end"
+                height={60}
+              />
+              <YAxis hide />
+              <Tooltip />
+              <Legend verticalAlign="top" height={36} />
+              <Line
+                type="monotone"
+                dataKey="marketCap"
+                stroke="#4caf50"
+                strokeWidth={2}
+                dot={false}
+                name="Market Cap (T)"
+              />
+              <Line
+                type="monotone"
+                dataKey="volume"
+                stroke="#ef5350"
+                strokeWidth={2}
+                dot={false}
+                name="Volume (B)"
+              />
+            </LineChart>
+          </ResponsiveContainer>
         </Box>
       )}
 

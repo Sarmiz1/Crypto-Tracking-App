@@ -7,7 +7,7 @@ export const MarketInfo = () => {
     useContext(appContext);
 
   const { name: currencyName, symbol: currencySymbol } = currency;
-  const { data } = globalMetrics || {};
+  const { data, fearGreed } = globalMetrics || {};
   const { data: defiData } = defi || {};
   const { data: stableCoinsData } = stableCoins || {};
   const { data: btc } = bitcoin || {};
@@ -81,16 +81,30 @@ export const MarketInfo = () => {
   // 24h change
   const btcDominanceChange = formatLargeDigits(btcDominance - previousDominance, '');
 
+  // Eth dominance
+  const ethDominance = data?.data?.market_cap_percentage?.eth || 0;
+  const ethDominanceFormatted = formatLargeDigits(ethDominance, '');
+
+  // Fear and Greed
+  const fearGreedValue = Number(fearGreed?.value || 0);
+  const fearGreedClassification =
+    fearGreed?.value_classification || "Neutral";
+
   return {
-    marketVolume: { marketVolumeFormatted },
-    volumeChange: { marketVolumeChange24 },
-    defiVolume: { defiVolume24Formatted },
-    defiVolumePercent: { defiVolumePercentage },
-    stableCoinVolume: { stablecoinVolumeFormatted },
-    stableCoinVolumePercent: { stablecoinVolumePercent },
-    btcDominance: { btcDominanceFormatted },
-    btcDominanceChange: { btcDominanceChange },
-    marketCap : {marketCapFormatted},
-    marketCapChange: {change24h}
+    marketVolume:  marketVolumeFormatted ,
+    volumeChange:  marketVolumeChange24 ,
+    defiVolume:  defiVolume24Formatted ,
+    defiVolumePercent:  defiVolumePercentage ,
+    stableCoinVolume:  stablecoinVolumeFormatted ,
+    stableCoinVolumePercent:  stablecoinVolumePercent ,
+    btcDominance:  btcDominanceFormatted ,
+    btcDominanceChange:  btcDominanceChange ,
+    marketCap:  marketCapFormatted ,
+    marketCapChange:  change24h ,
+    ethDominance:  ethDominanceFormatted ,
+    fearGreed: {
+      value: fearGreedValue ,
+      classification: fearGreedClassification ,
+    },
   }
 }

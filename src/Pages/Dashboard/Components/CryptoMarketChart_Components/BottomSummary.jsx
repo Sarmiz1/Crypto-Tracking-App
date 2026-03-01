@@ -11,6 +11,9 @@ export default function BottomSummary({ summaryData }) {
           <Typography
             variant="body2"
             fontWeight={600}
+            sx={{
+              color: item.label === "Fear & Greed" && item.fearGreedColor,
+            }}
             color={
               item.change?.includes("-")
                 ? "error.main"
@@ -27,6 +30,8 @@ export default function BottomSummary({ summaryData }) {
   );
 }
 
-{/* <Typography variant="body2" color="text.secondary" sx={{ mt: 1 }}>
+{
+  /* <Typography variant="body2" color="text.secondary" sx={{ mt: 1 }}>
         Market Cap: $3.37T +5.60% | 24h Vol: $84.32B -4.23% | Dominance: BTC 57.9% ETH 10.4% | ETH Gas: 0.07 Gwei | Fear & Greed: 11/100 | Boom: 84.4 | Blue: 10/100 | Get Related...
-      </Typography> */}
+      </Typography> */
+}
