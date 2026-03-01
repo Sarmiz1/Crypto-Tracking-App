@@ -3,7 +3,7 @@ import { Box } from '@mui/material';
 import IconButtons from './CustomDashboardMarketCards_Components/IconButtons';
 import CardContentBox from './CustomDashboardMarketCards_Components/CardContentBox';
 
-export default function CustomDashboardMarketCards({ setSelectedCoin, darkMode, coins }) {
+export default function CustomDashboardMarketCards({ setSelectedCoin, darkMode, cryptoListing, currency  }) {
 
 
   const scrollRef = useRef(null);
@@ -13,7 +13,7 @@ export default function CustomDashboardMarketCards({ setSelectedCoin, darkMode, 
       {/* Left arrow */}
       <IconButtons darkMode={darkMode} scrollRef={scrollRef} type='left' />
       {/* Card Content Box */}
-      <CardContentBox coins={coins} scrollRef={scrollRef} setSelectedCoin={setSelectedCoin} />  
+      <CardContentBox cryptoListing={cryptoListing} scrollRef={scrollRef} setSelectedCoin={setSelectedCoin} currency={currency} />  
       {/* Right arrow */}
       <IconButtons darkMode={darkMode} scrollRef={scrollRef} type='right' />
     </Box>

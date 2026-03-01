@@ -1,10 +1,7 @@
 import { Box, Card, CardContent, Typography } from "@mui/material";
-import { useContext } from "react";
-import { appContext } from "../../../../Context/AppContextProvider";
 
 
-export default function CardContentBox({ scrollRef, setSelectedCoin }) {
-  const { cryptoListing, currency } = useContext(appContext);
+export default function CardContentBox({ scrollRef, setSelectedCoin, currency, cryptoListing }) {
 
   const { symbol:currencySymbol } = currency || {};  
 
