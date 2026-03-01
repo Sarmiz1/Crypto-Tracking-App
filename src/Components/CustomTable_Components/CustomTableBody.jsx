@@ -12,6 +12,7 @@ import StarIcon from "@mui/icons-material/Star";
 import { useTheme } from "@mui/material/styles";
 import { LineChart, Line, ResponsiveContainer, XAxis, YAxis } from "recharts";
 import currencyFormat from "../../utils/currencyFormat";
+import { formatLargeDigits } from "../../utils/formatLargeDigits";
 import { useContext } from "react";
 import { appContext } from "../../Context/AppContextProvider";
 
@@ -27,6 +28,8 @@ export default function CustomTableBody({
   const {
     watchList: { watchlist, setWatchlist },
   } = useContext(appContext);
+
+  const { symbol:currencySymbol } = currency || {}
 
   const handleWatchlistToggle = (coin) => {
     // Implement watchlist toggle logic here
@@ -45,10 +48,10 @@ export default function CustomTableBody({
 
         if (section === "watchlist") {
           rankDisplay = "__";
-        } else if (section === "most-visited" || section === "new") {
-          rankDisplay = index + 1;
-        } else {
+        } else if (section === "top") {
           rankDisplay = coin.market_cap_rank;
+        } else {
+          rankDisplay = index + 1;
         }
         
         const isWatched = watchlist.some((c) => c.id === coin.id);
@@ -127,8 +130,7 @@ export default function CustomTableBody({
             </TableCell>
 
             <TableCell align="right">
-              {currency.symbol}
-              {coin.current_price}
+              {currencyFormat(coin.current_price, {symbol: currencySymbol})}
             </TableCell>
 
             <TableCell
@@ -139,11 +141,21 @@ export default function CustomTableBody({
               {currencyFormat(coin.price_change_percentage_24h)}%
             </TableCell>
 
-            <TableCell align="right">{coin.market_cap}</TableCell>
+            <TableCell align="right">{currencyFormat(coin.market_cap,{symbol: currencySymbol})}</TableCell>
 
-            <TableCell align="right">{coin.total_volume}</TableCell>
+            <TableCell align="right">{currencyFormat(coin.total_volume,{symbol: currencySymbol})}</TableCell>
 
-            <TableCell align="right">{coin.total_supply}</TableCell>
+            <TableCell align="right">
+              <Box sx={{display: 'flex', m: 0, p: 0, justifyContent: 'right', gap: '5px' }}>
+                <Typography sx={{fontSize: 14}}>
+                  {formatLargeDigits(coin.total_supply, '')}
+                </Typography>
+
+                <Typography sx={{textTransform: 'uppercase', fontSize: 14}}>
+                  {coin.symbol}
+                </Typography>
+              </Box>
+            </TableCell>
 
             {/* Sparkline chart */}
             <TableCell align="right">

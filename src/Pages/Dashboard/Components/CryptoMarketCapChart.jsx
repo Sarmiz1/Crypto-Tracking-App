@@ -12,13 +12,13 @@ import {
 import { useFetch } from "../../../Hooks/useFetch";
 import BottomSummary from "./CryptoMarketChart_Components/BottomSummary";
 import CryptoMarketTabContent from "./CryptoMarketChart_Components/CryptoMarketTabContent";
-import { MarketInfo } from "../../../utils/marketInfo";
+import { useMarketInfo } from "../../../utils/useMarketInfo";
 
 export default function CryptoMarketCapChart({ mode }) {
   const [tabValue, setTabValue] = useState(0);
 
   // Get BTC/ETH dominance and Fear & Greed
-  const { btcDominance, ethDominance, fearGreed } = MarketInfo() || {};
+  const { btcDominance, ethDominance, fearGreed } = useMarketInfo() || {};
   const { value: fearGreedValue, classification } = fearGreed || {};
 
   const getFearGreedColor = (value) => {

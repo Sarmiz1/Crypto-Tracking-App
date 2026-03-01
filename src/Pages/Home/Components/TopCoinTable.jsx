@@ -8,9 +8,11 @@ export default function TopCoinTable({ value }) {
   const {cryptoListing, currency} = useContext(appContext);
   const {data: topCoins, loading:topLoading, error: topError} = cryptoListing;
 
+
   // Map CoinGecko data to match your table
   const mappedData = topCoins?.map((coin) => ({
     id: coin.id,
+    symbol: coin.symbol,
     market_cap_rank: coin.market_cap_rank,
     name: coin.name,
     image: coin.image,
@@ -21,7 +23,6 @@ export default function TopCoinTable({ value }) {
     total_supply: coin.total_supply,
     chart: coin.sparkline_in_7d?.price || [], // line chart
   }));
-
 
   return (
     <CustomTabPanel value={value} index={0}>

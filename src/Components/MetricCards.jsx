@@ -2,25 +2,38 @@ import { useEffect, useRef, useState, useContext, useMemo } from "react";
 import { Stack, Box } from "@mui/material";
 import { appContext } from "../Context/AppContextProvider";
 import { MetricCard } from "./MetricCards_Components/MetricCard";
-import currencyFormat from "../utils/currencyFormat";
 
 export default function MetricCards() {
   const { globalMetrics, currency } = useContext(appContext);
-  const isMobile = window.innerWidth < 900; // simple check
+
+  // ------------------------
+  // Track mobile/desktop dynamically
+  // ------------------------
+  const [isMobile, setIsMobile] = useState(window.innerWidth < 900);
+  useEffect(() => {
+    const handleResize = () => {
+      setIsMobile(window.innerWidth < 900);
+    };
+    window.addEventListener("resize", handleResize);
+    return () => window.removeEventListener("resize", handleResize);
+  }, []);
 
   const scrollRef = useRef(null);
-  const [isDragging, setIsDragging] = useState(false);
-  const [startX, setStartX] = useState(0);
-  const [scrollLeft, setScrollLeft] = useState(0);
+  const isDraggingRef = useRef(false);
+  const startXRef = useRef(0);
+  const scrollLeftRef = useRef(0);
 
-  const isLoading = !globalMetrics?.data?.data;
+  // ------------------------
+  // Loading check
+  // ------------------------
+  const isLoading = !globalMetrics?.data;
 
-  /* =========================
-    Metrics Memo
-  ========================= */
+  // ------------------------
+  // Metrics memo
+  // ------------------------
   const metrics = useMemo(() => {
     if (isLoading) return [];
-    const globalData = globalMetrics.data.data;
+    const globalData = globalMetrics.data;
 
     return [
       {
@@ -30,7 +43,7 @@ export default function MetricCards() {
         change: globalData.market_cap_change_percentage_24h_usd || 0,
         data:
           globalMetrics.topCoins?.map(
-            (c) => c.sparkline_in_7d?.price?.[0] || 0,
+            (c) => c.sparkline_in_7d?.price?.[0] || 0
           ) || [],
       },
       {
@@ -43,37 +56,40 @@ export default function MetricCards() {
         title: "Fear & Greed",
         value: globalMetrics.fearGreed?.value || 0,
         change: 0,
-        data: Array.from(
-          { length: 7 },
-          () =>
-            (parseInt(globalMetrics.fearGreed?.value) || 0) +
-            Math.random() * 5 -
-            2,
+        data: Array.from({ length: 7 }, () =>
+          (parseInt(globalMetrics.fearGreed?.value) || 0) + Math.random() * 5 - 2
         ),
       },
     ];
   }, [globalMetrics, currency, isLoading]);
 
-  /* =========================
-     Apple-style Drag on Desktop
-  ========================= */
+  // ------------------------
+  // Dragging logic for desktop
+  // ------------------------
   useEffect(() => {
     const slider = scrollRef.current;
     if (!slider || isMobile) return;
 
     const handleMouseDown = (e) => {
-      setIsDragging(true);
-      setStartX(e.pageX - slider.offsetLeft);
-      setScrollLeft(slider.scrollLeft);
+      isDraggingRef.current = true;
+      startXRef.current = e.pageX - slider.offsetLeft;
+      scrollLeftRef.current = slider.scrollLeft;
     };
-    const handleMouseUp = () => setIsDragging(false);
-    const handleMouseLeave = () => setIsDragging(false);
+
+    const handleMouseUp = () => {
+      isDraggingRef.current = false;
+    };
+
+    const handleMouseLeave = () => {
+      isDraggingRef.current = false;
+    };
+
     const handleMouseMove = (e) => {
-      if (!isDragging) return;
+      if (!isDraggingRef.current) return;
       e.preventDefault();
       const x = e.pageX - slider.offsetLeft;
-      const walk = (x - startX) * 1.5;
-      slider.scrollLeft = scrollLeft - walk;
+      const walk = (x - startXRef.current) * 1.5;
+      slider.scrollLeft = scrollLeftRef.current - walk;
     };
 
     slider.addEventListener("mousedown", handleMouseDown);
@@ -87,7 +103,7 @@ export default function MetricCards() {
       slider.removeEventListener("mouseleave", handleMouseLeave);
       slider.removeEventListener("mousemove", handleMouseMove);
     };
-  }, [isDragging, startX, scrollLeft, isMobile]);
+  }, [isMobile]); // reattach if isMobile changes
 
   return (
     <Box sx={{ overflow: "hidden" }}>

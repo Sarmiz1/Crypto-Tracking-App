@@ -1,11 +1,11 @@
-import { MarketInfo } from "../../../../utils/marketInfo";
+import { useMarketInfo } from "../../../../utils/useMarketInfo";
 import { Box, Typography } from "@mui/material";
 import { PieChart, Pie, Cell, Tooltip, Legend, ResponsiveContainer } from "recharts";
 
 const COLORS = ["#f7931a", "#627eea", "#e0e0e0"]; // BTC, ETH, Other
 
 export default function CryptoMarketTabContent({ tabValue, loading }) {
-  const { btcDominance, ethDominance } = MarketInfo() || {};
+  const { btcDominance, ethDominance } = useMarketInfo();
 
   // Safe numeric conversion + fallback
   const safeNum = (val) => (typeof val === 'number' && !isNaN(val) ? val : 0);

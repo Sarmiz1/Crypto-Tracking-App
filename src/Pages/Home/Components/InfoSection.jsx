@@ -6,12 +6,17 @@ import { appContext } from "../../../Context/AppContextProvider";
 import ChangeIndicator from "./InfoSection_Components/ChangeIndicator";
 import CollapseSection from "./InfoSection_Components/CollapseSection";
 import ToggleSection from "./InfoSection_Components/ToggleSection";
-import { MarketInfo } from "../../../utils/marketInfo";
+import { useMarketInfo } from "../../../utils/useMarketInfo";
 
 export default function InfoSection() {
   const { mode } = useContext(appContext);
-  const { marketCap, marketCapChange } = MarketInfo || {}
+  const { marketCap, marketCapChange } = useMarketInfo() 
 
+
+  // ------------------------
+  // Hide component if no data
+  // ------------------------
+  if (!marketCap && !marketCapChange) return null;
 
   const isDark = mode === "dark";
   const textColor = isDark ? "#fff" : "#000";
@@ -40,10 +45,7 @@ export default function InfoSection() {
         </Typography>
 
         {/* Collapse Section */}
-        <CollapseSection
-          textColor={textColor}
-          expanded={expanded}
-        />
+        <CollapseSection textColor={textColor} expanded={expanded} />
 
         {/* Toggle */}
         <ToggleSection

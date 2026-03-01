@@ -1,67 +1,80 @@
-import { Box, Card, CardContent, Typography } from "@mui/material";
+import {
+  Box,
+  Card,
+  CardContent,
+  Typography,
+  CircularProgress,
+  Alert,
+} from '@mui/material';
 import { LineChart, Line, ResponsiveContainer } from "recharts";
-import { appContext } from "../../../../Context/AppContextProvider";
 import { useContext } from "react";
-import { formatLargeDigits } from '../../../../utils/formatLargeDigits'
+import { formatLargeDigits } from '../../../../utils/formatLargeDigits';
+import { appContext } from "../../../../Context/AppContextProvider";
 
 export default function ContentCardsBox({ scrollRef }) {
   const { globalMetrics, currency } = useContext(appContext);
+  const { symbol: currencySymbol = '$' } = currency || {};
 
-  const { symbol: currencySymbol } = currency || {};
-  const { data, loading, error, fearGreed } = globalMetrics || {};
+  // Correct destructuring
+  const {
+    data: globalData,       // Already the /global data object
+    loading: globalLoading,
+    error: globalError,
+    fearGreed,               // Already the single Fear & Greed object
+  } = globalMetrics || {};
 
-
-  // ✅ Loading state
-  if (loading) {
+  // Loading state
+  if (globalLoading) {
     return (
-      <Box sx={{ px: 6, py: 4 }}>
-        <Typography>Loading metrics...</Typography>
+      <Box sx={{ px: 6, py: 4, textAlign: 'center' }}>
+        <CircularProgress size={32} />
+        <Typography sx={{ mt: 1 }}>Loading global metrics...</Typography>
       </Box>
     );
   }
 
-  // ✅ Error state
-  if (error || !data) {
+  // Error state
+  if (globalError || !globalData) {
     return (
       <Box sx={{ px: 6, py: 4 }}>
-        <Typography color="error">Failed to load global metrics.</Typography>
+        <Alert severity="error">
+          Failed to load global metrics: {globalError || "No data"}
+        </Alert>
       </Box>
     );
   }
 
-  // 🔥 Build cards array manually
+  // Safe global metrics values
+  const totalMarketCap = globalData?.total_market_cap?.[currency?.name?.toLowerCase()] || 0;
+  const totalVolume = globalData?.total_volume?.[currency?.name?.toLowerCase()] || 0;
+  const btcDominance = globalData?.market_cap_percentage?.btc?.toFixed(2) || "N/A";
+
+  // Fear & Greed values
+  const fearValue = fearGreed?.value || "--";
+  const fearLabel = fearGreed?.value_classification || "";
+  const gaugeValue = Number(fearValue) || 0;
+
+  // Cards array
   const cards = [
     {
       name: "Global Market Cap",
-      value:
-        formatLargeDigits(
-        (data?.data?.total_market_cap?.usd || 0), currencySymbol),
+      value: formatLargeDigits(totalMarketCap, currencySymbol),
     },
     {
       name: "24h Volume",
-      value:
-        formatLargeDigits(
-        (data?.data?.total_volume?.usd || 0), currencySymbol),
+      value: formatLargeDigits(totalVolume, currencySymbol),
     },
     {
       name: "BTC Dominance",
-      value:
-        (data?.data?.market_cap_percentage?.btc || 0).toFixed(2) + "%",
+      value: btcDominance + "%",
     },
     {
       name: "Fear & Greed Index",
-      value: fearGreed?.value || "--",
+      value: fearValue,
       type: "fear",
-      gaugeValue: fearGreed?.value || 0,
-      label: fearGreed?.value_classification || "",
+      gaugeValue: gaugeValue,
+      label: fearLabel,
     },
-    // Sparkline example (if you have one)
-    // {
-    //   name: "Sample Sparkline",
-    //   type: "sparkline",
-    //   sparkline: [{ v: 10 }, { v: 12 }, { v: 8 }, { v: 14 }],
-    //   isPositive: true,
-    // },
   ];
 
   return (
@@ -102,7 +115,7 @@ export default function ContentCardsBox({ scrollRef }) {
               {item.value}
             </Typography>
 
-            {/* Fear & Greed */}
+            {/* Fear & Greed Gauge */}
             {item.type === "fear" && (
               <>
                 <Box
@@ -132,7 +145,7 @@ export default function ContentCardsBox({ scrollRef }) {
 
                 <Typography
                   variant="body2"
-                  sx={{ mt: 1, color: "success.main" }}
+                  sx={{ mt: 1, color: item.gaugeValue >= 50 ? "success.main" : "error.main" }}
                 >
                   {item.label}
                 </Typography>

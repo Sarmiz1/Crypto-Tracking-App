@@ -4,7 +4,7 @@ import {
   Collapse
 } from "@mui/material";
 import ChangeIndicator from "./ChangeIndicator";
-import { MarketInfo } from "../../../../utils/marketInfo";
+import { useMarketInfo } from "../../../../utils/useMarketInfo";
 
 export default function CollapseSection({ expanded, textColor }) {
 
@@ -17,7 +17,7 @@ export default function CollapseSection({ expanded, textColor }) {
     stableCoinVolumePercent,
     btcDominance,
     btcDominanceChange
-  } = MarketInfo || {}
+  } = useMarketInfo()
 
   return (
     <Collapse in={expanded}>
