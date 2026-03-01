@@ -1,5 +1,5 @@
 import { useState, useMemo } from "react";
-import { Box, Tabs, Tab, Typography } from "@mui/material";
+import { Box, Tabs, Tab, Typography, Divider, Paper, Chip, CircularProgress, Alert } from "@mui/material";
 import {
   LineChart,
   Line,
@@ -68,14 +68,14 @@ export default function CryptoMarketCapChart({ mode }) {
       {
         label: "Market Cap",
         value: `$${latest.marketCap.toFixed(2)}T`,
-        change: `${marketCapChange >= 0 ? "+" : ""}${marketCapChange.toFixed(
-          2
-        )}%`,
+        change: `${marketCapChange >= 0 ? "+" : ""}${marketCapChange.toFixed(2)}%`,
+        color: marketCapChange >= 0 ? "success.main" : "error.main",
       },
       {
         label: "24h Volume",
         value: `$${latest.volume.toFixed(2)}B`,
         change: `${volumeChange >= 0 ? "+" : ""}${volumeChange.toFixed(2)}%`,
+        color: volumeChange >= 0 ? "success.main" : "error.main",
       },
       { label: "BTC Dominance", value: btcDominance || "N/A" },
       { label: "ETH Dominance", value: ethDominance || "N/A" },
@@ -85,39 +85,85 @@ export default function CryptoMarketCapChart({ mode }) {
         color: fearGreedColor,
       },
     ];
-  }, [chartData, btcDominance, ethDominance, fearGreedValue, classification]);
+  }, [chartData, btcDominance, ethDominance, fearGreedValue, classification, fearGreedColor]);
 
   // Loading state
   if ((tabValue === 2 || tabValue === 3 || tabValue === 4) && loading)
     return (
-      <Box sx={{ px: 6, py: 4 }}>
-        <Typography>Loading historical market data...</Typography>
+      <Box sx={{ px: 6, py: 6, display: 'flex', justifyContent: 'center' }}>
+        <CircularProgress />
       </Box>
     );
 
   // Error state
   if (error)
     return (
-      <Box sx={{ px: 6, py: 4 }}>
-        <Typography color="error">Failed to load Bitcoin historical data.</Typography>
-      </Box>
+      <Alert severity="error" sx={{ m: 4 }}>
+        Failed to load Bitcoin historical data: {error}
+      </Alert>
     );
 
   return (
     <Box
       sx={{
         py: 4,
-        px: 2,
-        bgcolor: mode === "dark" ? "#222222" : "background.default",
+        px: { xs: 2, md: 4 },
+        bgcolor: mode === "dark" ? "#1a1a1a" : "background.default",
         borderRadius: 3,
-        boxShadow: 1,
+        boxShadow: 3,
+        position: "relative",
+        overflow: "hidden",
       }}
     >
-      <Typography variant="h6" fontWeight={600} gutterBottom>
+      {/* Title with subtle gradient background */}
+      <Box
+        sx={{
+          position: "absolute",
+          top: 0,
+          left: 0,
+          right: 0,
+          height: 80,
+          background: mode === "dark"
+            ? "linear-gradient(180deg, rgba(30,30,30,0.8) 0%, transparent 100%)"
+            : "linear-gradient(180deg, rgba(250,249,246,0.8) 0%, transparent 100%)",
+          zIndex: 1,
+        }}
+      />
+
+      <Typography
+        variant="h5"
+        fontWeight={700}
+        sx={{
+          mb: 3,
+          position: "relative",
+          zIndex: 2,
+          color: mode === "dark" ? "#fff" : "text.primary",
+        }}
+      >
         Crypto Market Cap
       </Typography>
 
-      <Tabs value={tabValue} onChange={handleTabChange} sx={{ mb: 2 }}>
+      {/* Tabs with better contrast */}
+      <Tabs
+        value={tabValue}
+        onChange={handleTabChange}
+        sx={{
+          mb: 4,
+          position: "relative",
+          zIndex: 2,
+          "& .MuiTab-root": {
+            fontWeight: 600,
+            color: mode === "dark" ? "#bbb" : "#555",
+            "&.Mui-selected": {
+              color: mode === "dark" ? "#fff" : "primary.main",
+            },
+          },
+          "& .MuiTabs-indicator": {
+            backgroundColor: "primary.main",
+            height: 3,
+          },
+        }}
+      >
         <Tab label="Overview" />
         <Tab label="Breakdown" />
         <Tab label="30d" />
@@ -125,48 +171,86 @@ export default function CryptoMarketCapChart({ mode }) {
         <Tab label="All" />
       </Tabs>
 
+      {/* Tab Content */}
       <CryptoMarketTabContent
         tabValue={tabValue}
         loading={loading}
         chartData={chartData}
       />
 
-      {/* Historical charts */}
+      {/* Historical charts with improved style */}
       {(tabValue === 2 || tabValue === 3 || tabValue === 4) && chartData.length > 0 && (
-        <Box sx={{ height: 220, mb: 2 }}>
+        <Paper
+          elevation={0}
+          sx={{
+            height: 280,
+            mb: 4,
+            borderRadius: 3,
+            overflow: "hidden",
+            bgcolor: mode === "dark" ? "#222" : "#fff",
+            border: `1px solid ${mode === "dark" ? "#444" : "#eee"}`,
+          }}
+        >
           <ResponsiveContainer width="100%" height="100%">
-            <LineChart data={chartData}>
+            <LineChart data={chartData} margin={{ top: 20, right: 20, bottom: 40, left: 20 }}>
+              <defs>
+                <linearGradient id="marketCapGradient" x1="0" y1="0" x2="0" y2="1">
+                  <stop offset="5%" stopColor="#4caf50" stopOpacity={0.4} />
+                  <stop offset="95%" stopColor="#4caf50" stopOpacity={0} />
+                </linearGradient>
+                <linearGradient id="volumeGradient" x1="0" y1="0" x2="0" y2="1">
+                  <stop offset="5%" stopColor="#ef5350" stopOpacity={0.4} />
+                  <stop offset="95%" stopColor="#ef5350" stopOpacity={0} />
+                </linearGradient>
+              </defs>
               <XAxis
                 dataKey="date"
-                tick={{ fontSize: 12 }}
+                tick={{ fontSize: 12, fill: mode === "dark" ? "#aaa" : "#666" }}
                 angle={-45}
                 textAnchor="end"
                 height={60}
               />
               <YAxis hide />
-              <Tooltip />
-              <Legend verticalAlign="top" height={36} />
+              <Tooltip
+                contentStyle={{
+                  backgroundColor: mode === "dark" ? "#222" : "#fff",
+                  border: `1px solid ${mode === "dark" ? "#444" : "#ddd"}`,
+                  borderRadius: 8,
+                  color: mode === "dark" ? "#fff" : "#000",
+                }}
+              />
+              <Legend
+                verticalAlign="top"
+                height={40}
+                iconSize={12}
+                wrapperStyle={{ color: mode === "dark" ? "#ddd" : "#333" }}
+              />
               <Line
                 type="monotone"
                 dataKey="marketCap"
                 stroke="#4caf50"
-                strokeWidth={2}
+                strokeWidth={3}
                 dot={false}
                 name="Market Cap (T)"
+                fill="url(#marketCapGradient)"
+                activeDot={{ r: 6 }}
               />
               <Line
                 type="monotone"
                 dataKey="volume"
                 stroke="#ef5350"
-                strokeWidth={2}
+                strokeWidth={3}
                 dot={false}
                 name="Volume (B)"
+                fill="url(#volumeGradient)"
+                activeDot={{ r: 6 }}
               />
             </LineChart>
           </ResponsiveContainer>
-        </Box>
+        </Paper>
       )}
 
+      {/* Bottom Summary – refined cards */}
       <BottomSummary summaryData={summaryData} />
     </Box>
   );
