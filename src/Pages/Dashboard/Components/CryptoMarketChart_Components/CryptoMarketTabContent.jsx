@@ -1,4 +1,4 @@
-import { Box, Tabs, Tab, Typography } from "@mui/material";
+import { Box, Typography } from "@mui/material";
 
 
 export default function CryptoMarketTabContent({ tabValue }) {

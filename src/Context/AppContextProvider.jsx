@@ -87,6 +87,34 @@ export default function AppContextProvider({ children }) {
   } = useFetch(
     "https://api.coingecko.com//api/v3/coins/markets?vs_currency=usd&ids=bitcoin",
   );
+  
+  // --- Bit Coin price History 30 Days---
+  // const {
+  //   data: btcHistoricalData_30,
+  //   loading: btcHistoricalLoading_30,
+  //   error: btcHistoricalError_30,
+  // } = useFetch(
+  //   "https://api.coingecko.com/api/v3/coins/bitcoin/market_chart?vs_currency=usd&days=30",
+  // );
+
+  // // --- Bit Coin price History 365 Days---
+  // const {
+  //   data: btcHistoricalData_365,
+  //   loading: btcHistoricalLoading_365,
+  //   error: btcHistoricalError_365,
+  // } = useFetch(
+  //   "https://api.coingecko.com/api/v3/coins/bitcoin/market_chart?vs_currency=usd&days=365",
+  // );
+
+  // // --- Bit Coin price History All ---
+  // const {
+  //   data: btcHistoricalData_max,
+  //   loading: btcHistoricalLoading_max,
+  //   error: btcHistoricalError_max,
+  // } = useFetch(
+  //   "https://api.coingecko.com/api/v3/coins/bitcoin/market_chart?vs_currency=usd&days=max",
+  // );
+
 
   const value = {
     tabValue,
@@ -131,7 +159,24 @@ export default function AppContextProvider({ children }) {
       data: bitCoinData,
       loading: bitCoinLoading,
       error: bitCoinError,
-    },
+    //   historical: {
+    //     thirtyDays: {
+    //       btcHistory: btcHistoricalData_30,
+    //       btcHistoryloading: btcHistoricalLoading_30,
+    //       btcHistoryerror: btcHistoricalError_30
+    //   },
+    //     oneYear: {
+    //       btcHistory: btcHistoricalData_365,
+    //       btcHistoryloading: btcHistoricalLoading_365,
+    //       btcHistoryerror: btcHistoricalError_365
+    //   },
+    //     max: {
+    //       btcHistory: btcHistoricalData_max,
+    //       btcHistoryloading: btcHistoricalLoading_max,
+    //       btcHistoryerror: btcHistoricalError_max
+    //   },
+    // },
+    }
   };
 
   return <appContext.Provider value={value}>{children}</appContext.Provider>;
