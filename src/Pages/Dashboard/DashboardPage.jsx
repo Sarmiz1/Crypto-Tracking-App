@@ -19,6 +19,8 @@ export default function DashboardPage() {
 
   const [selectedCoin, setSelectedCoin] = useState(null);
 
+  const [activeLink, setActiveLink] = useState("Market Overview");
+
   const { mode, setMode } = useContext(appContext);
 
   const isMobile = useMediaQuery("(max-width:900px)");
@@ -39,7 +41,14 @@ export default function DashboardPage() {
       {/* MOBILE DRAWER */}
       {isMobile && (
         <Drawer open={mobileOpen} onClose={() => setMobileOpen(false)}>
-          <SidebarContent collapsed={false} setCollapsed={() => {}} />
+          <SidebarContent 
+            collapsed={false} 
+            setCollapsed={() => {}} 
+            setTab={setTab} 
+            activeLink={activeLink}
+            setActiveLink={setActiveLink}
+            setMobileOpen={setMobileOpen}
+          />
         </Drawer>
       )}
 
@@ -60,7 +69,13 @@ export default function DashboardPage() {
             zIndex: 10,
           }}
         >
-          <SidebarContent collapsed={collapsed} setCollapsed={setCollapsed} />
+          <SidebarContent 
+            collapsed={collapsed} 
+            setCollapsed={setCollapsed} 
+            setTab={setTab} 
+            activeLink={activeLink}
+            setActiveLink={setActiveLink}
+          />
         </Box>
       )}
 
@@ -74,7 +89,13 @@ export default function DashboardPage() {
         />
 
         <Box sx={{ px: { xs: 2, md: 4 }, py: 3,}}>
-          <TabSection tab={tab} setTab={setTab} darkMode={mode === "dark"} />
+          <TabSection 
+            tab={tab} 
+            setTab={setTab} 
+            darkMode={mode === "dark"} 
+            activeLink={activeLink}
+            setActiveLink={setActiveLink}
+          />
 
           <CustomTabPanel value={tab} index={0}>
             <OverviewHeader mode={mode} />

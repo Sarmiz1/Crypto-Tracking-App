@@ -6,7 +6,7 @@ import {
   TableCell,
   TableBody,
   TableContainer,
-  Typography,
+  Alert,
   Box,
   CircularProgress,
 } from "@mui/material";
@@ -14,6 +14,8 @@ import { useContext } from "react";
 import { appContext } from "../../../Context/AppContextProvider";
 import { formatLargeDigits } from "../../../utils/formatLargeDigits";
 import currencyFormat from "../../../utils/currencyFormat";
+import ErrorDisplay from "../../../Components/ErrorDisplay";
+import LoadingState from "../../../Components/LoadingState";
 
 export default function MarketTable() {
   const { cryptoListing, currency } = useContext(appContext);
@@ -29,29 +31,14 @@ export default function MarketTable() {
     changePercent_24: coin.price_change_percentage_24h,
   }));
 
-  if (loading) return (
-    <Box sx={{
-      display: 'flex', 
-      justifyContent: 'center', 
-      alignItems: 'center',
-      height: '4rem',
-      mt: 6
-    }}>
-      <CircularProgress />
-    </Box>
-  )
+  if (loading) return <LoadingState />
 
-  if (error) return (
-    <Box sx={{
-      display: 'flex', 
-      justifyContent: 'center', 
-      alignItems: 'center',
-      height: '4rem',
-      mt: 6
-    }}>
-      <Typography variant="h6">Failed to load market: Try again</Typography>
-    </Box>
-  )
+  if (error)
+    return (
+      <ErrorDisplay message={'Failed to load market: Try again'}/>
+    );
+
+    
 
   return (
     <Paper sx={{ mt: 6, width: "100%", overflow: "hidden" }}>

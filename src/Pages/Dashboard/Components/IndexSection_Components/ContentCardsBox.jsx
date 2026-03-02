@@ -10,6 +10,9 @@ import { LineChart, Line, ResponsiveContainer } from "recharts";
 import { useContext } from "react";
 import { formatLargeDigits } from '../../../../utils/formatLargeDigits';
 import { appContext } from "../../../../Context/AppContextProvider";
+import ErrorDisplay from '../../../../Components/ErrorDisplay';
+import LoadingState from '../../../../Components/LoadingState';
+
 
 export default function ContentCardsBox({ scrollRef }) {
   const { globalMetrics, currency } = useContext(appContext);
@@ -24,26 +27,12 @@ export default function ContentCardsBox({ scrollRef }) {
   } = globalMetrics || {};
 
   // Loading state
-  if (globalLoading) {
-    return (
-      <Box sx={{ px: 6, py: 4, textAlign: 'center' }}>
-        <CircularProgress size={32} />
-        <Typography sx={{ mt: 1 }}>Loading global metrics...</Typography>
-      </Box>
-    );
-  }
+  if (globalLoading)  return <LoadingState />
 
   // Error state
-  if (globalError || !globalData) {
-    return (
-      <Box sx={{ px: 6, py: 4 }}>
-        <Alert severity="error">
-          Failed to load global metrics: {globalError || "No data"}
-        </Alert>
-      </Box>
-    );
-  }
-
+  if (globalError || !globalData) 
+    return <ErrorDisplay message={`Failed to load global metrics: ${globalError || "No data"}`} />
+          
   // Safe global metrics values
   const totalMarketCap = globalData?.total_market_cap?.[currency?.name?.toLowerCase()] || 0;
   const totalVolume = globalData?.total_volume?.[currency?.name?.toLowerCase()] || 0;

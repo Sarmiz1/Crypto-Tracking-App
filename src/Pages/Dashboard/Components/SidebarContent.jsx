@@ -1,14 +1,14 @@
-import {
-  Box,
-  List,
-  ListItemButton,
-  ListItemText,
-  Button,
-} from "@mui/material";
+import { Box, List, ListItemButton, ListItemText, Button } from "@mui/material";
 import { Link } from "react-router-dom";
-import { useState } from "react";
 
-export default function SidebarContent({ collapsed, setCollapsed }) {
+export default function SidebarContent({ 
+  collapsed, 
+  setCollapsed, 
+  setTab,
+  activeLink, 
+  setActiveLink,
+  setMobileOpen
+  }) {
   const sidebarLinks = [
     "Market Overview",
     "Spot Market",
@@ -18,14 +18,32 @@ export default function SidebarContent({ collapsed, setCollapsed }) {
     "Home",
   ];
 
-  const [activeLink, setActiveLink] = useState("Market Overview");
+
+  const handleClickAction = (text) => {
+    setActiveLink(text);
+    setMobileOpen(false)
+
+    switch (text) {
+      case "Market Overview":
+        setTab(0);
+        break;
+      case "Spot Market":
+        setTab(1);
+        break;
+      case "Derivatives":
+        setTab(2);
+        break;
+      default:
+        ''
+    }
+  };
 
   return (
     <Box
       sx={{
         width: "100%",
         height: "100%",
-        position: 'sticky',
+        position: "sticky",
         p: 2,
         display: "flex",
         flexDirection: "column",
@@ -51,7 +69,7 @@ export default function SidebarContent({ collapsed, setCollapsed }) {
             component={text === "Home" ? Link : "button"}
             to={text === "Home" ? "/" : undefined}
             key={text}
-            onClick={() => setActiveLink(text)}
+            onClick={() => handleClickAction(text)}
             sx={{
               borderRadius: 2,
               mb: 1,

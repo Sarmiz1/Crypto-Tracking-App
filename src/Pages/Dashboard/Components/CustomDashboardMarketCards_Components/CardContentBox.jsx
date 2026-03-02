@@ -1,9 +1,14 @@
 import { Box, Card, CardContent, Typography } from "@mui/material";
+import ErrorDisplay from "../../../../Components/ErrorDisplay";
+import LoadingState from "../../../../Components/LoadingState";
 
-
-export default function CardContentBox({ scrollRef, setSelectedCoin, currency, cryptoListing }) {
-
-  const { symbol:currencySymbol } = currency || {};  
+export default function CardContentBox({
+  scrollRef,
+  setSelectedCoin,
+  currency,
+  cryptoListing,
+}) {
+  const { symbol: currencySymbol } = currency || {};
 
   const {
     data: coins,
@@ -12,24 +17,12 @@ export default function CardContentBox({ scrollRef, setSelectedCoin, currency, c
   } = cryptoListing || {};
 
   // ✅ Loading State
-  if (coinsLoading) {
-    return (
-      <Box sx={{ px: 2, py: 3 }}>
-        <Typography>Loading coins...</Typography>
-      </Box>
-    );
-  }
+  if (coinsLoading) return <LoadingState />
 
   // ✅ Error State
-  if (coinsError) {
-    return (
-      <Box sx={{ px: 2, py: 3 }}>
-        <Typography color="error">
-          Failed to load coins. Please try again.
-        </Typography>
-      </Box>
-    );
-  }
+  if (coinsError) 
+    return <ErrorDisplay message={"Failed to load coins. Please try again."} />;
+
 
   // ✅ Safety fallback
   if (!coins || coins.length === 0) {
@@ -148,4 +141,3 @@ export default function CardContentBox({ scrollRef, setSelectedCoin, currency, c
     </Box>
   );
 }
-
