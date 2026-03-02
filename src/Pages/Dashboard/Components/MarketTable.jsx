@@ -6,16 +6,52 @@ import {
   TableCell,
   TableBody,
   TableContainer,
+  Typography,
+  Box,
+  CircularProgress,
 } from "@mui/material";
+import { useContext } from "react";
+import { appContext } from "../../../Context/AppContextProvider";
+import { formatLargeDigits } from "../../../utils/formatLargeDigits";
+import currencyFormat from "../../../utils/currencyFormat";
 
 export default function MarketTable() {
-  const markets = [
-    { name: "Bitcoin", price: "64,261", change: -0.85, volume: "28B" },
-    { name: "Ethereum", price: "1,846", change: -1.02, volume: "15B" },
-    { name: "BNB", price: "599", change: 1.95, volume: "3B" },
-    { name: "Solana", price: "78", change: 0.17, volume: "2B" },
-    { name: "XRP", price: "1.35", change: 1.05, volume: "1.5B" },
-  ];
+  const { cryptoListing, currency } = useContext(appContext);
+  const { symbol: currencySymbol } = currency || {};
+  const { data, loading, error } = cryptoListing || {};
+  const markets = data?.slice(12, 35).map((coin) => ({
+    id: coin.id,
+    price: coin.current_price,
+    name: coin.name,
+    image: coin.image,
+    volume: coin.total_volume,
+    symbol: coin.symbol,
+    changePercent_24: coin.price_change_percentage_24h,
+  }));
+
+  if (loading) return (
+    <Box sx={{
+      display: 'flex', 
+      justifyContent: 'center', 
+      alignItems: 'center',
+      height: '4rem',
+      mt: 6
+    }}>
+      <CircularProgress />
+    </Box>
+  )
+
+  if (error) return (
+    <Box sx={{
+      display: 'flex', 
+      justifyContent: 'center', 
+      alignItems: 'center',
+      height: '4rem',
+      mt: 6
+    }}>
+      <Typography variant="h6">Failed to load market: Try again</Typography>
+    </Box>
+  )
 
   return (
     <Paper sx={{ mt: 6, width: "100%", overflow: "hidden" }}>
@@ -31,11 +67,26 @@ export default function MarketTable() {
           </TableHead>
           <TableBody>
             {markets.map((coin) => (
-              <TableRow key={coin.name}>
-                <TableCell>{coin.name}</TableCell>
-                <TableCell>${coin.price}</TableCell>
-                <TableCell>{coin.change}%</TableCell>
-                <TableCell>{coin.volume}</TableCell>
+              <TableRow key={coin.id}>
+                <TableCell>
+                  <Box sx={{ display: "flex", alignItems: "center", gap: 1 }}>
+                    <Box
+                      component={"img"}
+                      src={coin.image}
+                      sx={{
+                        width: "25px",
+                      }}
+                    />
+                    {coin.name}
+                  </Box>
+                </TableCell>
+                <TableCell>
+                  {currencyFormat(coin.price, { symbol: currencySymbol })}
+                </TableCell>
+                <TableCell>
+                  {formatLargeDigits(coin.changePercent_24, "")}%
+                </TableCell>
+                <TableCell>{formatLargeDigits(coin.volume, "")}</TableCell>
               </TableRow>
             ))}
           </TableBody>

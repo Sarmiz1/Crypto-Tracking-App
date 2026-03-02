@@ -12,11 +12,11 @@ export default function InfoSection() {
   const { mode } = useContext(appContext);
   const { marketCap, marketCapChange } = useMarketInfo() 
 
-
+console.log(marketCap)
   // ------------------------
   // Hide component if no data
   // ------------------------
-  if (!marketCap && !marketCapChange) return null;
+  if (!marketCap && !marketCapChange ) return null;
 
   const isDark = mode === "dark";
   const textColor = isDark ? "#fff" : "#000";

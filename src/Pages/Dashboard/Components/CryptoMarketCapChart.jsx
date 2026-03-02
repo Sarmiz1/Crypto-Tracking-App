@@ -33,7 +33,7 @@ export default function CryptoMarketCapChart({ mode }) {
 
   // Only fetch historical data for 30d, 1y, All
   const days =
-    tabValue === 2 ? 30 : tabValue === 3 ? 365 : tabValue === 4 ? "max" : null;
+    tabValue === 2 ? 30 : tabValue === 3 ? 365 : tabValue === 4 ? 365 : null;  // 'max' paid version
 
   const { data: historical, loading, error } = useFetch(
     days
