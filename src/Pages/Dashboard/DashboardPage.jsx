@@ -102,7 +102,7 @@ export default function DashboardPage() {
 
           {/* Spot Tab */}
           <CustomTabPanel value={tab} index={1}>
-            <SpotMarket />
+            <SpotMarket mode={mode} />
           </CustomTabPanel>
 
           {/* Derivatives Tab */}

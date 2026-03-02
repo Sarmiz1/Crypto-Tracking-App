@@ -3,7 +3,7 @@ import { Header } from "./SpotMarket_Components/Header";
 import { SpotFilterTable } from "./SpotMarket_Components/SpotFilterTable";
 import CryptoMarketCapChart from "./CryptoMarketCapChart";
 
-export default function SpotMarket() {
+export default function SpotMarket({ mode }) {
 
   return (
     <Box sx={{ 
@@ -15,7 +15,7 @@ export default function SpotMarket() {
       gap: 2 }}
     >
       <Header />
-      <SpotFilterTable />
+      <SpotFilterTable mode={mode} />
       <CryptoMarketCapChart />
     </Box>
   );
