@@ -1,6 +1,6 @@
 import { Box, Card, CardContent, Typography } from "@mui/material";
-import ErrorDisplay from "../../../../Components/ErrorDisplay";
-import LoadingState from "../../../../Components/LoadingState";
+import ErrorDisplay from "../../../../../../Components/ErrorDisplay";
+import LoadingState from "../../../../../../Components/LoadingState";
 
 export default function CardContentBox({
   scrollRef,

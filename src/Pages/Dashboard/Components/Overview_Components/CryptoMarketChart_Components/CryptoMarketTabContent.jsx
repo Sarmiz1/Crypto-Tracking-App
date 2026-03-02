@@ -1,6 +1,5 @@
-import { useMarketInfo } from "../../../../utils/useMarketInfo";
+import { useMarketInfo } from "../../../../../utils/useMarketInfo";
 import { Box, Typography } from "@mui/material";
-import { PieChart, Pie, Cell, Tooltip, Legend, ResponsiveContainer } from "recharts";
 import { OverviewLabel } from "./OverViewLabel";
 import { Breakdown } from "./Breakdown";
 

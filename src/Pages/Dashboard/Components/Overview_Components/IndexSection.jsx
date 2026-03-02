@@ -1,7 +1,7 @@
 import { useRef } from "react";
 import { Box, Container } from "@mui/material";
-import ContentCardsBox from "./IndexSection_Components/ContentCardsBox";
-import IndexIconsButton from "./IndexSection_Components/IndexIconsButton";
+import ContentCardsBox from "././IndexSection_Components/ContentCardsBox";
+import IndexIconsButton from "././IndexSection_Components/IndexIconsButton";
 
 export default function IndexSection() {
   const scrollRef = useRef(null);

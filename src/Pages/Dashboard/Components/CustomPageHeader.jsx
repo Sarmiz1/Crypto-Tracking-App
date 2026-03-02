@@ -1,6 +1,6 @@
 import { Typography, Box } from "@mui/material";
 
-export default function OverviewHeader({ darkMode }) {
+export default function CustomPageHeader({ darkMode, header='No header', children='No message Body' }, ...props) {
   return (
     <Box
       sx={{
@@ -10,14 +10,15 @@ export default function OverviewHeader({ darkMode }) {
         mb: 3,
         mt: -2,
         gap: 1,
-        minWidth: 0
+        minWidth: 0,
+        ...props
       }}
     >
-      <Typography variant="h4" fontWeight="bold">
-        Crypto Market Overview
+      <Typography variant="h4" fontWeight="bold" props>
+        {header}
       </Typography>
       <Typography variant="body1" color={darkMode ? "grey.400" : "grey.600"}>
-        Stay updated on the latest cryptocurrency market trends, including Bitcoin dominance, altcoin season, ETF net flows, and real-time market sentiment, all conveniently accessible in one place on CoinVerse.
+        {children}
       </Typography>
     </Box>
   );

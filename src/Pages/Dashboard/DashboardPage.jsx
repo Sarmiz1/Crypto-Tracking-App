@@ -1,17 +1,13 @@
-import { Box, Drawer, useMediaQuery } from "@mui/material";
+import { Box, Drawer, useMediaQuery, Typography } from "@mui/material";
 import { useState, useContext } from "react";
 import { appContext } from "../../Context/AppContextProvider";
-import MarketTable from "./Components/MarketTable";
 import TabSection from "./Components/TabSection";
 import TopAppBar from "./Components/TopAppBar";
 import ModalSection from "./Components/ModalSection";
 import SidebarContent from "./Components/SidebarContent";
 import CustomTabPanel from "../../Components/CustomTabPanel";
-import OverviewHeader from "./Components/OverviewHeader";
-import TopMarketCards from "./Components/TopMarketCards";
-import IndexSection from "./Components/IndexSection";
-import CryptoMarketCapChart from "./Components/CryptoMarketCapChart";
-import CryptoETFsNetFlow from "./Components/CryptoETFsNetFlow";
+import  SpotMarket  from "./Components/SpotMarket";
+import Overview from "./Components/Overview";
 
 export default function DashboardPage() {
   const [tab, setTab] = useState(0);
@@ -35,16 +31,17 @@ export default function DashboardPage() {
         color: mode === "dark" ? "#fff" : "#000",
         minHeight: "100vh",
         overflowX: "hidden",
-        mb: -10 
+        mb: -10,
       }}
     >
+      <title>Dashboard</title>
       {/* MOBILE DRAWER */}
       {isMobile && (
         <Drawer open={mobileOpen} onClose={() => setMobileOpen(false)}>
-          <SidebarContent 
-            collapsed={false} 
-            setCollapsed={() => {}} 
-            setTab={setTab} 
+          <SidebarContent
+            collapsed={false}
+            setCollapsed={() => {}}
+            setTab={setTab}
             activeLink={activeLink}
             setActiveLink={setActiveLink}
             setMobileOpen={setMobileOpen}
@@ -69,12 +66,13 @@ export default function DashboardPage() {
             zIndex: 10,
           }}
         >
-          <SidebarContent 
-            collapsed={collapsed} 
-            setCollapsed={setCollapsed} 
-            setTab={setTab} 
+          <SidebarContent
+            collapsed={collapsed}
+            setCollapsed={setCollapsed}
+            setTab={setTab}
             activeLink={activeLink}
             setActiveLink={setActiveLink}
+            setMobileOpen={setMobileOpen}
           />
         </Box>
       )}
@@ -88,26 +86,29 @@ export default function DashboardPage() {
           setMobileOpen={setMobileOpen}
         />
 
-        <Box sx={{ px: { xs: 2, md: 4 }, py: 3,}}>
-          <TabSection 
-            tab={tab} 
-            setTab={setTab} 
-            darkMode={mode === "dark"} 
+        <Box sx={{ px: { xs: 2, md: 4 }, py: 3 }}>
+          <TabSection
+            tab={tab}
+            setTab={setTab}
+            darkMode={mode === "dark"}
             activeLink={activeLink}
             setActiveLink={setActiveLink}
           />
+          {/* Overview Tab */}
+          <Overview
+            tab={tab} 
+            setSelectedCoin={setSelectedCoin} 
+          />
 
-          <CustomTabPanel value={tab} index={0}>
-            <OverviewHeader mode={mode} />
-            <TopMarketCards setSelectedCoin={setSelectedCoin} mode={mode} />
-            <IndexSection mode={mode} />
-            <CryptoMarketCapChart mode={mode} />
-            <CryptoETFsNetFlow mode={mode} />
-            {/* <AltcoinSeasonBar /> */}
-            <MarketTable />
+          {/* Spot Tab */}
+          <CustomTabPanel value={tab} index={1}>
+            <SpotMarket />
           </CustomTabPanel>
 
-          {/* other tabs if any */}
+          {/* Derivatives Tab */}
+          <CustomTabPanel value={tab} index={2}>
+            <Typography align="center">Coming soon..</Typography>
+          </CustomTabPanel>
         </Box>
       </Box>
 

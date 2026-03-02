@@ -1,5 +1,5 @@
 import { Box } from "@mui/material";
-import { generateETFData } from "../../../Data/generateETFData";
+import { generateETFData } from "../../../../Data/generateETFData";
 import Header from "./CryptoETFsNetFlow_Components/Header";
 import TabSection from "./CryptoETFsNetFlow_Components/Tabs";
 import CurrentValue from "./CryptoETFsNetFlow_Components/CurrentValue";

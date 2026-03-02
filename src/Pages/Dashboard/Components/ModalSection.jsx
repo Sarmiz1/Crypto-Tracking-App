@@ -4,7 +4,6 @@ import { formatLargeDigits } from "../../../utils/formatLargeDigits";
 import currencyFormat from "../../../utils/currencyFormat";
 import { useContext } from "react";
 import { appContext } from "../../../Context/AppContextProvider";
-import { symbol } from "zod";
 
 export default function ModalSection({ selectedCoin, setSelectedCoin }) {
 

@@ -6,16 +6,14 @@ import {
   TableCell,
   TableBody,
   TableContainer,
-  Alert,
   Box,
-  CircularProgress,
 } from "@mui/material";
 import { useContext } from "react";
-import { appContext } from "../../../Context/AppContextProvider";
-import { formatLargeDigits } from "../../../utils/formatLargeDigits";
-import currencyFormat from "../../../utils/currencyFormat";
-import ErrorDisplay from "../../../Components/ErrorDisplay";
-import LoadingState from "../../../Components/LoadingState";
+import { appContext } from "../../../../Context/AppContextProvider";
+import { formatLargeDigits } from "../../../../utils/formatLargeDigits";
+import currencyFormat from "../../../../utils/currencyFormat";
+import ErrorDisplay from "../../../../Components/ErrorDisplay";
+import LoadingState from "../../../../Components/LoadingState";
 
 export default function MarketTable() {
   const { cryptoListing, currency } = useContext(appContext);

@@ -3,7 +3,8 @@ import ChevronLeftIcon from "@mui/icons-material/ChevronLeft";
 import ChevronRightIcon from "@mui/icons-material/ChevronRight";
 import { useState, useEffect, useCallback } from "react";
 
-export default function IconButtons({ darkMode, scrollRef, type }) {
+export default function IconButtons({ mode, scrollRef, type }) {
+  const darkMode = mode === 'dark'
   const [canScrollLeft, setCanScrollLeft] = useState(false);
   const [canScrollRight, setCanScrollRight] = useState(false);
 

@@ -15,12 +15,12 @@ import {
   ResponsiveContainer,
   Legend,
 } from "recharts";
-import { useFetch } from "../../../Hooks/useFetch";
+import { useFetch } from "../../../../Hooks/useFetch";
 import BottomSummary from "./CryptoMarketChart_Components/BottomSummary";
 import CryptoMarketTabContent from "./CryptoMarketChart_Components/CryptoMarketTabContent";
-import { useMarketInfo } from "../../../utils/useMarketInfo";
-import ErrorDisplay from "../../../Components/ErrorDisplay";
-import LoadingState from "../../../Components/LoadingState";
+import { useMarketInfo } from "../../../../utils/useMarketInfo";
+import ErrorDisplay from "../../../../Components/ErrorDisplay";
+import LoadingState from "../../../../Components/LoadingState";
 
 export default function CryptoMarketCapChart({ mode }) {
   const [tabValue, setTabValue] = useState(0);

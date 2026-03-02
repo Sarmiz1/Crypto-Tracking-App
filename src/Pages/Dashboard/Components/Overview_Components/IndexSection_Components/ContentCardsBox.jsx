@@ -3,15 +3,13 @@ import {
   Card,
   CardContent,
   Typography,
-  CircularProgress,
-  Alert,
 } from '@mui/material';
 import { LineChart, Line, ResponsiveContainer } from "recharts";
 import { useContext } from "react";
-import { formatLargeDigits } from '../../../../utils/formatLargeDigits';
-import { appContext } from "../../../../Context/AppContextProvider";
-import ErrorDisplay from '../../../../Components/ErrorDisplay';
-import LoadingState from '../../../../Components/LoadingState';
+import { formatLargeDigits } from '../../../../../utils/formatLargeDigits';
+import { appContext } from "../../../../../Context/AppContextProvider";
+import ErrorDisplay from '../../../../../Components/ErrorDisplay';
+import LoadingState from '../../../../../Components/LoadingState';
 
 
 export default function ContentCardsBox({ scrollRef }) {
