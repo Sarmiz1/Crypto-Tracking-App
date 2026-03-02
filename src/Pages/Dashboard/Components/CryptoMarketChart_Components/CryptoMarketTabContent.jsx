@@ -1,4 +1,4 @@
-import { useMarketInfo } from "../../../../../utils/useMarketInfo";
+import { useMarketInfo } from "../../../../utils/useMarketInfo";
 import { Box, Typography } from "@mui/material";
 import { OverviewLabel } from "./OverViewLabel";
 import { Breakdown } from "./Breakdown";

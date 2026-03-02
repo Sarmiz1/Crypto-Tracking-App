@@ -1,8 +1,13 @@
 import { Paper } from "@mui/material";
-import { useState } from "react";
+import { useState, useContext } from "react";
 import SpotFilters from "./SpotFilterTable_Components/SpotFilters";
 import SpotTable from "./SpotFilterTable_Components/SpotTable";
-export const SpotFilterTable = ({ darkMode }) => {
+import { appContext } from "../../../../Context/AppContextProvider";
+
+export const SpotFilterTable = () => {
+  const { mode, currency, spotMarket } = useContext(appContext) || {}
+  const darkMode = mode === 'dark'
+
   const [search, setSearch] = useState("");
   const [marketType, setMarketType] = useState("All");
 
@@ -19,6 +24,7 @@ export const SpotFilterTable = ({ darkMode }) => {
         setSearch={setSearch}
         marketType={marketType}
         setMarketType={setMarketType}
+        darkMode={darkMode}
       />
 
       <SpotTable search={search} marketType={marketType} darkMode={darkMode} />

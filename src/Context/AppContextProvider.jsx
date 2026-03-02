@@ -22,7 +22,7 @@ export default function AppContextProvider({ children }) {
   const topCoinsFetch = useFetch(
     topCoinsUrl,
     {},
-    [currency.name] // refetch ONLY when currency changes
+    [currency.name]
   );
 
   /* ---------------- FETCH ONCE (mount only) ---------------- */
@@ -55,6 +55,30 @@ export default function AppContextProvider({ children }) {
     "https://api.coingecko.com/api/v3/coins/markets?vs_currency=usd&ids=bitcoin"
   );
 
+  /* ---------------- SPOT MARKET (BINANCE via CoinGecko) ---------------- */
+
+  const spotFetch = useFetch(
+    "https://api.coingecko.com/api/v3/exchanges/binance/tickers?depth=true"
+  );
+
+  const formattedSpotPairs = useMemo(() => {
+    if (!spotFetch.data?.tickers) return [];
+
+    return spotFetch.data.tickers
+      .filter((pair) => pair.target === "USDT") // only USDT pairs
+      .map((pair) => ({
+        pair: `${pair.base}/${pair.target}`,
+        base: pair.base,
+        target: pair.target,
+        price: pair.last,
+        volume: pair.volume,
+        spread: pair.bid_ask_spread_percentage,
+        trustScore: pair.trust_score,
+        tradeUrl: pair.trade_url,
+      }))
+      .slice(0, 100); // limit to 100 rows for performance
+  }, [spotFetch.data]);
+
   /* ---------------- MERGE TRENDING + TOP COINS ---------------- */
 
   const trendingWithSparkline = useMemo(() => {
@@ -68,9 +92,6 @@ export default function AppContextProvider({ children }) {
       .map((coin) => topMap.get(coin.item.id))
       .filter(Boolean);
   }, [topCoinsFetch.data, trendingFetch.data]);
-
-
-  console.log(globalFetch.data?.data)
 
   /* ---------------- CONTEXT VALUE ---------------- */
 
@@ -127,7 +148,14 @@ export default function AppContextProvider({ children }) {
       loading: bitcoinFetch.loading,
       error: bitcoinFetch.error,
     },
-    watchList: {watchlist , setWatchlist}
+
+    spotMarket: {
+      data: formattedSpotPairs,
+      loading: spotFetch.loading,
+      error: spotFetch.error,
+    },
+
+    watchList: { watchlist, setWatchlist }
   };
 
   return (

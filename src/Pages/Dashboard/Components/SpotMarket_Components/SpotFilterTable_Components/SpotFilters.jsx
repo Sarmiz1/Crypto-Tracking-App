@@ -10,6 +10,7 @@ export default function SpotFilters({
   setSearch,
   marketType,
   setMarketType,
+  darkMode
 }) {
   return (
     <Box

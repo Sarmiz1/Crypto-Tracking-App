@@ -3,7 +3,7 @@ import { appContext } from "../Context/AppContextProvider";
 import { formatLargeDigits } from "./formatLargeDigits";
 
 export const useMarketInfo = () => {
-  const { currency, globalMetrics, defi, stableCoins, bitcoin } = useContext(appContext);
+  const { currency, globalMetrics, defi, stableCoins, bitcoin, mode } = useContext(appContext);
 
   const { name: currencyName, symbol: currencySymbol } = currency || {};
   const { data, fearGreed } = globalMetrics || {};
@@ -68,5 +68,6 @@ export const useMarketInfo = () => {
       value: fearGreedValue,
       value_classification: fearGreedClassification,
     },
+    mode: mode
   };
 };
