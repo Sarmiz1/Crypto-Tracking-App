@@ -12,7 +12,6 @@ export default function InfoSection() {
   const { mode } = useContext(appContext);
   const { marketCap, marketCapChange } = useMarketInfo() 
 
-console.log(marketCap)
   // ------------------------
   // Hide component if no data
   // ------------------------

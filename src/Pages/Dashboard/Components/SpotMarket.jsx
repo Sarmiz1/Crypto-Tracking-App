@@ -2,6 +2,7 @@ import { Box } from "@mui/material";
 import { Header } from "./SpotMarket_Components/Header";
 import { SpotFilterTable } from "./SpotMarket_Components/SpotFilterTable";
 import CryptoMarketCapChart from "./CryptoMarketCapChart";
+import AboutSpotMarket from "./SpotMarket_Components/AboutSpotMarket";
 
 export default function SpotMarket({ mode }) {
 
@@ -17,6 +18,7 @@ export default function SpotMarket({ mode }) {
       <Header />
       <SpotFilterTable mode={mode} />
       <CryptoMarketCapChart />
+      <AboutSpotMarket mode={mode} />
     </Box>
   );
 }
