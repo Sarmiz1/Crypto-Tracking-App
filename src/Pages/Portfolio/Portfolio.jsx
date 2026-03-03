@@ -1,7 +1,7 @@
 import { Box, Typography } from "@mui/material";
 import { Link } from "react-router-dom";
 
-export default function Exchanges() {
+export default function PortFolio() {
   return (
     <Box
       mt={4}

@@ -7,6 +7,10 @@ import Watchlist from "./Pages/Watchlist/Watchlist";
 import Footer from "./Components/Footer";
 import DashboardPage from "./Pages/Dashboard/DashboardPage";
 import Exchange from "./Pages/Exchanges/Exchanges";
+import DexscanPage from "./Pages/DexScan/DexscanPage";
+import PortFolio from "./Pages/Portfolio/Portfolio";
+import LoginPage from "./Pages/Login/LoginPage";
+import SignUpPage from "./Pages/SignUp/SignUp";
 import ThemeContextProvider from "./Context/ThemeContextProvider";
 import { appContext } from "./Context/AppContextProvider";
 import { useContext } from "react";
@@ -38,6 +42,26 @@ function App() {
         />
         <Route path="/dashboard" element={<DashboardPage />} />
         <Route path="/exchanges" element={<Exchange />} />
+        <Route path="/dexscan" element={<DexscanPage />} />
+        <Route path="/portfolio" element={<PortFolio />} />
+        <Route
+          path="/login"
+          element={
+            <>
+              <NavBar />
+              <LoginPage />
+            </>
+          }
+        />
+        <Route
+          path="/createAccount"
+          element={
+            <>
+              <NavBar />
+              <SignUpPage />
+            </>
+          }
+        />
       </Routes>
 
       <Footer />
