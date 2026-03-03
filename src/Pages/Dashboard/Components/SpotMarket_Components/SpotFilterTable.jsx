@@ -4,15 +4,14 @@ import SpotFilters from "./SpotFilterTable_Components/SpotFilters";
 import SpotTable from "./SpotFilterTable_Components/SpotTable";
 
 export const SpotFilterTable = ({ mode }) => {
-
   const [search, setSearch] = useState("");
   const [marketType, setMarketType] = useState("All");
 
   return (
     <Paper
       sx={{
-        p: 3,
-        backgroundColor: mode === 'dark' ? "#1e1e1e" : "#fff",
+        p: { xs: 1.5, sm: 3 },
+        backgroundColor: mode === "dark" ? "#1e1e1e" : "#fff",
         borderRadius: 3,
       }}
     >

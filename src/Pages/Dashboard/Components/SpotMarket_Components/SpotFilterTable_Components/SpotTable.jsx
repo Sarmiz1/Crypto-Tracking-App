@@ -19,13 +19,24 @@ export default function SpotTable({
   currencySymbol = "$",
 }) {
   const [spotMarkets, setSpotMarkets] = useState([]);
-  const [loading, setLoading] = useState(true);
+  const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
   const [page, setPage] = useState(0);
 
   const rowsPerPage = 30;
 
-  // FETCH DATA (SERVER SIDE PAGINATION)
+  // ✅ Debounce search (prevents jitter)
+  const [debouncedSearch, setDebouncedSearch] = useState(search);
+
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      setDebouncedSearch(search);
+      setPage(0);
+    }, 400);
+
+    return () => clearTimeout(timer);
+  }, [search]);
+
   useEffect(() => {
     let mounted = true;
 
@@ -65,125 +76,129 @@ export default function SpotTable({
     };
   }, [page]);
 
-  // Reset page when filters change
-  useEffect(() => {
-    setPage(0);
-  }, [search, marketType]);
-
-  // FILTERING (only affects current page results)
   const filtered = useMemo(() => {
     return spotMarkets.filter((row) => {
       const matchesSearch = row.pair
         .toLowerCase()
-        .includes(search.toLowerCase());
+        .includes(debouncedSearch.toLowerCase());
 
       const matchesType =
         marketType === "All" || row.type === marketType;
 
       return matchesSearch && matchesType;
     });
-  }, [spotMarkets, search, marketType]);
+  }, [spotMarkets, debouncedSearch, marketType]);
 
   const handleChangePage = (_, newPage) => {
     setPage(newPage);
   };
 
-  if (loading)
-    return (
-      <Box sx={{ py: 4, display: "flex", justifyContent: "center" }}>
-        <CircularProgress />
-      </Box>
-    );
-
-  if (error)
-    return <Typography color="error">{error}</Typography>;
-
   return (
-    <>
-      <Table>
-        <TableHead>
-          <TableRow>
-            <TableCell>Pair</TableCell>
-            <TableCell>Price</TableCell>
-            <TableCell>24h %</TableCell>
-            <TableCell>Volume (24h)</TableCell>
-            <TableCell>7d</TableCell>
-          </TableRow>
-        </TableHead>
-
-        <TableBody>
-          {filtered.length === 0 ? (
+    <Box sx={{ minHeight: 550 }}>
+      {/* ✅ Mobile safe scroll */}
+      <Box sx={{ width: "100%", overflowX: "auto" }}>
+        <Table sx={{ minWidth: 750 }}>
+          <TableHead>
             <TableRow>
-              <TableCell colSpan={5} align="center">
-                <Typography sx={{ py: 4 }}>
-                  No markets found
-                </Typography>
-              </TableCell>
+              <TableCell>Pair</TableCell>
+              <TableCell>Price</TableCell>
+              <TableCell>24h %</TableCell>
+              <TableCell>Volume (24h)</TableCell>
+              <TableCell>7d</TableCell>
             </TableRow>
-          ) : (
-            filtered.map((row) => (
-              <TableRow key={row.id}>
-                <TableCell>
-                  <Typography fontWeight="bold">
-                    {row.pair}
+          </TableHead>
+
+          <TableBody>
+            {error ? (
+              <TableRow>
+                <TableCell colSpan={5} align="center">
+                  <Typography color="error">
+                    {error}
                   </Typography>
-                  <Typography variant="caption">
-                    {row.exchange}
-                  </Typography>
-                </TableCell>
-
-                <TableCell>
-                  {currencySymbol}
-                  {row.price.toLocaleString(undefined, {
-                    maximumFractionDigits: 6,
-                  })}
-                </TableCell>
-
-                <TableCell
-                  sx={{
-                    color:
-                      row.change >= 0
-                        ? "success.main"
-                        : "error.main",
-                    fontWeight: 600,
-                  }}
-                >
-                  {row.change >= 0 ? "+" : ""}
-                  {row.change.toFixed(2)}%
-                </TableCell>
-
-                <TableCell>
-                  {currencySymbol}
-                  {row.volume.toLocaleString()}
-                </TableCell>
-
-                <TableCell width={120}>
-                  <ResponsiveContainer width="100%" height={40}>
-                    <LineChart data={row.chart}>
-                      <Line
-                        type="monotone"
-                        dataKey="value"
-                        stroke="#16c784"
-                        dot={false}
-                        strokeWidth={2}
-                      />
-                    </LineChart>
-                  </ResponsiveContainer>
                 </TableCell>
               </TableRow>
-            ))
-          )}
-        </TableBody>
-      </Table>
+            ) : filtered.length === 0 && !loading ? (
+              <TableRow>
+                <TableCell colSpan={5} align="center" sx={{ py: 6 }}>
+                  <Typography>
+                    No markets found
+                  </Typography>
+                </TableCell>
+              </TableRow>
+            ) : (
+              filtered.map((row) => (
+                <TableRow key={row.id}>
+                  <TableCell>
+                    <Typography fontWeight="bold">
+                      {row.pair}
+                    </Typography>
+                    <Typography variant="caption">
+                      {row.exchange}
+                    </Typography>
+                  </TableCell>
+
+                  <TableCell>
+                    {currencySymbol}
+                    {row.price.toLocaleString(undefined, {
+                      maximumFractionDigits: 6,
+                    })}
+                  </TableCell>
+
+                  <TableCell
+                    sx={{
+                      color:
+                        row.change >= 0
+                          ? "success.main"
+                          : "error.main",
+                      fontWeight: 600,
+                    }}
+                  >
+                    {row.change >= 0 ? "+" : ""}
+                    {row.change.toFixed(2)}%
+                  </TableCell>
+
+                  <TableCell>
+                    {currencySymbol}
+                    {row.volume.toLocaleString()}
+                  </TableCell>
+
+                  <TableCell width={120}>
+                    <ResponsiveContainer width="100%" height={40}>
+                      <LineChart data={row.chart}>
+                        <Line
+                          type="monotone"
+                          dataKey="value"
+                          stroke="#16c784"
+                          dot={false}
+                          strokeWidth={2}
+                        />
+                      </LineChart>
+                    </ResponsiveContainer>
+                  </TableCell>
+                </TableRow>
+              ))
+            )}
+
+            {/* ✅ Loading row stays at bottom (no flash) */}
+            {loading && (
+              <TableRow>
+                <TableCell colSpan={5} align="center" sx={{ py: 2 }}>
+                  <CircularProgress size={20} />
+                </TableCell>
+              </TableRow>
+            )}
+          </TableBody>
+        </Table>
+      </Box>
 
       <TablePagination
-        rowsPerPageOptions={[50]}
+        rowsPerPageOptions={[30]}
         component="div"
-        count={1000} 
+        count={-1} // server-side pagination safe
         rowsPerPage={rowsPerPage}
         page={page}
         onPageChange={handleChangePage}
       />
-    </>
+    </Box>
   );
 }
