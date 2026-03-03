@@ -9,12 +9,11 @@ import DashboardPage from "./Pages/Dashboard/DashboardPage";
 import Exchange from "./Pages/Exchanges/Exchanges";
 import DexscanPage from "./Pages/DexScan/DexscanPage";
 import PortFolio from "./Pages/Portfolio/Portfolio";
-import LoginPage from "./Pages/Login/LoginPage";
 import SignUpPage from "./Pages/SignUp/SignUp";
 import ThemeContextProvider from "./Context/ThemeContextProvider";
 import { appContext } from "./Context/AppContextProvider";
 import { useContext } from "react";
-
+import Login from './Pages/LoginPage/Login'
 function App() {
   const { mode } = useContext(appContext);
 
@@ -49,7 +48,7 @@ function App() {
           element={
             <>
               <NavBar />
-              <LoginPage />
+              <Login />
             </>
           }
         />
