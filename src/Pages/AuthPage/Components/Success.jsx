@@ -1,23 +1,42 @@
 import { Fade, Typography, Box, Button } from "@mui/material";
-import CheckCircleIcon from '@mui/icons-material/CheckCircle';
+import CheckCircleIcon from "@mui/icons-material/CheckCircle";
+import { Fragment } from "react";
 export const Success = ({ setSuccess, navigate, setStep, isLogin }) => {
   return (
     <Fade in>
       <Box textAlign="center">
-        <Typography variant="h4" fontWeight="bold" gutterBottom>
-          🎉 Success!
-        </Typography>
-        <Typography>Your account action was completed successfully.</Typography>
+        {isLogin ? (
+          <>
+            <Box
+              display="flex"
+              alignItems="center"
+              justifyContent="center"
+              gap={1}
+              mb={1}
+            >
+              <CheckCircleIcon color="primary" fontSize="large" />
+              <Typography variant="h4" fontWeight="bold">
+                Correct!
+              </Typography>
+            </Box>
+            <Typography fontWeight={400}>Logged in successfully.</Typography>
+          </>
+        ) : (
+          <>
+            <Typography variant="h4" fontWeight="bold" gutterBottom>
+              🎉 Success!
+            </Typography>
+            <Typography>Your account was completed successfully.</Typography>
+          </>
+        )}
         <Button
           sx={{ mt: 3 }}
           variant="contained"
           onClick={() => {
-            setSuccess(false);
-            navigate(isLogin ? '/' : '/login');
-            setStep(0);
+            navigate(isLogin ? "/" : "/login");
           }}
         >
-          {isLogin ? 'Return to Home' : 'Go to Login'}
+          {isLogin ? "Return to Home" : "Go to Login"}
         </Button>
       </Box>
     </Fade>

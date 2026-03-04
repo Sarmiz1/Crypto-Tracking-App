@@ -31,7 +31,7 @@ export default function DashboardPage() {
         color: mode === "dark" ? "#fff" : "#000",
         minHeight: "100vh",
         overflowX: "hidden",
-        mb: -10,
+        mb: -7.99,
       }}
     >
       <title>Dashboard</title>
