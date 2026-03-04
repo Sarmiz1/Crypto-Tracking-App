@@ -9,11 +9,10 @@ import DashboardPage from "./Pages/Dashboard/DashboardPage";
 import Exchange from "./Pages/Exchanges/Exchanges";
 import DexscanPage from "./Pages/DexScan/DexscanPage";
 import PortFolio from "./Pages/Portfolio/Portfolio";
-import SignUpPage from "./Pages/SignUp/SignUp";
 import ThemeContextProvider from "./Context/ThemeContextProvider";
 import { appContext } from "./Context/AppContextProvider";
 import { useContext } from "react";
-import Login from './Pages/LoginPage/Login'
+import AuthPage from "./Pages/AuthPage/AuthPage";
 function App() {
   const { mode } = useContext(appContext);
 
@@ -43,24 +42,8 @@ function App() {
         <Route path="/exchanges" element={<Exchange />} />
         <Route path="/dexscan" element={<DexscanPage />} />
         <Route path="/portfolio" element={<PortFolio />} />
-        <Route
-          path="/login"
-          element={
-            <>
-              <NavBar />
-              <Login />
-            </>
-          }
-        />
-        <Route
-          path="/createAccount"
-          element={
-            <>
-              <NavBar />
-              <SignUpPage />
-            </>
-          }
-        />
+        <Route path="/login" element={<AuthPage />} />
+        <Route path="/createAccount" element={<AuthPage />} />
       </Routes>
 
       <Footer />

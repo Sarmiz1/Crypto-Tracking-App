@@ -1,5 +1,6 @@
 import { Fade, Typography, Box, Button } from "@mui/material";
-export const Success = ({ setSuccess, setIsLogin, setStep}) => {
+import CheckCircleIcon from '@mui/icons-material/CheckCircle';
+export const Success = ({ setSuccess, navigate, setStep, isLogin }) => {
   return (
     <Fade in>
       <Box textAlign="center">
@@ -12,11 +13,11 @@ export const Success = ({ setSuccess, setIsLogin, setStep}) => {
           variant="contained"
           onClick={() => {
             setSuccess(false);
-            setIsLogin(true);
+            navigate(isLogin ? '/' : '/login');
             setStep(0);
           }}
         >
-          Go to Login
+          {isLogin ? 'Return to Home' : 'Go to Login'}
         </Button>
       </Box>
     </Fade>
