@@ -29,6 +29,7 @@ export const OnSignUpSection = ({
   prevStep,
   nextStep,
   loading,
+  signupErrors,
   watch,
 }) => {
   const [showPassword, setShowPassword] = useState(false);
@@ -61,6 +62,8 @@ export const OnSignUpSection = ({
                 fullWidth
                 sx={{ mb: 2 }}
                 {...signupRegister("email")}
+                error={!!signupErrors.email}
+                helperText={signupErrors.email?.message}
               />
               <TextField
                 select
@@ -68,6 +71,8 @@ export const OnSignUpSection = ({
                 fullWidth
                 sx={{ mb: 2 }}
                 {...signupRegister("gender")}
+                error={!!signupErrors.gender}
+                helperText={signupErrors.gender?.message}
               >
                 <MenuItem value="Male">Male</MenuItem>
                 <MenuItem value="Female">Female</MenuItem>
@@ -83,6 +88,8 @@ export const OnSignUpSection = ({
                 fullWidth
                 sx={{ mb: 2 }}
                 {...signupRegister("phone")}
+                error={!!signupErrors.phone}
+                helperText={signupErrors.phone?.message}
               />
               <TextField
                 label="Address"
@@ -91,6 +98,8 @@ export const OnSignUpSection = ({
                 fullWidth
                 sx={{ mb: 2 }}
                 {...signupRegister("address")}
+                error={!!signupErrors.address}
+                helperText={signupErrors.address?.message}
               />
             </>
           )}
@@ -136,6 +145,8 @@ export const OnSignUpSection = ({
                 fullWidth
                 sx={{ mb: 2 }}
                 {...signupRegister("confirmPassword")}
+                error={!!signupErrors.confirmPassword}
+                helperText={signupErrors.confirmPassword?.message}
               />
 
               <FormControlLabel

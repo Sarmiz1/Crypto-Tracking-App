@@ -9,11 +9,11 @@ export const loginSchema = z.object({
 
 export const signupSchema = z
   .object({
-    fullName: z.string().min(3),
+    fullName: z.string().min(3, 'name cant be less than 3 letters'),
     email: z.string().email(),
-    gender: z.string().min(1),
-    phone: z.string().min(10),
-    address: z.string().min(5),
+    gender: z.string().min(1, 'pick atleast 1 gender'),
+    phone: z.string().min(10, 'Phone number cant be less than 10 digits'),
+    address: z.string().min(5, 'Address cant be less than 5 letters'),
     password: z
       .string()
       .min(8)
