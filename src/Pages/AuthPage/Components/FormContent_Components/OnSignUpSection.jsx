@@ -39,7 +39,7 @@ export const OnSignUpSection = ({
 
   return (
     <>
-      <Stepper activeStep={step} sx={{ mb: 3 }}>
+      <Stepper activeStep={step} sx={{ mb: 3, ml: {xs: -2, md: 0} }}>
         {steps.map((label) => (
           <Step key={label}>
             <StepLabel>{label}</StepLabel>
@@ -47,7 +47,7 @@ export const OnSignUpSection = ({
         ))}
       </Stepper>
 
-      <Box component="form" onSubmit={handleSignupSubmit(onSignup)}>
+      <Box component="form" onSubmit={handleSignupSubmit(onSignup)} >
         <AuthFormStep direction={direction}>
           {step === 0 && (
             <>

@@ -76,7 +76,9 @@ export default function AuthPage() {
           alignItems: "center",
           justifyContent: "center",
           background: "linear-gradient(135deg, #667eea 0%, #764ba2 100%)",
-          p: 2,
+          p: {
+            xs: 1, md: 2
+          },
           mb: -8,
         }}
       >
