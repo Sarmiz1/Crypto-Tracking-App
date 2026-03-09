@@ -12,7 +12,7 @@ import ThemeContextProvider from "./Context/ThemeContextProvider";
 import { appContext } from "./Context/AppContextProvider";
 import { useContext } from "react";
 import AuthPage from "./Pages/AuthPage/AuthPage";
-function App() {
+function App() { 
   const { mode } = useContext(appContext);
 
   return (
