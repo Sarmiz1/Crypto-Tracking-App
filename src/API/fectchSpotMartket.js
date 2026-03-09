@@ -48,24 +48,3 @@ export function generateSparkline(price) {
 
 
 
-
-
-
-
-
-
-
-
-
-
-
-// Frequently Asked Questions (FAQ)
-// Can I access live market data through an API?
-
-
-// Can I access historical market data through an API?
-
-// How can different crypto indexes help an investor to understand the crypto market?
-// What should you look for when comparing crypto data providers and methodologies?
-// Why does data accuracy matter when compiling crypto price data charts?
-// CoinMarketCap is the trusted, industry leading source for crypto price charts

@@ -11,6 +11,8 @@ import { useMarketInfo } from "../../../utils/useMarketInfo";
 export default function InfoSection() {
   const { mode } = useContext(appContext);
   const { marketCap, marketCapChange } = useMarketInfo() 
+  const [expanded, setExpanded] = useState(false);
+
 
   // ------------------------
   // Hide component if no data
@@ -20,7 +22,6 @@ export default function InfoSection() {
   const isDark = mode === "dark";
   const textColor = isDark ? "#fff" : "#000";
 
-  const [expanded, setExpanded] = useState(false);
 
   return (
     <Box

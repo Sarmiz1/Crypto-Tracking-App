@@ -30,6 +30,7 @@ export const useMarketInfo = () => {
   const stablecoinVolume = stableCoinsData?.reduce((acc, coin) => acc + (coin.total_volume || 0), 0) || 0;
   const stablecoinVolumeFormatted = formatLargeDigits(stablecoinVolume, currencySymbol, 1);
   const stablecoinVolumePercent = marketVolume ? (stablecoinVolume / marketVolume) * 100 : 0;
+  const stableCoinVolumeFormatted = formatLargeDigits(stablecoinVolumePercent, '')
 
   const btcMarketCap = btcArray[0]?.market_cap || 0;
   const btcMarketCapChange = btcArray[0]?.market_cap_change_24h || 0;
@@ -58,7 +59,7 @@ export const useMarketInfo = () => {
     defiVolume: defiVolume24Formatted,
     defiVolumePercent: defiVolumePercentage,
     stableCoinVolume: stablecoinVolumeFormatted,
-    stableCoinVolumePercent: stablecoinVolumePercent,
+    stableCoinVolumePercent: stableCoinVolumeFormatted,
     btcDominance: formatLargeDigits(btcDominance, ''),
     btcDominanceChange: btcDominanceChange,
     marketCap: marketCapFormatted,

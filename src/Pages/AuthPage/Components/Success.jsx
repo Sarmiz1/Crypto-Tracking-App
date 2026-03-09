@@ -1,7 +1,7 @@
 import { Fade, Typography, Box, Button } from "@mui/material";
 import CheckCircleIcon from "@mui/icons-material/CheckCircle";
-import { Fragment } from "react";
-export const Success = ({ setSuccess, navigate, setStep, isLogin }) => {
+
+export const Success = ({ navigate, isLogin }) => {
   return (
     <Fade in>
       <Box textAlign="center">

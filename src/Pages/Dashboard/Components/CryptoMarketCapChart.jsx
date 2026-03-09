@@ -1,11 +1,5 @@
 import { useState, useMemo } from "react";
-import {
-  Box,
-  Tabs,
-  Tab,
-  Typography,
-  Paper,
-} from "@mui/material";
+import { Box, Tabs, Tab, Typography, Paper } from "@mui/material";
 import {
   LineChart,
   Line,
@@ -107,13 +101,16 @@ export default function CryptoMarketCapChart() {
   ]);
 
   // Loading state
-  if ((tabValue === 2 || tabValue === 3 || tabValue === 4) && loading) return <LoadingState />
-    
+  if ((tabValue === 2 || tabValue === 3 || tabValue === 4) && loading)
+    return <LoadingState />;
 
   // Error state
-  if (error) return <ErrorDisplay
+  if (error)
+    return (
+      <ErrorDisplay
         message={`Failed to load Bitcoin historical data: ${error}`}
       />
+    );
 
   return (
     <Box
@@ -164,16 +161,33 @@ export default function CryptoMarketCapChart() {
           mb: 4,
           position: "relative",
           zIndex: 2,
+
+          "& .MuiTabs-flexContainer": {
+            flexWrap: "wrap",
+            rowGap: 1,
+          },
+
           "& .MuiTab-root": {
+            width: {
+              xs: "33.33%", // 3 top / 2 bottom
+              sm: "20%", // normal row on larger screens
+            },
+            maxWidth: "none",
             fontWeight: 600,
             color: mode === "dark" ? "#bbb" : "#555",
+
             "&.Mui-selected": {
               color: mode === "dark" ? "#fff" : "primary.main",
             },
           },
+
           "& .MuiTabs-indicator": {
             backgroundColor: "primary.main",
             height: 3,
+            display: {
+              xs: "none",
+              sm: "block",
+            },
           },
         }}
       >

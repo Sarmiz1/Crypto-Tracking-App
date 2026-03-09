@@ -13,6 +13,7 @@ import { useContext } from "react";
 import { appContext } from "../../Context/AppContextProvider";
 import InfoSection from "./Components/InfoSection";
 import SubscribeSection from "./Components/SubscribeSection";
+import WatchlistTable from "./Components/WatchlistTable";
 
 export default function HomePage() {
   const { tabValue, handleTabChange } = useContext(appContext);
@@ -25,16 +26,11 @@ export default function HomePage() {
       <Container maxWidth="xl" sx={{ mt: 3 }}>
         <TabsSection value={tabValue} handleChange={handleTabChange} />
 
-        {/* Show metrics on all tabs except index 2 (Watchlist tab) */}
-        {tabValue !== 2 && <MetricCards />}
+        <MetricCards />
 
         <TopCoinTable value={tabValue} />
         <TrendingCoinTable value={tabValue} />
-
-        <CustomTabPanel value={tabValue} index={2}>
-          <Watchlist />
-        </CustomTabPanel>
-
+        <WatchlistTable value={tabValue} />
         <MostVisitedCoinTable value={tabValue} />
         <NewCoinTable value={tabValue} />
         <PredictionMarket value={tabValue} />

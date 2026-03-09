@@ -141,9 +141,9 @@ export default function CustomTableBody({
               {currencyFormat(coin.price_change_percentage_24h)}%
             </TableCell>
 
-            <TableCell align="right">{currencyFormat(coin.market_cap,{symbol: currencySymbol})}</TableCell>
+            <TableCell align="right">{formatLargeDigits(coin.market_cap, currencySymbol)}</TableCell>
 
-            <TableCell align="right">{currencyFormat(coin.total_volume,{symbol: currencySymbol})}</TableCell>
+            <TableCell align="right">{formatLargeDigits(coin.total_volume,currencySymbol)}</TableCell>
 
             <TableCell align="right">
               <Box sx={{display: 'flex', m: 0, p: 0, justifyContent: 'right', gap: '5px' }}>

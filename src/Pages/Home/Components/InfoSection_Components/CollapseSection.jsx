@@ -6,6 +6,7 @@ import {
 import ChangeIndicator from "./ChangeIndicator";
 import { useMarketInfo } from "../../../../utils/useMarketInfo";
 
+
 export default function CollapseSection({ expanded, textColor }) {
 
   const { 
@@ -18,6 +19,7 @@ export default function CollapseSection({ expanded, textColor }) {
     btcDominance,
     btcDominanceChange
   } = useMarketInfo()
+
 
   return (
     <Collapse in={expanded}>

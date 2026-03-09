@@ -84,9 +84,7 @@ export default function AuthPage() {
           <CardContent sx={{ p: 4 }}>
             {success ? (
               <Success
-                setSuccess={setSuccess}
                 navigate={navigate}
-                setStep={setStep}
                 isLogin={isLogin}
               />
             ) : (
