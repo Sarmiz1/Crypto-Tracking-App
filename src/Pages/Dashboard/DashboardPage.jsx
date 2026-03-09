@@ -6,7 +6,7 @@ import TopAppBar from "./Components/TopAppBar";
 import ModalSection from "./Components/ModalSection";
 import SidebarContent from "./Components/SidebarContent";
 import CustomTabPanel from "../../Components/CustomTabPanel";
-import  SpotMarket  from "./Components/SpotMarket";
+import SpotMarket from "./Components/SpotMarket";
 import Overview from "./Components/Overview";
 
 export default function DashboardPage() {
@@ -45,6 +45,7 @@ export default function DashboardPage() {
             activeLink={activeLink}
             setActiveLink={setActiveLink}
             setMobileOpen={setMobileOpen}
+            screenSize={"small"}
           />
         </Drawer>
       )}
@@ -73,6 +74,7 @@ export default function DashboardPage() {
             activeLink={activeLink}
             setActiveLink={setActiveLink}
             setMobileOpen={setMobileOpen}
+            screenSize={"large"}
           />
         </Box>
       )}
@@ -95,10 +97,7 @@ export default function DashboardPage() {
             setActiveLink={setActiveLink}
           />
           {/* Overview Tab */}
-          <Overview
-            tab={tab} 
-            setSelectedCoin={setSelectedCoin} 
-          />
+          <Overview tab={tab} setSelectedCoin={setSelectedCoin} />
 
           {/* Spot Tab */}
           <CustomTabPanel value={tab} index={1}>

@@ -9,13 +9,9 @@ import MenuIcon from "@mui/icons-material/Menu";
 import { useState, useEffect } from "react";
 
 export default function TopAppBar({ mode, setMode, isMobile, setMobileOpen }) {
-
   const [scrolled, setScrolled] = useState(false);
 
-  /* ===================================================== */
-  /* 2️⃣ SCROLL SHADOW EFFECT */
-  /* ===================================================== */
-
+  /* Scroll shadow effect */
   useEffect(() => {
     const handleScroll = () => {
       setScrolled(window.scrollY > 10);
@@ -26,10 +22,9 @@ export default function TopAppBar({ mode, setMode, isMobile, setMobileOpen }) {
 
   const handleSwitchChange = () => {
     setMode(mode === "dark" ? "light" : "dark");
-  }
+  };
 
-
-  return(
+  return (
     <AppBar
       position="sticky"
       elevation={scrolled ? 4 : 0}
@@ -49,12 +44,15 @@ export default function TopAppBar({ mode, setMode, isMobile, setMobileOpen }) {
           Crypto Dashboard
         </Typography>
 
-        <Typography mr={1}> {mode === "dark" ? "Light" : "Dark"}</Typography>
+        <Typography mr={1}>
+          {mode === "dark" ? "Light" : "Dark"}
+        </Typography>
+
         <Switch
-          checked={mode}
+          checked={mode === "dark"}
           onChange={handleSwitchChange}
         />
       </Toolbar>
     </AppBar>
-  )
+  );
 }

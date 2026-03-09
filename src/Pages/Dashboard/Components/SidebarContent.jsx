@@ -7,7 +7,8 @@ export default function SidebarContent({
   setTab,
   activeLink, 
   setActiveLink,
-  setMobileOpen
+  setMobileOpen,
+  screenSize,
   }) {
   const sidebarLinks = [
     "Market Overview",
@@ -50,8 +51,9 @@ export default function SidebarContent({
         overflowY: "auto",
       }}
     >
+      
       <Button
-        onClick={() => setCollapsed(!collapsed)}
+        onClick={() => screenSize === 'small' ? setMobileOpen(false) : setCollapsed(!collapsed)}
         variant="outlined"
         size="small"
         sx={{
