@@ -12,6 +12,9 @@ import {
 } from "@mui/material";
 import { LineChart, Line, ResponsiveContainer } from "recharts";
 import { useEffect, useState, useMemo } from "react";
+import { formatLargeDigits } from '../../../../../utils/formatLargeDigits'
+import currencyFormat  from '../../../../../utils/currencyFormat'
+
 
 export default function SpotTable({
   search = "",
@@ -138,10 +141,9 @@ export default function SpotTable({
                   </TableCell>
 
                   <TableCell>
-                    {currencySymbol}
-                    {row.price.toLocaleString(undefined, {
-                      maximumFractionDigits: 6,
-                    })}
+                    {currencyFormat(row.price, {
+                      symbol: currencySymbol
+                    }).toLocaleString()}
                   </TableCell>
 
                   <TableCell
@@ -158,8 +160,7 @@ export default function SpotTable({
                   </TableCell>
 
                   <TableCell>
-                    {currencySymbol}
-                    {row.volume.toLocaleString()}
+                    {formatLargeDigits(row.volume, currencySymbol)}
                   </TableCell>
 
                   <TableCell width={120}>

@@ -8,7 +8,9 @@ export default function SpotMarket({ mode }) {
 
   return (
     <Box sx={{ 
-      px: 3, 
+      px: {
+        xs: 0.5, md: 2
+      }, 
       pb: 2, 
       pt: 0, 
       display: "flex", 
