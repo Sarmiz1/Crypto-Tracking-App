@@ -11,13 +11,12 @@ import {
   Legend
 } from "chart.js";
 import { Box, Button, Stack } from "@mui/material";
-import { useTheme } from "@mui/material/styles";
 
 ChartJS.register(LineElement, PointElement, LinearScale, CategoryScale, Tooltip, Legend);
 
 export default function PriceChart({ coinId, currencyName, currencySymbol, mode }) {
-  const theme = useTheme();
-  const isDark = theme.palette.mode === "dark";
+ 
+  const isDark = mode === "dark";
 
   const [days, setDays] = useState(7);
   const [chartData, setChartData] = useState([]);
