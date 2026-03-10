@@ -14,18 +14,18 @@ import DarkModeIcon from "@mui/icons-material/DarkMode";
 import LightModeIcon from "@mui/icons-material/LightMode";
 import { appContext } from "../Context/AppContextProvider";
 
-
 export default function NavBar() {
-
-  const { mode, setMode } = useContext(appContext)
+  const { mode, setMode } = useContext(appContext);
 
   const [open, setOpen] = useState(false);
+
+  const [searchInput, setSearchInput] = useState("");
 
   const toggleDrawer = (state) => () => {
     setOpen(state);
   };
-  
-  const display = { xs: "none", sm: "block" }
+
+  const display = { xs: "none", sm: "block" };
 
   return (
     <>
@@ -40,11 +40,16 @@ export default function NavBar() {
           <Logo component={Link} display={display} />
           <DesktopNavLinks />
           <TabletMenu />
-          <SearchBar />
+          <SearchBar 
+            searchInput={searchInput} 
+            setSearchInput={setSearchInput} 
+          />
 
           {/* DarkMode */}
-          <IconButton onClick={() => setMode(mode === "dark" ? "light" : "dark")}>
-            {mode === 'dark' ? <LightModeIcon /> : <DarkModeIcon />}
+          <IconButton
+            onClick={() => setMode(mode === "dark" ? "light" : "dark")}
+          >
+            {mode === "dark" ? <LightModeIcon /> : <DarkModeIcon />}
           </IconButton>
 
           {/* Mobile Menu Icon */}

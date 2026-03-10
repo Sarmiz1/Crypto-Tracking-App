@@ -12,6 +12,7 @@ import ThemeContextProvider from "./Context/ThemeContextProvider";
 import { appContext } from "./Context/AppContextProvider";
 import { useContext } from "react";
 import AuthPage from "./Pages/AuthPage/AuthPage";
+import CoinPage from "./Pages/CoinPage/CoinPage"
 function App() { 
   const { mode } = useContext(appContext);
 
@@ -43,6 +44,13 @@ function App() {
         <Route path="/portfolio" element={<PortFolio />} />
         <Route path="/login" element={<AuthPage />} />
         <Route path="/createAccount" element={<AuthPage />} />
+
+        <Route path="/coin/:id" element={
+          <>
+            <NavBar />
+            <CoinPage />
+          </>
+        }/>
       </Routes>
 
       <Footer />
