@@ -1,11 +1,7 @@
-import {
-  TableCell,
-  TableHead,
-  TableRow,
-} from "@mui/material";
+import { TableCell, TableHead, TableRow } from "@mui/material";
 
 export default function CustomTableHead({ stickyBg }) {
-  return(
+  return (
     <TableHead>
       <TableRow>
         {/* Sticky # */}
@@ -15,8 +11,8 @@ export default function CustomTableHead({ stickyBg }) {
             left: 0,
             zIndex: 5,
             backgroundColor: stickyBg,
-            width: 80,
-            boxShadow: "2px 0 5px rgba(0,0,0,0.1)"
+            width: { xs: 40, sm: 60, md: 80 },
+            boxShadow: "2px 0 5px rgba(0,0,0,0.1)",
           }}
         >
           #
@@ -26,11 +22,11 @@ export default function CustomTableHead({ stickyBg }) {
         <TableCell
           sx={{
             position: "sticky",
-            left: 80,
+            left: { xs: 40, sm: 60, md: 80 }, // match # column width
             zIndex: 5,
             backgroundColor: stickyBg,
-            width: 220,
-            boxShadow: "2px 0 5px rgba(0,0,0,0.05)"
+            width: { xs: 120, sm: 160, md: 220 },
+            boxShadow: "2px 0 5px rgba(0,0,0,0.05)",
           }}
         >
           Name
@@ -44,5 +40,5 @@ export default function CustomTableHead({ stickyBg }) {
         <TableCell align="right">Last 7 Days</TableCell>
       </TableRow>
     </TableHead>
-  )
+  );
 }
