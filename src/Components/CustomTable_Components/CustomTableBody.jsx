@@ -72,7 +72,7 @@ export default function CustomTableBody({ coins, stickyBg, currency, section = "
                 boxShadow: "2px 0 5px rgba(0,0,0,0.05)",
               }}
             >
-              <Box sx={{ display: "flex", alignItems: "center", width: { xs: 36, sm: 56, md: 80 }, overflow: "hidden" }}>
+              <Box sx={{ display: "flex", alignItems: "center", width: { xs: 55, sm: 56, md: 80 }, overflow: "hidden" }}>
                 <IconButton size="small" onClick={() => handleWatchlistToggle(coin)}>
                   {isWatched ? <StarIcon sx={{ color: "#FFD700" }} fontSize="small" /> : <StarBorderIcon fontSize="small" />}
                 </IconButton>
@@ -86,14 +86,14 @@ export default function CustomTableBody({ coins, stickyBg, currency, section = "
             <TableCell
               sx={{
                 position: "sticky",
-                left: { xs: 36, sm: 56, md: 80 },
+                left: { xs: 30, sm: 56, md: 80 },
                 backgroundColor: stickyBg,
                 zIndex: 4,
                 px: 0,
                 boxShadow: "2px 0 5px rgba(0,0,0,0.03)",
               }}
             >
-              <Box sx={{ display: "flex", alignItems: "center", width: { xs: 120, sm: 160, md: 220 }, overflow: "hidden", gap: 1 }}>
+              <Box sx={{ display: "flex", alignItems: "center", width: { xs: 100, sm: 160, md: 220 }, overflow: "hidden", gap: 1 }}>
                 <Box
                   component="img"
                   alt={`${coin.name} logo`}
