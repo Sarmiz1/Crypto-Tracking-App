@@ -26,7 +26,9 @@ export default function TrendingCoinTable({ value }) {
 
   return (
     <CustomTabPanel value={value} index={1}>
-      <CustomTable coins={trendingCoin} currency={currency} />
+      {loading && <p>Loading coins...</p>}
+      {error && <p>Failed to load Table</p>}
+      {data && <CustomTable coins={trendingCoin} currency={currency} />}
     </CustomTabPanel>
   );
 }

@@ -59,7 +59,7 @@ export default function PredictionMarket({ value }) {
             </Typography>
           </Box>
         ) : predictionError ? (
-          <Alert severity="error">{predictionError}</Alert>
+          <Alert severity="error">Failed to load Market</Alert>
         ) : filteredMarkets.length === 0 ? (
           <Typography sx={{ textAlign: "center", py: 8 }}>
             No markets found in {categories[tab]}

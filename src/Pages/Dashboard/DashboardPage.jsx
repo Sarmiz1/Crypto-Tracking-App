@@ -1,8 +1,6 @@
-import { Box, Drawer, useMediaQuery, Typography } from "@mui/material";
-import { useState, useContext } from "react";
-import { appContext } from "../../Context/AppContextProvider";
+import { Box, Drawer, Typography } from "@mui/material";
+import { useState } from "react";
 import TabSection from "./Components/TabSection";
-import TopAppBar from "./Components/TopAppBar";
 import ModalSection from "./Components/ModalSection";
 import SidebarContent from "./Components/SidebarContent";
 import CustomTabPanel from "../../Components/CustomTabPanel";
@@ -10,21 +8,22 @@ import SpotMarket from "./Components/SpotMarket";
 import Overview from "./Components/Overview";
 
 
-export default function DashboardPage() {
+export default function DashboardPage( { 
+  mode,
+  mobileOpen,
+  setMobileOpen,
+  isMobile,
+  } ) {
   const [tab, setTab] = useState(0);
-  const [mobileOpen, setMobileOpen] = useState(false);
 
   const [selectedCoin, setSelectedCoin] = useState(null);
 
   const [activeLink, setActiveLink] = useState("Market Overview");
 
-  const { mode, setMode } = useContext(appContext);
-
-  const isMobile = useMediaQuery("(max-width:900px)");
-
   const [collapsed, setCollapsed] = useState(false);
 
   return (
+
     <Box
       sx={{
         display: "flex",
@@ -82,12 +81,7 @@ export default function DashboardPage() {
 
       {/* MAIN CONTENT */}
       <Box sx={{ flex: 1, overflowX: "hidden" }}>
-        <TopAppBar
-          mode={mode}
-          setMode={setMode}
-          isMobile={isMobile}
-          setMobileOpen={setMobileOpen}
-        />
+
 
         <Box sx={{ px: { xs: 2, md: 4 }, py: 3 }}>
           <TabSection
@@ -117,5 +111,6 @@ export default function DashboardPage() {
         setSelectedCoin={setSelectedCoin}
       />
     </Box>
+
   );
 }

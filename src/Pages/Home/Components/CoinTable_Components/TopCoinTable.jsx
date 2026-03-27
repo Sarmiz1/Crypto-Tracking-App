@@ -27,7 +27,7 @@ export default function TopCoinTable({ value }) {
   return (
     <CustomTabPanel value={value} index={0}>
       {topLoading && <p>Loading coins...</p>}
-      {topError && <p>Error: {topError}</p>}
+      {topError && <p>Failed to load Table</p>}
       {mappedData && <CustomTable coins={mappedData} currency={currency}/>}
     </CustomTabPanel>
   );

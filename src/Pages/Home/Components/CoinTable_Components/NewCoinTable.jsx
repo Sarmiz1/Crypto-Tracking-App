@@ -25,7 +25,7 @@ export default function NewCoinTable({ value }) {
           <CircularProgress />
         </Box>
       ) : error ? (
-        <Alert severity="error">{error}</Alert>
+        <Alert severity="error">Failed to load Table</Alert>
       ) : (
         <CustomTable coins={newCoins} currency={currency} section='new' />
       )}

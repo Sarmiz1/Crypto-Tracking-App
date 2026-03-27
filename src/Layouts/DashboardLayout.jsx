@@ -1,12 +1,22 @@
 import { Outlet } from "react-router-dom";
-import NavBar from "../Components/NavBar";
 import { Suspense } from "react";
 import { PagesFallback } from "../Suspense/PagesFallback";
+import TopAppBar from "../Components/TopAppBar";
 
-export default function DefaultLayout() {
+export default function DashboardLayout({
+  mode,
+  setMode,
+  setMobileOpen,
+  isMobile
+}) {
   return (
     <>
-      <NavBar />
+      <TopAppBar
+        mode={mode}
+        setMode={setMode}
+        isMobile={isMobile}
+        setMobileOpen={setMobileOpen}
+      />
       <Suspense fallback={<PagesFallback />}>
         <Outlet />  {/* This renders the route element */}
       </Suspense>
