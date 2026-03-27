@@ -9,12 +9,13 @@ import App from "./App.jsx";
 import { BrowserRouter } from "react-router-dom";
 import AppContextProvider from "./Context/AppContextProvider";
 import { ErrorBoundary } from 'react-error-boundary';
+import FallbackPage from "./Components/FallbackPage.jsx";
 
 createRoot(document.getElementById("root")).render(
   <StrictMode>
     <AppContextProvider>
       <BrowserRouter>
-        <ErrorBoundary fallback={<p>Something went wrong. Try again later.</p>}>
+        <ErrorBoundary FallbackComponent={FallbackPage}>
           <App />
         </ErrorBoundary>
       </BrowserRouter>
