@@ -1,7 +1,7 @@
-import CustomTabPanel from "../../../Components/CustomTabPanel";
-import CustomTable from "../../../Components/CustomTable";
+import CustomTabPanel from "../../../../Components/CustomTabPanel";
+import CustomTable from "../../../../Components/CustomTable";
 import { useContext } from "react";
-import { appContext } from "../../../Context/AppContextProvider";
+import { appContext } from "../../../../Context/AppContextProvider";
 import { Typography, Box } from "@mui/material";
 
 export default function WatchlistTable({ value }) {

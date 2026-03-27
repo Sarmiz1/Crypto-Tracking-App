@@ -9,6 +9,7 @@ import CustomTabPanel from "../../Components/CustomTabPanel";
 import SpotMarket from "./Components/SpotMarket";
 import Overview from "./Components/Overview";
 
+
 export default function DashboardPage() {
   const [tab, setTab] = useState(0);
   const [mobileOpen, setMobileOpen] = useState(false);
@@ -40,7 +41,7 @@ export default function DashboardPage() {
         <Drawer open={mobileOpen} onClose={() => setMobileOpen(false)}>
           <SidebarContent
             collapsed={false}
-            setCollapsed={() => {}}
+            setCollapsed={() => { }}
             setTab={setTab}
             activeLink={activeLink}
             setActiveLink={setActiveLink}

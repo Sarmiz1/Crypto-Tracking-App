@@ -1,8 +1,8 @@
 
-import CustomTabPanel from "../../../Components/CustomTabPanel";
-import CustomTable from "../../../Components/CustomTable";
+import CustomTabPanel from "../../../../Components/CustomTabPanel";
+import CustomTable from "../../../../Components/CustomTable";
 import { useContext } from "react";
-import { appContext } from "../../../Context/AppContextProvider";
+import { appContext } from "../../../../Context/AppContextProvider";
 
 export default function TrendingCoinTable({ value }) { 
   const { trendingCryptos, currency } = useContext(appContext);

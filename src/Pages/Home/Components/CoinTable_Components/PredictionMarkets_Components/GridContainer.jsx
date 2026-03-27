@@ -1,5 +1,5 @@
 import { Grid } from "@mui/material";
-import MarketCard from "../../../../Components/MarketCard";
+import MarketCard from "../../../../../Components/MarketCard";
 
 export default function GridContainer({ Date, mode, filteredMarkets }) {
   return (

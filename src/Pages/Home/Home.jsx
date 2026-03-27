@@ -1,23 +1,16 @@
-import { Container, Divider } from "@mui/material";
+import { Container, Divider, Box } from "@mui/material";
 import HeroSection from "./Components/HeroSection";
 import TabsSection from "../../Components/TabsSection";
 import MetricCards from "../../Components/MetricCards";
-import TopCoinTable from "./Components/TopCoinTable";
-import TrendingCoinTable from "./Components/TrendingCoinTable";
-import Watchlist from "../Watchlist/Watchlist";
-import MostVisitedCoinTable from "./Components/MostVisitedCoinTable";
-import NewCoinTable from "./Components/NewCoinTable";
-import PredictionMarket from "./Components/PredictionMarket";
-import CustomTabPanel from "../../Components/CustomTabPanel";
 import { useContext } from "react";
 import { appContext } from "../../Context/AppContextProvider";
 import InfoSection from "./Components/InfoSection";
 import SubscribeSection from "./Components/SubscribeSection";
-import WatchlistTable from "./Components/WatchlistTable";
+import CoinTable from "./Components/CoinTable";
 
 export default function HomePage() {
   const { tabValue, handleTabChange } = useContext(appContext);
-  
+
 
   return (
     <>
@@ -28,12 +21,8 @@ export default function HomePage() {
 
         <MetricCards />
 
-        <TopCoinTable value={tabValue} />
-        <TrendingCoinTable value={tabValue} />
-        <WatchlistTable value={tabValue} />
-        <MostVisitedCoinTable value={tabValue} />
-        <NewCoinTable value={tabValue} />
-        <PredictionMarket value={tabValue} />
+        <CoinTable tabValue={tabValue} />
+
 
         <InfoSection />
         <Divider sx={{ my: 3, borderBottomWidth: 2 }} />

@@ -1,7 +1,7 @@
-import CustomTable from "../../../Components/CustomTable";
-import CustomTabPanel from "../../../Components/CustomTabPanel";
+import CustomTable from "../../../../Components/CustomTable";
+import CustomTabPanel from "../../../../Components/CustomTabPanel";
 import { useContext } from "react";
-import { appContext } from "../../../Context/AppContextProvider";
+import { appContext } from "../../../../Context/AppContextProvider";
 
 export default function TopCoinTable({ value }) {
   
