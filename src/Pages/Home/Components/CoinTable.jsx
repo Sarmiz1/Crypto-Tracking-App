@@ -9,21 +9,15 @@ const NewCoinTable = lazy(() => import("./CoinTable_Components/NewCoinTable"));
 const PredictionMarket = lazy(() => import("./CoinTable_Components/PredictionMarket"));
 
 export default function CoinTable({ tabValue }) {
-  const tables = [
-    TopCoinTable,
-    TrendingCoinTable,
-    WatchlistTable,
-    MostVisitedCoinTable,
-    NewCoinTable,
-    PredictionMarket,
-  ];
-
-  const ActiveTable = tables[tabValue];
-
   return (
-    <Box sx={{my: 4}}>
-      <Suspense fallback={<p>Loading table...</p>}>
-        {ActiveTable && <ActiveTable />}
+    <Box sx={{ my: 2 }}>
+      <Suspense fallback={<p>Loading...</p>}>
+        {tabValue === 0 && <TopCoinTable value={tabValue} />}
+        {tabValue === 1 && <TrendingCoinTable value={tabValue} />}
+        {tabValue === 2 && <WatchlistTable value={tabValue} />}
+        {tabValue === 3 && <MostVisitedCoinTable value={tabValue} />}
+        {tabValue === 4 && <NewCoinTable value={tabValue} />}
+        {tabValue === 5 && <PredictionMarket value={tabValue} />}
       </Suspense>
     </Box>
   );
