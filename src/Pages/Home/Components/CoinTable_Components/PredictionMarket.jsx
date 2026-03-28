@@ -25,11 +25,12 @@ export default function PredictionMarket({ value }) {
     categories[tab] === "all"
       ? predictionMarket || []
       : (predictionMarket || []).filter((market) => {
-          const questionLower = market.question?.toLowerCase() || "";
-          return categoryKeywords[categories[tab]].some((kw) =>
-            questionLower.includes(kw),
-          );
-        });
+        const questionLower = market.question?.toLowerCase() || "";
+        return categoryKeywords[categories[tab]].some((kw) =>
+          questionLower.includes(kw),
+        );
+      });
+
 
 
   return (
@@ -53,7 +54,14 @@ export default function PredictionMarket({ value }) {
 
         {/* Content */}
         {predictionLoading ? (
-          <Box sx={{ textAlign: "center", py: 8 }}>
+          <Box sx={{
+            mr: { md: 77, lg: 120 }, ml: { sm: 30, md: 0 },
+            display: 'flex',
+            flexDirection: 'column',
+            justifyContent: 'center',
+            alignItems: 'center',
+            py: 2,
+              }}>
             <CircularProgress />
             <Typography sx={{ mt: 2 }}>
               Loading prediction markets...
@@ -61,8 +69,8 @@ export default function PredictionMarket({ value }) {
           </Box>
         ) : predictionError ? (
           <Alert severity="error">Failed to load Market</Alert>
-        ) : filteredMarkets.length === 0 ? (
-          <Typography sx={{ textAlign: "center", py: 8 }}>
+        ) : predictionMarket?.length === 0 ? (
+          <Typography sx={{ textAlign: { xs: "center", sm: 'right', md: 'left' }, py: 8, my: -5, mr: { sm: 12 }, ml: { md: 4 } }}>
             No market found in {categories[tab]}
           </Typography>
         ) : (

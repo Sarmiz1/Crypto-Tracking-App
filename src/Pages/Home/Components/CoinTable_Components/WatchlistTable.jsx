@@ -12,17 +12,19 @@ export default function WatchlistTable({ value }) {
 
   return (
     <CustomTabPanel value={value} index={2}>
-      {watchlist.length === 0 ? (
+      {watchlist?.length === 0 ? (
         <Box
           sx={{
             textAlign: "center",
             py: 2,
-            my: 3,
+            my: 2,
             height: "100%",
-            display: "block",
+            display: "flex",
+            justifyContent: 'center',
+            alignItems: 'center'
           }}
         >
-          <Typography variant="h6" sx={{ fontWeight: 500 }}>
+          <Typography variant="h6" sx={{ fontWeight: 500, my: -5 }}>
             Your watchlist is empty{" "}
           </Typography>
         </Box>

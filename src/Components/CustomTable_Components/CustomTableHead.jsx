@@ -4,7 +4,7 @@ export default function CustomTableHead({ stickyBg }) {
   return (
     <TableHead>
       <TableRow>
-        {/* Sticky # */}
+        {/* Sticky Rank Column */}
         <TableCell
           sx={{
             position: "sticky",
@@ -18,7 +18,7 @@ export default function CustomTableHead({ stickyBg }) {
           #
         </TableCell>
 
-        {/* Sticky Name */}
+        {/* Sticky Name Column */}
         <TableCell
           sx={{
             position: "sticky",

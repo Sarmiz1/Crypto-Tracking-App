@@ -3,7 +3,6 @@ import {
   TableCell,
   TableRow,
   Typography,
-  Stack,
   Box,
   IconButton,
 } from "@mui/material";
@@ -16,7 +15,12 @@ import { formatLargeDigits } from "../../utils/formatLargeDigits";
 import { useContext } from "react";
 import { appContext } from "../../Context/AppContextProvider";
 
-export default function CustomTableBody({ coins, stickyBg, currency, section = "table" }) {
+export default function CustomTableBody({
+  coins,
+  stickyBg,
+  currency,
+  section = "table",
+}) {
   const theme = useTheme();
   const isDark = theme.palette.mode === "dark";
 
@@ -57,7 +61,9 @@ export default function CustomTableBody({ coins, stickyBg, currency, section = "
             hover
             sx={{
               "&:hover": {
-                backgroundColor: isDark ? "rgba(255,255,255,0.05)" : "rgba(0,0,0,0.04)",
+                backgroundColor: isDark
+                  ? "rgba(255,255,255,0.05)"
+                  : "rgba(0,0,0,0.04)",
               },
             }}
           >
@@ -72,9 +78,23 @@ export default function CustomTableBody({ coins, stickyBg, currency, section = "
                 boxShadow: "2px 0 5px rgba(0,0,0,0.05)",
               }}
             >
-              <Box sx={{ display: "flex", alignItems: "center", width: { xs: 55, sm: 56, md: 80 }, overflow: "hidden" }}>
-                <IconButton size="small" onClick={() => handleWatchlistToggle(coin)}>
-                  {isWatched ? <StarIcon sx={{ color: "#FFD700" }} fontSize="small" /> : <StarBorderIcon fontSize="small" />}
+              <Box
+                sx={{
+                  display: "flex",
+                  alignItems: "center",
+                  width: { xs: 55, sm: 56, md: 80 },
+                  overflow: "hidden",
+                }}
+              >
+                <IconButton
+                  size="small"
+                  onClick={() => handleWatchlistToggle(coin)}
+                >
+                  {isWatched ? (
+                    <StarIcon sx={{ color: "#FFD700" }} fontSize="small" />
+                  ) : (
+                    <StarBorderIcon fontSize="small" />
+                  )}
                 </IconButton>
                 <Typography variant="body2" noWrap>
                   {rankDisplay}
@@ -93,7 +113,15 @@ export default function CustomTableBody({ coins, stickyBg, currency, section = "
                 boxShadow: "2px 0 5px rgba(0,0,0,0.03)",
               }}
             >
-              <Box sx={{ display: "flex", alignItems: "center", width: { xs: 100, sm: 160, md: 220 }, overflow: "hidden", gap: 1 }}>
+              <Box
+                sx={{
+                  display: "flex",
+                  alignItems: "center",
+                  width: { xs: 100, sm: 160, md: 220 },
+                  overflow: "hidden",
+                  gap: 1,
+                }}
+              >
                 <Box
                   component="img"
                   alt={`${coin.name} logo`}
@@ -111,17 +139,30 @@ export default function CustomTableBody({ coins, stickyBg, currency, section = "
               </Box>
             </TableCell>
 
-            <TableCell align="right">{currencyFormat(coin.current_price, { symbol: currencySymbol })}</TableCell>
-            <TableCell align="right" sx={{ color: isPositive ? "success.main" : "error.main" }}>
+            <TableCell align="right">
+              {currencyFormat(coin.current_price, { symbol: currencySymbol })}
+            </TableCell>
+            <TableCell
+              align="right"
+              sx={{ color: isPositive ? "success.main" : "error.main" }}
+            >
               {isPositive ? "+" : ""}
               {currencyFormat(coin.price_change_percentage_24h)}%
             </TableCell>
-            <TableCell align="right">{formatLargeDigits(coin.market_cap, currencySymbol)}</TableCell>
-            <TableCell align="right">{formatLargeDigits(coin.total_volume, currencySymbol)}</TableCell>
+            <TableCell align="right">
+              {formatLargeDigits(coin.market_cap, currencySymbol)}
+            </TableCell>
+            <TableCell align="right">
+              {formatLargeDigits(coin.total_volume, currencySymbol)}
+            </TableCell>
             <TableCell align="right">
               <Box sx={{ display: "flex", justifyContent: "flex-end", gap: 0.5 }}>
-                <Typography sx={{ fontSize: 12 }}>{formatLargeDigits(coin.total_supply, "")}</Typography>
-                <Typography sx={{ textTransform: "uppercase", fontSize: 12 }}>{coin.symbol}</Typography>
+                <Typography sx={{ fontSize: 12 }}>
+                  {formatLargeDigits(coin.total_supply, "")}
+                </Typography>
+                <Typography sx={{ textTransform: "uppercase", fontSize: 12 }}>
+                  {coin.symbol}
+                </Typography>
               </Box>
             </TableCell>
 

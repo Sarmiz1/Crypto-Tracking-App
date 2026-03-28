@@ -25,15 +25,24 @@ export default function TopCoinTable({ value }) {
     chart: coin.sparkline_in_7d?.price || [], // line chart
   }));
 
+
+
   return (
     <CustomTabPanel value={value} index={0}>
       {topLoading && <p>Loading coins...</p>}
-      {topError && <Alert severity="error">Failed to load Table</Alert>}
-      {mappedData.length === 0 && (
-        <Typography sx={{ textAlign: "center", py: 8 }}>
-          No coin found
-        </Typography>)}
-      {mappedData && <CustomTable coins={mappedData} currency={currency} />}
+
+
+      {topError ? (<Alert severity="error">Failed to load Table</Alert>)
+
+        : mappedData?.length === 0 ? (
+          <Typography sx={{ textAlign: "center", py: 8, my: -5 }}>
+            No coin found
+          </Typography>)
+
+          : mappedData && <CustomTable coins={mappedData} currency={currency} />
+      }
+
+
     </CustomTabPanel>
   );
 }

@@ -27,12 +27,15 @@ export default function TrendingCoinTable({ value }) {
   return (
     <CustomTabPanel value={value} index={1}>
       {loading && <p>Loading coins...</p>}
-      {error && <Alert severity="error">Failed to load Table</Alert>}
-      {trendingCoin.length === 0 && (
-        <Typography sx={{ textAlign: "center", py: 8 }}>
-          No coin found
-        </Typography>)}
-      {data && <CustomTable coins={trendingCoin} currency={currency} />}
+
+      {error ? (<Alert severity="error">Failed to load Table</Alert>)
+        :
+        trendingCoin?.length === 0 ? (
+          <Typography sx={{ textAlign: "center", py: 8, my: -5 }}>
+            No coin found
+          </Typography>)
+          : trendingCoin && <CustomTable coins={trendingCoin} currency={currency} />
+      }
     </CustomTabPanel>
   );
 }

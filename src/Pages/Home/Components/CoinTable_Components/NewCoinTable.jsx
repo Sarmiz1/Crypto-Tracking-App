@@ -18,6 +18,7 @@ export default function NewCoinTable({ value }) {
       .slice(0, 50); // limit to 50 newest
   }, [data]);
 
+
   return (
     <CustomTabPanel value={value} index={5}>
       {loading ? (
@@ -30,8 +31,8 @@ export default function NewCoinTable({ value }) {
         <Alert severity="error">Failed to load Table</Alert>
       ) 
 
-      : newCoins.length === 0 ? (
-        <Typography sx={{ textAlign: "center", py: 8 }}>
+      : newCoins?.length === 0 ? (
+        <Typography sx={{ textAlign: "center", py: 8, my: -5 }}>
           No coin found
         </Typography>
       ) 
