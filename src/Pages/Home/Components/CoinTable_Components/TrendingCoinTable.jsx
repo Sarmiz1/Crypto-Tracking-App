@@ -1,13 +1,13 @@
-
+import { Typography, Alert } from "@mui/material";
 import CustomTabPanel from "../../../../Components/CustomTabPanel";
 import CustomTable from "../../../../Components/CustomTable";
 import { useContext } from "react";
 import { appContext } from "../../../../Context/AppContextProvider";
 
-export default function TrendingCoinTable({ value }) { 
+export default function TrendingCoinTable({ value }) {
   const { trendingCryptos, currency } = useContext(appContext);
 
-  const {data, loading, error} = trendingCryptos;
+  const { data, loading, error } = trendingCryptos;
 
   // Map CoinGecko data to match your table
   const trendingCoin = data?.map((coin) => ({
@@ -22,12 +22,16 @@ export default function TrendingCoinTable({ value }) {
     total_supply: coin.total_supply,
     chart: coin.sparkline_in_7d?.price || [], // line chart
   }));
-  
+
 
   return (
     <CustomTabPanel value={value} index={1}>
       {loading && <p>Loading coins...</p>}
-      {error && <p>Failed to load Table</p>}
+      {error && <Alert severity="error">Failed to load Table</Alert>}
+      {trendingCoin.length === 0 && (
+        <Typography sx={{ textAlign: "center", py: 8 }}>
+          No coin found
+        </Typography>)}
       {data && <CustomTable coins={trendingCoin} currency={currency} />}
     </CustomTabPanel>
   );

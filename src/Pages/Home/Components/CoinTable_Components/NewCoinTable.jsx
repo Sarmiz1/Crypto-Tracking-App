@@ -2,7 +2,7 @@ import CustomTable from "../../../../Components/CustomTable";
 import CustomTabPanel from "../../../../Components/CustomTabPanel";
 import { useContext, useMemo } from "react";
 import { appContext } from "../../../../Context/AppContextProvider";
-import { CircularProgress, Box, Alert } from "@mui/material";
+import { CircularProgress, Box, Alert, Typography } from "@mui/material";
 
 export default function NewCoinTable({ value }) { 
   const { currency, cryptoListing } = useContext(appContext);
@@ -24,9 +24,19 @@ export default function NewCoinTable({ value }) {
         <Box sx={{ textAlign: "center", py: 6 }}>
           <CircularProgress />
         </Box>
-      ) : error ? (
+      ) 
+      
+      : error ? (
         <Alert severity="error">Failed to load Table</Alert>
-      ) : (
+      ) 
+
+      : newCoins.length === 0 ? (
+        <Typography sx={{ textAlign: "center", py: 8 }}>
+          No coin found
+        </Typography>
+      ) 
+      
+      : (
         <CustomTable coins={newCoins} currency={currency} section='new' />
       )}
     </CustomTabPanel>

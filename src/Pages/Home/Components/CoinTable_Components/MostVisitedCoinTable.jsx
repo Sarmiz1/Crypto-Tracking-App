@@ -5,7 +5,7 @@ import { appContext } from "../../../../Context/AppContextProvider";
 import { CircularProgress, Box, Alert } from "@mui/material";
 
 export default function MostVisitedCoinTable({ value }) {
-const { currency, cryptoListing } = useContext(appContext);
+  const { currency, cryptoListing } = useContext(appContext);
   const { data, loading, error } = cryptoListing || {};
 
   // Sort by useMemo (Most Visited Coin)
@@ -24,11 +24,22 @@ const { currency, cryptoListing } = useContext(appContext);
         <Box sx={{ textAlign: "center", py: 6 }}>
           <CircularProgress />
         </Box>
-      ) : error ? (
+      ) 
+      
+      : error ? (
         <Alert severity="error">Failed to load Table</Alert>
-      ) : (
+      )
+
+      : newCoins.length === 0 ? (
+        <Typography sx={{ textAlign: "center", py: 8 }}>
+          No coin found
+        </Typography>
+      ) 
+      
+      : (
         <CustomTable coins={newCoins} currency={currency} section='most-visited' />
-      )}
+      )
+      }
     </CustomTabPanel>
   );
 }
