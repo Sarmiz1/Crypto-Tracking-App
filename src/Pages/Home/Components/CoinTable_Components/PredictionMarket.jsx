@@ -31,6 +31,7 @@ export default function PredictionMarket({ value }) {
           );
         });
 
+
   return (
     <CustomTabPanel value={value} index={3}>
       <Box sx={{ p: 3 }}>

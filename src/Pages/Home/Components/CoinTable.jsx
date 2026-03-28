@@ -18,9 +18,9 @@ export default function CoinTable({ tabValue }) {
         {tabValue === 0 && <TopCoinTable value={tabValue} />}
         {tabValue === 1 && <TrendingCoinTable value={tabValue} />}
         {tabValue === 2 && <WatchlistTable value={tabValue} />}
-        {tabValue === 3 && <MostVisitedCoinTable value={tabValue} />}
-        {tabValue === 4 && <NewCoinTable value={tabValue} />}
-        {tabValue === 5 && <PredictionMarket value={tabValue} />}
+        {tabValue === 3 && <PredictionMarket value={tabValue} />}
+        {tabValue === 4 && <MostVisitedCoinTable value={tabValue} />}
+        {tabValue === 5 && <NewCoinTable value={tabValue} />}       
       </Suspense>
     </Box>
   );
