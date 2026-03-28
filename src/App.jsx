@@ -3,7 +3,6 @@ import CssBaseline from "@mui/material/CssBaseline";
 import { useMediaQuery } from "@mui/material";
 import DefaultLayout from "./Layouts/DefaultLayout";
 import Watchlist from "./Pages/Watchlist/Watchlist";
-import Footer from "./Components/Footer";
 import Exchange from "./Pages/Exchanges/Exchanges";
 import DexscanPage from "./Pages/DexScan/DexscanPage";
 import PortFolio from "./Pages/Portfolio/Portfolio";
@@ -13,6 +12,8 @@ import { useContext, lazy, useState } from "react";
 import AuthPage from "./Pages/AuthPage/AuthPage";
 import CoinPage from "./Pages/CoinPage/CoinPage"
 import DashboardLayout from "./Layouts/DashboardLayout";
+import NotFoundPage from "./Components/NotFoundPage";
+
 
 const HomePage = lazy(() => import("./Pages/Home/Home"));
 const DashboardPage = lazy(() => import("./Pages/Dashboard/DashboardPage"));
@@ -57,9 +58,10 @@ function App() {
             />}
           />
         </Route>
+
+        <Route path="*" element={<NotFoundPage mode={mode}/>} />
       </Routes>
 
-      <Footer />
     </ThemeContextProvider>
   );
 }

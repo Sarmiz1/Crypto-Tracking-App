@@ -2,6 +2,7 @@ import { Outlet } from "react-router-dom";
 import { Suspense } from "react";
 import { PagesFallback } from "../Suspense/PagesFallback";
 import TopAppBar from "../Components/TopAppBar";
+import Footer from "../Components/Footer";
 
 export default function DashboardLayout({
   mode,
@@ -20,6 +21,7 @@ export default function DashboardLayout({
       <Suspense fallback={<PagesFallback />}>
         <Outlet />  {/* This renders the route element */}
       </Suspense>
+      <Footer />
     </>
   );
 }

@@ -47,7 +47,7 @@ export default function NavBar() {
 
           {/* DarkMode */}
           <IconButton
-            onClick={() => setMode(mode === "dark" ? "light" : "dark")}
+            onClick={() => setMode(prev => prev === "dark" ? "light" : "dark")}
           >
             {mode === "dark" ? <LightModeIcon /> : <DarkModeIcon />}
           </IconButton>

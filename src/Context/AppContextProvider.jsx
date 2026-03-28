@@ -1,10 +1,37 @@
-import { createContext, useState, useMemo } from "react";
+import { createContext, useState, useMemo, useEffect } from "react";
 import { useFetch } from "../Hooks/useFetch";
 
 export const appContext = createContext();
 
 export default function AppContextProvider({ children }) {
-  const [mode, setMode] = useState("dark");
+
+  const getSystemMode = () => {
+    if (typeof window !== "undefined" && window.matchMedia) {
+      return window.matchMedia("(prefers-color-scheme: dark)").matches
+        ? "dark"
+        : "light";
+    }
+    return "light"; // fallback
+  };
+
+  const [mode, setMode] = useState(getSystemMode);
+
+  useEffect(() => {
+    const mediaQuery = window.matchMedia("(prefers-color-scheme: dark)");
+
+    const handleChange = (e) => {
+      setMode(e.matches ? "dark" : "light");
+    };
+
+    mediaQuery.addEventListener("change", handleChange);
+
+    return () => {
+      mediaQuery.removeEventListener("change", handleChange);
+    };
+  }, []);
+
+
+
   const [tabValue, setTabValue] = useState(0);
   const [currency, setCurrency] = useState({ name: "USD", symbol: "$" });
   const [watchlist, setWatchlist] = useState([]);

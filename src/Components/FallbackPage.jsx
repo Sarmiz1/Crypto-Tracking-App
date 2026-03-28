@@ -1,46 +1,95 @@
-import { useNavigate } from 'react-router-dom';
+// src/Pages/FallbackPage.jsx
+import { useNavigate } from "react-router-dom";
+import { Box, Typography, Button } from "@mui/material";
+import { useContext } from "react";
+import { appContext } from "../Context/AppContextProvider";
 
 const FallbackPage = (props) => {
   const navigate = useNavigate();
 
   const handleGoHome = () => {
-    navigate('/', { replace: true }); // replace avoids going back to error page
-    props.resetErrorBoundary(); // optional: reset boundary state
+    navigate("/", { replace: true }); // avoid going back to error page
+    if (props.resetErrorBoundary) props.resetErrorBoundary(); // reset error boundary if provided
   };
 
+  const { mode } = useContext(appContext) 
+
   return (
-    <section
-      className="
-        flex flex-col h-dvh justify-center items-center gap-4
-        animate-fadeIn p-4
-      "
+    <Box
+      sx={{
+        height: "100vh",
+        display: "flex",
+        flexDirection: "column",
+        justifyContent: "center",
+        alignItems: "center",
+        gap: 3,
+        px: 2,
+        textAlign: "center",
+
+         // Dynamic background
+        backgroundColor:
+          mode === "dark"
+            ? "rgba(18,18,18,0.95)"
+            : "rgba(245,245,245,0.95)",
+
+        color: mode === "dark" ? "#fff" : "#111",
+      }}
     >
-      <img
-        src='error/error.jpg'
-        alt='Page not found'
-        className="w-64 md:w-70 rounded-lg shadow-lg lg:w-60"
+      {/* Error Image */}
+      <Box
+        component="img"
+        src="/error/error-removebg-preview.png"
+        alt="Something went wrong"
+        sx={{
+          width: { xs: 120, sm: 150, md: 200 }, // responsive width
+          borderRadius: 2, // rounded corners
+          boxShadow: 3, // MUI shadow
+        }}
       />
 
-      <p className="text-center text-base font-poppins font-semibold text-gray-900 dark:text-gray-600 leading-relaxed w-[45ch]">
-        Something went wrong. Try clicking the refresh page button to reload the application or go back to homepage.
-      </p>
+      {/* Error message */}
+      <Typography
+        variant="body1"
+        sx={{
+          maxWidth: { xs: 400, md: 500 }, 
+          fontWeight: 600,
+          color: "text.primary",
+          lineHeight: 1.6,
+          fontSize: { xs: 15, sm: 17, md: 20 }
+        }}
+      >
+        Something went wrong. Try clicking the refresh page button to reload
+        the application or go back to homepage.
+      </Typography>
 
-      <div className="flex flex-row gap-4 mt-4">
-        <button
-          className='bg-yellow-700 w-32 rounded-2xl text-slate-100 hover:bg-yellow-600 transition-colors py-2'
+      {/* Action buttons */}
+      <Box
+        sx={{
+          display: "flex",
+          flexDirection: 'row',
+          gap: 2,
+          mt: 2,
+        }}
+      >
+        <Button
+          variant="contained"
+          color="warning"
           onClick={props.resetErrorBoundary}
+          sx={{ width: 140, borderRadius: 3 }}
         >
           Refresh page
-        </button>
+        </Button>
 
-        <button
-          className='bg-yellow-700 w-32 rounded-2xl text-slate-100 hover:bg-yellow-600 transition-colors py-2'
+        <Button
+          variant="contained"
+          color="warning"
           onClick={handleGoHome}
+          sx={{ width: 140, borderRadius: 3 }}
         >
           Go home
-        </button>
-      </div>
-    </section>
+        </Button>
+      </Box>
+    </Box>
   );
 };
 

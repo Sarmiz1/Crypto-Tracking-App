@@ -21,7 +21,7 @@ export default function TopAppBar({ mode, setMode, isMobile, setMobileOpen }) {
   }, []);
 
   const handleSwitchChange = () => {
-    setMode(mode === "dark" ? "light" : "dark");
+    setMode(prev => prev === "dark" ? "light" : "dark");
   };
 
   return (
