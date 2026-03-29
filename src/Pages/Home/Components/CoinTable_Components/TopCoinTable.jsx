@@ -1,4 +1,4 @@
-import { Typography, Alert } from "@mui/material";
+import { Typography, Alert, Box, CircularProgress } from "@mui/material";
 import CustomTable from "../../../../Components/CustomTable";
 import CustomTabPanel from "../../../../Components/CustomTabPanel";
 import { useContext } from "react";
@@ -29,7 +29,9 @@ export default function TopCoinTable({ value }) {
 
   return (
     <CustomTabPanel value={value} index={0}>
-      {topLoading && <p>Loading coins...</p>}
+      {topLoading && <Box sx={{ textAlign: "center", py: 6 }}>
+        <CircularProgress />
+      </Box>}
 
 
       {topError ? (<Alert severity="error">Failed to load Table</Alert>)

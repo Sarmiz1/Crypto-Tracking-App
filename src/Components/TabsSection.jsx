@@ -13,7 +13,7 @@ function a11yProps(index) {
 }
 
 
-export default function TabsSection({ value, handleChange }) {
+export default function TabsSection({ value = 0, handleChange }) {
 
   const theme = useTheme();
   const isDark = theme.palette.mode === "dark";

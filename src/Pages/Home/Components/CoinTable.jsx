@@ -11,7 +11,7 @@ const NewCoinTable = lazy(() => import("./CoinTable_Components/NewCoinTable"));
 const PredictionMarket = lazy(() => import("./CoinTable_Components/PredictionMarket"));
 
 
-export default function CoinTable({ tabValue }) {
+export default function CoinTable({ tabValue = 0 }) {
   return (
     <Box sx={{ my: 2 }}>
       <Suspense fallback={<TablesFallbackPage />}>

@@ -26,7 +26,9 @@ export default function TrendingCoinTable({ value }) {
 
   return (
     <CustomTabPanel value={value} index={1}>
-      {loading && <p>Loading coins...</p>}
+      {loading && <Box sx={{ textAlign: "center", py: 6 }}>
+        <CircularProgress />
+      </Box>}
 
       {error ? (<Alert severity="error">Failed to load Table</Alert>)
         :
