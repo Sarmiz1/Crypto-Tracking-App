@@ -26,7 +26,6 @@ export default function TopCoinTable({ value }) {
   }));
 
 
-
   return (
     <CustomTabPanel value={value} index={0}>
       {topLoading && <Box sx={{ textAlign: "center", py: 6 }}>
