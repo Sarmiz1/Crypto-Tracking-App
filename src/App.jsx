@@ -13,9 +13,9 @@ import AuthPage from "./Pages/AuthPage/AuthPage";
 import CoinPage from "./Pages/CoinPage/CoinPage"
 import DashboardLayout from "./Layouts/DashboardLayout";
 import NotFoundPage from "./Components/NotFoundPage";
+import HomePage from "./Pages/Home/Home";
 
 
-const HomePage = lazy(() => import("./Pages/Home/Home"));
 const DashboardPage = lazy(() => import("./Pages/Dashboard/DashboardPage"));
 
 
