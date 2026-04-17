@@ -7,13 +7,13 @@ import {
 import { LineChart, Line, ResponsiveContainer } from "recharts";
 import { useContext } from "react";
 import { formatLargeDigits } from '../../../../../utils/formatLargeDigits';
-import { appContext } from "../../../../../Context/AppContextProvider";
+import { AppContext } from "../../../../../Context/AppContext";
 import ErrorDisplay from '../../../../../Components/ErrorDisplay';
 import LoadingState from '../../../../../Components/LoadingState';
 
 
 export default function ContentCardsBox({ scrollRef }) {
-  const { globalMetrics, currency } = useContext(appContext);
+  const { globalMetrics, currency } = useContext(AppContext);
   const { symbol: currencySymbol = '$' } = currency || {};
 
   // Correct destructuring

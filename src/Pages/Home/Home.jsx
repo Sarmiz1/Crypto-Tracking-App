@@ -3,13 +3,13 @@ import HeroSection from "./Components/HeroSection";
 import TabsSection from "../../Components/TabsSection";
 import MetricCards from "../../Components/MetricCards";
 import { useContext } from "react";
-import { appContext } from "../../Context/AppContextProvider";
+import { AppContext } from "../../Context/AppContext";
 import InfoSection from "./Components/InfoSection";
 import SubscribeSection from "./Components/SubscribeSection";
 import CoinTable from "./Components/CoinTable";
 
 export default function HomePage() {
-  const { tabValue, handleTabChange } = useContext(appContext);
+  const { tabValue, handleTabChange } = useContext(AppContext);
 
 
   return (
