@@ -1,10 +1,10 @@
 import { useEffect, useRef, useState, useContext, useMemo } from "react";
 import { Stack, Box } from "@mui/material";
-import { appContext } from "../Context/AppContextProvider";
+import { AppContext } from "../Context/AppContext";
 import { MetricCard } from "./MetricCards_Components/MetricCard";
 
 export default function MetricCards() {
-  const { globalMetrics, currency } = useContext(appContext);
+  const { globalMetrics, currency } = useContext(AppContext);
 
   // ------------------------
   // Track mobile/desktop dynamically
@@ -35,6 +35,10 @@ export default function MetricCards() {
     if (isLoading) return [];
     const globalData = globalMetrics.data;
 
+    // Stable dummy data for Fear & Greed sparkline
+    const fearGreedValue = parseInt(globalMetrics.fearGreed?.value) || 0;
+    const fearGreedData = [0, 2, -1, 1, -2, 3, 0].map(offset => fearGreedValue + offset);
+
     return [
       {
         title: "Market Cap",
@@ -56,9 +60,7 @@ export default function MetricCards() {
         title: "Fear & Greed",
         value: globalMetrics.fearGreed?.value || 0,
         change: 0,
-        data: Array.from({ length: 7 }, () =>
-          (parseInt(globalMetrics.fearGreed?.value) || 0) + Math.random() * 5 - 2
-        ),
+        data: fearGreedData,
       },
     ];
   }, [globalMetrics, currency, isLoading]);

@@ -2,10 +2,10 @@ import { Typography, Alert } from "@mui/material";
 import CustomTabPanel from "../../../../Components/CustomTabPanel";
 import CustomTable from "../../../../Components/CustomTable";
 import { useContext } from "react";
-import { appContext } from "../../../../Context/AppContextProvider";
+import { AppContext } from "../../../../Context/AppContext";
 
 export default function TrendingCoinTable({ value }) {
-  const { trendingCryptos, currency } = useContext(appContext);
+  const { trendingCryptos, currency } = useContext(AppContext);
 
   const { data, loading, error } = trendingCryptos;
 

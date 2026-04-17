@@ -2,7 +2,7 @@
 import { useNavigate } from "react-router-dom";
 import { Box, Typography, Button } from "@mui/material";
 import { useContext } from "react";
-import { appContext } from "../Context/AppContextProvider";
+import { AppContext } from "../Context/AppContext";
 
 const FallbackPage = (props) => {
   const navigate = useNavigate();
@@ -12,7 +12,7 @@ const FallbackPage = (props) => {
     if (props.resetErrorBoundary) props.resetErrorBoundary(); // reset error boundary if provided
   };
 
-  const { mode } = useContext(appContext) 
+  const { mode } = useContext(AppContext)
 
   return (
     <Box

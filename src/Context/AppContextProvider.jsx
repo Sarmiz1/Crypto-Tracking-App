@@ -1,7 +1,6 @@
-import { createContext, useState, useMemo, useEffect } from "react";
+import { useState, useMemo, useEffect } from "react";
 import { useFetch } from "../Hooks/useFetch";
-
-export const appContext = createContext();
+import { AppContext } from "./AppContext";
 
 export default function AppContextProvider({ children }) {
 
@@ -157,8 +156,8 @@ export default function AppContextProvider({ children }) {
   };
 
   return (
-    <appContext.Provider value={value}>
+    <AppContext.Provider value={value}>
       {children}
-    </appContext.Provider>
+    </AppContext.Provider>
   );
 }

@@ -2,14 +2,14 @@ import { useState, useContext } from "react";
 import { Box, Typography } from "@mui/material";
 import CustomTextBox from "../../../Components/CustomTextBox";
 import { textFile } from "../../../Data/text";
-import { appContext } from "../../../Context/AppContextProvider";
+import { AppContext } from "../../../Context/AppContext";
 import ChangeIndicator from "./InfoSection_Components/ChangeIndicator";
 import CollapseSection from "./InfoSection_Components/CollapseSection";
 import ToggleSection from "./InfoSection_Components/ToggleSection";
 import { useMarketInfo } from "../../../utils/useMarketInfo";
 
 export default function InfoSection() {
-  const { mode } = useContext(appContext);
+  const { mode } = useContext(AppContext);
   const { marketCap, marketCapChange } = useMarketInfo() 
   const [expanded, setExpanded] = useState(false);
 

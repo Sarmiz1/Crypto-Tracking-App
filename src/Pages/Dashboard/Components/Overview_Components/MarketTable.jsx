@@ -9,14 +9,14 @@ import {
   Box,
 } from "@mui/material";
 import { useContext } from "react";
-import { appContext } from "../../../../Context/AppContextProvider";
+import { AppContext } from "../../../../Context/AppContext";
 import { formatLargeDigits } from "../../../../utils/formatLargeDigits";
 import currencyFormat from "../../../../utils/currencyFormat";
 import ErrorDisplay from "../../../../Components/ErrorDisplay";
 import LoadingState from "../../../../Components/LoadingState";
 
 export default function MarketTable() {
-  const { cryptoListing, currency } = useContext(appContext);
+  const { cryptoListing, currency } = useContext(AppContext);
   const { symbol: currencySymbol } = currency || {};
   const { data, loading, error } = cryptoListing || {};
   const markets = data?.slice(12, 35).map((coin) => ({

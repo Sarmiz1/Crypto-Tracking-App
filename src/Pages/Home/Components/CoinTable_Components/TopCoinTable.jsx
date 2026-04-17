@@ -2,11 +2,11 @@ import { Typography, Alert, Box, CircularProgress } from "@mui/material";
 import CustomTable from "../../../../Components/CustomTable";
 import CustomTabPanel from "../../../../Components/CustomTabPanel";
 import { useContext } from "react";
-import { appContext } from "../../../../Context/AppContextProvider";
+import { AppContext } from "../../../../Context/AppContext";
 
 export default function TopCoinTable({ value }) {
 
-  const { cryptoListing, currency } = useContext(appContext);
+  const { cryptoListing, currency } = useContext(AppContext);
   const { data: topCoins, loading: topLoading, error: topError } = cryptoListing;
 
 

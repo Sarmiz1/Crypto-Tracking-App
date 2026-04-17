@@ -1,8 +1,10 @@
 import { Box } from "@mui/material";
 import { Header } from "./SpotMarket_Components/Header";
 import { SpotFilterTable } from "./SpotMarket_Components/SpotFilterTable";
-import CryptoMarketCapChart from "./CryptoMarketCapChart";
+import { lazy, Suspense } from "react";
 import AboutSpotMarket from "./SpotMarket_Components/AboutSpotMarket";
+
+const CryptoMarketCapChart = lazy(() => import("./CryptoMarketCapChart"));
 
 export default function SpotMarket({ mode }) {
 
@@ -19,7 +21,9 @@ export default function SpotMarket({ mode }) {
     >
       <Header />
       <SpotFilterTable mode={mode} />
-      <CryptoMarketCapChart />
+      <Suspense fallback={<p>Loading table...</p>}>
+        <CryptoMarketCapChart />
+      </Suspense>
       <AboutSpotMarket mode={mode} />
     </Box>
   );

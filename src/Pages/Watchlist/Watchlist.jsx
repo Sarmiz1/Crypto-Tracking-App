@@ -1,13 +1,13 @@
 import { Box, Typography } from "@mui/material";
 import CustomTable from "../../Components/CustomTable";
 import { useContext } from "react";
-import { appContext } from "../../Context/AppContextProvider";
+import { AppContext } from "../../Context/AppContext";
 
 export default function Watchlist() {
   const {
     watchList: { watchlist },
     currency,
-  } = useContext(appContext);
+  } = useContext(AppContext);
 
   return (
     <Box sx={{ padding: 2 }}>
