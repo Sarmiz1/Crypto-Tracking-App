@@ -1,5 +1,5 @@
 import { useContext } from "react";
-import { appContext } from "../Context/AppContextProvider";
+import { appContext } from "../Context/AppContext";
 import { formatLargeDigits } from "./formatLargeDigits";
 
 export const useMarketInfo = () => {
