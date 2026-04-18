@@ -13,7 +13,7 @@ import { LineChart, Line, ResponsiveContainer, XAxis, YAxis } from "recharts";
 import currencyFormat from "../../utils/currencyFormat";
 import { formatLargeDigits } from "../../utils/formatLargeDigits";
 import { useContext } from "react";
-import { appContext } from "../../Context/AppContextProvider";
+import { appContext } from "../../Context/AppContext";
 
 export default function CustomTableBody({
   coins,
