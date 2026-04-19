@@ -2,7 +2,7 @@
 import { useNavigate } from "react-router-dom";
 import { Box, Typography, Button } from "@mui/material";
 import { useContext } from "react";
-import { appContext } from "../Context/AppContextProvider";
+import { appContext } from "../Context/AppContext";
 
 const FallbackPage = (props) => {
   const navigate = useNavigate();

@@ -62,7 +62,8 @@ export default function SpotTable({
 
         setSpotMarkets(enriched);
         setError(null);
-      } catch (err) {
+      } catch (error) {
+        console.error(error);
         if (!mounted) return;
         setError("Failed to fetch spot market");
       } finally {
