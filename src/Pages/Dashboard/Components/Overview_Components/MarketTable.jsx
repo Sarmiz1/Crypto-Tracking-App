@@ -9,7 +9,7 @@ import {
   Box,
 } from "@mui/material";
 import { useContext } from "react";
-import { appContext } from "../../../../Context/AppContextProvider";
+import { appContext } from "../../../../Context/AppContext";
 import { formatLargeDigits } from "../../../../utils/formatLargeDigits";
 import currencyFormat from "../../../../utils/currencyFormat";
 import ErrorDisplay from "../../../../Components/ErrorDisplay";
