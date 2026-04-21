@@ -1,0 +1,3 @@
+## 2025-05-14 - [React Context and Large Table Optimization]
+**Learning:** In data-heavy applications using React Context, a single unmemoized context value can trigger application-wide re-renders. Large tables (100+ rows) with complex children (like sparklines) are particularly sensitive to these re-renders, especially when parent state changes frequently (e.g., scroll-linked UI updates).
+**Action:** Always memoize context values and sub-objects. Wrap large table components (Head/Body) in `React.memo` and ensure data props have stable references via `useMemo` in the container component. Split Context definitions from Providers to avoid circular dependencies and satisfy ESLint/Fast Refresh requirements.

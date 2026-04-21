@@ -1,7 +1,7 @@
 import { useState, useContext } from "react";
 import { Box, Typography, CircularProgress, Alert } from "@mui/material";
 import CustomTabPanel from "../../../../Components/CustomTabPanel";
-import { appContext } from "../../../../Context/AppContextProvider";
+import { appContext } from "../../../../Context/AppContext";
 import { categoryKeywords } from "../../Features/categoriesKeywords";
 import TopTabs from "./PredictionMarkets_Components/TopTabs";
 import DrawerForMobile from "./PredictionMarkets_Components/DrawerForMobile";
