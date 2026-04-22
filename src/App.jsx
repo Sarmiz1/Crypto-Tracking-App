@@ -7,7 +7,7 @@ import Exchange from "./Pages/Exchanges/Exchanges";
 import DexscanPage from "./Pages/DexScan/DexscanPage";
 import PortFolio from "./Pages/Portfolio/Portfolio";
 import ThemeContextProvider from "./Context/ThemeContextProvider";
-import { appContext } from "./Context/AppContextProvider";
+import { appContext } from "./Context/AppContext";
 import { useContext, lazy, useState } from "react";
 import AuthPage from "./Pages/AuthPage/AuthPage";
 import CoinPage from "./Pages/CoinPage/CoinPage"
