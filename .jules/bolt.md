@@ -1,0 +1,4 @@
+## 2025-05-15 - [React Context & Table Rendering Optimization]
+**Learning:** Providing non-memoized objects to a Context Provider causes all consumer components to re-render whenever the provider's parent updates, even if the context data hasn't changed. In high-density data views like crypto tables, this can lead to severe lag during interactions (e.g., scroll-triggered arrow visibility toggles in `CustomTable`). Additionally, Fast Refresh in Vite requires Context declarations to be in separate files from Provider components to avoid full-page reloads and circular dependencies.
+
+**Action:** Always memoize Context values with `useMemo` and functions with `useCallback`. Extract Context objects into dedicated files (e.g., `AppContext.jsx`) separate from their Provider logic. Wrap heavy data-driven components (Tables, Charts) in `React.memo` and memoize their data transformation logic.
