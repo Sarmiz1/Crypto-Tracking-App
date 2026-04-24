@@ -1,0 +1,3 @@
+## 2025-05-21 - React Context Performance and Table Rendering
+**Learning:** In applications using React Context for global data (like market prices), the entire component tree can suffer from "re-render cascades" if the context value is not memoized. Combined with heavy components like tables containing 100+ sparklines (Recharts), this causes significant scroll and interaction lag. Memoizing the context value with `useMemo`, event handlers with `useCallback`, and heavy UI components with `React.memo` effectively isolates state updates.
+**Action:** Always memoize Context values that contain multiple independent state slices and wrap expensive list/table components in `React.memo` to skip redundant rendering cycles during parent updates.

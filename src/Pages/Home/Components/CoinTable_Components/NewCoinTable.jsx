@@ -1,7 +1,7 @@
 import CustomTable from "../../../../Components/CustomTable";
 import CustomTabPanel from "../../../../Components/CustomTabPanel";
 import { useContext, useMemo } from "react";
-import { appContext } from "../../../../Context/AppContextProvider";
+import { appContext } from "../../../../Context/appContext";
 import { CircularProgress, Box, Alert, Typography } from "@mui/material";
 
 export default function NewCoinTable({ value }) { 
