@@ -1,7 +1,6 @@
-import { createContext, useState, useMemo, useEffect } from "react";
+import { useState, useMemo, useEffect, useCallback } from "react";
 import { useFetch } from "../Hooks/useFetch";
-
-export const appContext = createContext();
+import { appContext as AppContext } from "./appContext";
 
 export default function AppContextProvider({ children }) {
 
@@ -36,9 +35,9 @@ export default function AppContextProvider({ children }) {
   const [currency, setCurrency] = useState({ name: "USD", symbol: "$" });
   const [watchlist, setWatchlist] = useState([]);
 
-  const handleTabChange = (event, newValue) => {
+  const handleTabChange = useCallback((event, newValue) => {
     setTabValue(newValue);
-  };
+  }, []);
 
   /* ---------------- TOP 100 (refetch when currency changes) ---------------- */
 
@@ -99,66 +98,99 @@ export default function AppContextProvider({ children }) {
 
   /* ---------------- CONTEXT VALUE ---------------- */
 
-  const value = {
-    tabValue,
-    setTabValue,
-    handleTabChange,
-    mode,
-    setMode,
-    currency,
-    setCurrency,
-    watchlist,
-    setWatchlist,
+  const value = useMemo(
+    () => ({
+      tabValue,
+      setTabValue,
+      handleTabChange,
+      mode,
+      setMode,
+      currency,
+      setCurrency,
+      watchlist,
+      setWatchlist,
 
-    cryptoListing: {
-      data: topCoinsFetch.data,
-      loading: topCoinsFetch.loading,
-      error: topCoinsFetch.error,
-    },
+      cryptoListing: {
+        data: topCoinsFetch.data,
+        loading: topCoinsFetch.loading,
+        error: topCoinsFetch.error,
+      },
 
-    globalMetrics: {
-      data: globalFetch.data?.data,
-      loading: globalFetch.loading || fearGreedFetch.loading,
-      error: globalFetch.error || fearGreedFetch.error,
-      fearGreed: fearGreedFetch.data?.data?.[0] || null,
-    },
+      globalMetrics: {
+        data: globalFetch.data?.data,
+        loading: globalFetch.loading || fearGreedFetch.loading,
+        error: globalFetch.error || fearGreedFetch.error,
+        fearGreed: fearGreedFetch.data?.data?.[0] || null,
+      },
 
-    trendingCryptos: {
-      data: trendingWithSparkline,
-      loading: trendingFetch.loading || topCoinsFetch.loading,
-      error: trendingFetch.error || topCoinsFetch.error,
-    },
+      trendingCryptos: {
+        data: trendingWithSparkline,
+        loading: trendingFetch.loading || topCoinsFetch.loading,
+        error: trendingFetch.error || topCoinsFetch.error,
+      },
 
-    predictionMarkets: {
-      data: predictionFetch.data,
-      loading: predictionFetch.loading,
-      error: predictionFetch.error,
-    },
+      predictionMarkets: {
+        data: predictionFetch.data,
+        loading: predictionFetch.loading,
+        error: predictionFetch.error,
+      },
 
-    defi: {
-      data: defiFetch.data,
-      loading: defiFetch.loading,
-      error: defiFetch.error,
-    },
+      defi: {
+        data: defiFetch.data,
+        loading: defiFetch.loading,
+        error: defiFetch.error,
+      },
 
-    stableCoins: {
-      data: stablecoinsFetch.data,
-      loading: stablecoinsFetch.loading,
-      error: stablecoinsFetch.error,
-    },
+      stableCoins: {
+        data: stablecoinsFetch.data,
+        loading: stablecoinsFetch.loading,
+        error: stablecoinsFetch.error,
+      },
 
-    bitcoin: {
-      data: bitcoinFetch.data,
-      loading: bitcoinFetch.loading,
-      error: bitcoinFetch.error,
-    },
+      bitcoin: {
+        data: bitcoinFetch.data,
+        loading: bitcoinFetch.loading,
+        error: bitcoinFetch.error,
+      },
 
-    watchList: { watchlist, setWatchlist }
-  };
+      watchList: { watchlist, setWatchlist },
+    }),
+    [
+      tabValue,
+      handleTabChange,
+      mode,
+      currency,
+      watchlist,
+      topCoinsFetch.data,
+      topCoinsFetch.loading,
+      topCoinsFetch.error,
+      globalFetch.data,
+      globalFetch.loading,
+      globalFetch.error,
+      fearGreedFetch.loading,
+      fearGreedFetch.error,
+      fearGreedFetch.data,
+      trendingWithSparkline,
+      trendingFetch.loading,
+      trendingFetch.error,
+      predictionFetch.data,
+      predictionFetch.loading,
+      predictionFetch.error,
+      defiFetch.data,
+      defiFetch.loading,
+      defiFetch.error,
+      stablecoinsFetch.data,
+      stablecoinsFetch.loading,
+      stablecoinsFetch.error,
+      bitcoinFetch.data,
+      bitcoinFetch.loading,
+      bitcoinFetch.error,
+    ]
+  );
 
   return (
-    <appContext.Provider value={value}>
+    <AppContext.Provider value={value}>
       {children}
-    </appContext.Provider>
+    </AppContext.Provider>
   );
 }
