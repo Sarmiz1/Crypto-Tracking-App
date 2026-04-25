@@ -12,7 +12,7 @@ import SearchBar from "./NavBar_Components/SearchBar";
 import MobileDrawer from "./NavBar_Components/MobileDrawer";
 import DarkModeIcon from "@mui/icons-material/DarkMode";
 import LightModeIcon from "@mui/icons-material/LightMode";
-import { appContext } from "../Context/AppContextProvider";
+import { appContext } from "../Context/appContext";
 
 export default function NavBar() {
   const { mode, setMode } = useContext(appContext);
