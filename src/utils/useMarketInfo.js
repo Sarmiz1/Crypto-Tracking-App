@@ -1,9 +1,9 @@
 import { useContext } from "react";
-import { appContext } from "../Context/AppContextProvider";
+import { AppContext } from "../Context/appContext";
 import { formatLargeDigits } from "./formatLargeDigits";
 
 export const useMarketInfo = () => {
-  const { currency, globalMetrics, defi, stableCoins, bitcoin, mode } = useContext(appContext);
+  const { currency, globalMetrics, defi, stableCoins, bitcoin, mode } = useContext(AppContext);
 
   const { name: currencyName, symbol: currencySymbol } = currency || {};
   const { data, fearGreed } = globalMetrics || {};

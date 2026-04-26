@@ -1,17 +1,17 @@
 import { Typography, Alert, Box, CircularProgress } from "@mui/material";
 import CustomTable from "../../../../Components/CustomTable";
 import CustomTabPanel from "../../../../Components/CustomTabPanel";
-import { useContext } from "react";
-import { appContext } from "../../../../Context/AppContextProvider";
+import { useContext, useMemo } from "react";
+import { AppContext } from "../../../../Context/appContext";
 
 export default function TopCoinTable({ value }) {
 
-  const { cryptoListing, currency } = useContext(appContext);
+  const { cryptoListing, currency } = useContext(AppContext);
   const { data: topCoins, loading: topLoading, error: topError } = cryptoListing;
 
 
   // Map CoinGecko data to match your table
-  const mappedData = topCoins?.map((coin) => ({
+  const mappedData = useMemo(() => topCoins?.map((coin) => ({
     id: coin.id,
     symbol: coin.symbol,
     market_cap_rank: coin.market_cap_rank,
@@ -23,7 +23,7 @@ export default function TopCoinTable({ value }) {
     total_volume: coin.total_volume,
     total_supply: coin.total_supply,
     chart: coin.sparkline_in_7d?.price || [], // line chart
-  }));
+  })), [topCoins]);
 
 
   return (

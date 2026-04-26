@@ -6,9 +6,9 @@ import {
 } from "@mui/material";
 import Logo from "../Logo";
 import { useContext } from "react";
-import { appContext } from "../../Context/AppContextProvider";
+import { AppContext } from "../../Context/appContext";
 export default function LeftSideGrid({ isDark, textColor }) {
-  const {currency, setCurrency} = useContext(appContext);
+  const {currency, setCurrency} = useContext(AppContext);
 
   const handleCurrencyChange = (event) => {
     const newValue = {
