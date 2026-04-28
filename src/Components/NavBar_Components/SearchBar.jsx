@@ -5,14 +5,14 @@ import { useNavigate } from "react-router-dom";
 import { TextFieldSection } from "./SearchBarComponents/TextFieldSection";
 import { SearchResults } from "./SearchBarComponents/SearchResults";
 import { useContext } from "react";
-import { appContext } from "../../Context/AppContextProvider";
+import { AppContext } from "../../Context/appContext";
 
 export default function SearchBar({
   searchInput,
   setSearchInput,
 }) {
   
-  const { mode } = useContext(appContext)
+  const { mode } = useContext(AppContext)
   const isDark = mode === "dark";
   const navigate = useNavigate();
 

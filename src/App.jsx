@@ -7,7 +7,7 @@ import Exchange from "./Pages/Exchanges/Exchanges";
 import DexscanPage from "./Pages/DexScan/DexscanPage";
 import PortFolio from "./Pages/Portfolio/Portfolio";
 import ThemeContextProvider from "./Context/ThemeContextProvider";
-import { appContext } from "./Context/AppContextProvider";
+import { AppContext } from "./Context/appContext";
 import { useContext, lazy, useState } from "react";
 import AuthPage from "./Pages/AuthPage/AuthPage";
 import CoinPage from "./Pages/CoinPage/CoinPage"
@@ -20,7 +20,7 @@ const DashboardPage = lazy(() => import("./Pages/Dashboard/DashboardPage"));
 
 
 function App() {
-  const { mode, setMode } = useContext(appContext);
+  const { mode, setMode } = useContext(AppContext);
   const [mobileOpen, setMobileOpen] = useState(false);
   const isMobile = useMediaQuery("(max-width:900px)");
 
