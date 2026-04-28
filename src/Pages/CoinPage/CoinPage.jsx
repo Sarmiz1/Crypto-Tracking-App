@@ -5,7 +5,7 @@ import { Box, Typography, Paper, CircularProgress } from "@mui/material";
 
 import PriceChart from "./Components/PriceChart";
 import { Header } from "./Components/Header";
-import { appContext } from "../../Context/AppContextProvider";
+import { AppContext } from "../../Context/appContext";
 import { Price } from "./Components/Price";
 import { Stats } from "./Components/Stats";
 
@@ -14,7 +14,7 @@ export default function CoinPage() {
   const [coin, setCoin] = useState(null);
   const [loading, setLoading] = useState(true);
 
-  const { currency, mode } = useContext(appContext);
+  const { currency, mode } = useContext(AppContext);
   const lowerCurrency = currency.name.toLowerCase(); // for CoinGecko keys
   const currencySymbol = currency.symbol; // for display
 

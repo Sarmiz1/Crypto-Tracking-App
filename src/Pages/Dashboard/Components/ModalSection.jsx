@@ -3,11 +3,11 @@ import CloseIcon from "@mui/icons-material/Close";
 import { formatLargeDigits } from "../../../utils/formatLargeDigits";
 import currencyFormat from "../../../utils/currencyFormat";
 import { useContext } from "react";
-import { appContext } from "../../../Context/AppContextProvider";
+import { AppContext } from "../../../Context/appContext";
 
 export default function ModalSection({ selectedCoin, setSelectedCoin }) {
 
-  const { currency } = useContext(appContext)
+  const { currency } = useContext(AppContext)
   const { symbol: currencySymbol } = currency || {}
 
   return (
