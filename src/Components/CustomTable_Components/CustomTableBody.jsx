@@ -12,10 +12,14 @@ import { useTheme } from "@mui/material/styles";
 import { LineChart, Line, ResponsiveContainer, XAxis, YAxis } from "recharts";
 import currencyFormat from "../../utils/currencyFormat";
 import { formatLargeDigits } from "../../utils/formatLargeDigits";
-import { useContext } from "react";
-import { appContext } from "../../Context/AppContextProvider";
+import { useContext, memo } from "react";
+import { appContext } from "../../Context/appContext";
 
-export default function CustomTableBody({
+/**
+ * CustomTableBody is memoized to prevent expensive re-renders of the table rows
+ * when the parent component (CustomTable) updates its state (e.g., scroll position).
+ */
+const CustomTableBody = memo(function CustomTableBody({
   coins,
   stickyBg,
   currency,
@@ -189,4 +193,6 @@ export default function CustomTableBody({
       })}
     </TableBody>
   );
-}
+});
+
+export default CustomTableBody;
