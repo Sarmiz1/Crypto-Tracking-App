@@ -1,7 +1,7 @@
 import { Box, Typography } from "@mui/material";
 import CustomTable from "../../Components/CustomTable";
 import { useContext } from "react";
-import { appContext } from "../../Context/AppContextProvider";
+import { AppContext as appContext } from "../../Context/appContext";
 
 export default function Watchlist() {
   const {

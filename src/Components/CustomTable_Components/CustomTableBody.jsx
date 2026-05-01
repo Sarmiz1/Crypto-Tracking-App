@@ -12,10 +12,10 @@ import { useTheme } from "@mui/material/styles";
 import { LineChart, Line, ResponsiveContainer, XAxis, YAxis } from "recharts";
 import currencyFormat from "../../utils/currencyFormat";
 import { formatLargeDigits } from "../../utils/formatLargeDigits";
-import { useContext } from "react";
-import { appContext } from "../../Context/AppContextProvider";
+import { useContext, memo } from "react";
+import { AppContext as appContext } from "../../Context/appContext";
 
-export default function CustomTableBody({
+const CustomTableBody = memo(function CustomTableBody({
   coins,
   stickyBg,
   currency,
@@ -189,4 +189,6 @@ export default function CustomTableBody({
       })}
     </TableBody>
   );
-}
+});
+
+export default CustomTableBody;

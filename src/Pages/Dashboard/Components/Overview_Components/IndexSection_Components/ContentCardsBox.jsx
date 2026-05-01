@@ -7,7 +7,7 @@ import {
 import { LineChart, Line, ResponsiveContainer } from "recharts";
 import { useContext } from "react";
 import { formatLargeDigits } from '../../../../../utils/formatLargeDigits';
-import { appContext } from "../../../../../Context/AppContextProvider";
+import { AppContext as appContext } from "../../../../../Context/appContext";
 import ErrorDisplay from '../../../../../Components/ErrorDisplay';
 import LoadingState from '../../../../../Components/LoadingState';
 

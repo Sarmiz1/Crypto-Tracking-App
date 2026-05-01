@@ -2,7 +2,7 @@ import { useState, useContext } from "react";
 import { Box, Typography } from "@mui/material";
 import CustomTextBox from "../../../Components/CustomTextBox";
 import { textFile } from "../../../Data/text";
-import { appContext } from "../../../Context/AppContextProvider";
+import { AppContext as appContext } from "../../../Context/appContext";
 import ChangeIndicator from "./InfoSection_Components/ChangeIndicator";
 import CollapseSection from "./InfoSection_Components/CollapseSection";
 import ToggleSection from "./InfoSection_Components/ToggleSection";
