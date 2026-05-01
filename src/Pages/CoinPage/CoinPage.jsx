@@ -5,7 +5,7 @@ import { Box, Typography, Paper, CircularProgress } from "@mui/material";
 
 import PriceChart from "./Components/PriceChart";
 import { Header } from "./Components/Header";
-import { appContext } from "../../Context/AppContextProvider";
+import { AppContext as appContext } from "../../Context/appContext";
 import { Price } from "./Components/Price";
 import { Stats } from "./Components/Stats";
 

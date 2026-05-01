@@ -1,7 +1,8 @@
-import { createContext, useState, useMemo, useEffect } from "react";
+import { AppContext } from "./appContext";
+import { useState, useMemo, useEffect, useCallback } from "react";
 import { useFetch } from "../Hooks/useFetch";
 
-export const appContext = createContext();
+
 
 export default function AppContextProvider({ children }) {
 
@@ -36,9 +37,9 @@ export default function AppContextProvider({ children }) {
   const [currency, setCurrency] = useState({ name: "USD", symbol: "$" });
   const [watchlist, setWatchlist] = useState([]);
 
-  const handleTabChange = (event, newValue) => {
+  const handleTabChange = useCallback((event, newValue) => {
     setTabValue(newValue);
-  };
+  }, []);
 
   /* ---------------- TOP 100 (refetch when currency changes) ---------------- */
 
@@ -99,7 +100,7 @@ export default function AppContextProvider({ children }) {
 
   /* ---------------- CONTEXT VALUE ---------------- */
 
-  const value = {
+  const value = useMemo(() => ({
     tabValue,
     setTabValue,
     handleTabChange,
@@ -154,11 +155,41 @@ export default function AppContextProvider({ children }) {
     },
 
     watchList: { watchlist, setWatchlist }
-  };
+  }), [
+    tabValue,
+    handleTabChange,
+    mode,
+    currency,
+    watchlist,
+    topCoinsFetch.data,
+    topCoinsFetch.loading,
+    topCoinsFetch.error,
+    globalFetch.data,
+    globalFetch.loading,
+    globalFetch.error,
+    fearGreedFetch.data,
+    fearGreedFetch.loading,
+    fearGreedFetch.error,
+    trendingWithSparkline,
+    trendingFetch.loading,
+    trendingFetch.error,
+    predictionFetch.data,
+    predictionFetch.loading,
+    predictionFetch.error,
+    defiFetch.data,
+    defiFetch.loading,
+    defiFetch.error,
+    stablecoinsFetch.data,
+    stablecoinsFetch.loading,
+    stablecoinsFetch.error,
+    bitcoinFetch.data,
+    bitcoinFetch.loading,
+    bitcoinFetch.error
+  ]);
 
   return (
-    <appContext.Provider value={value}>
+    <AppContext.Provider value={value}>
       {children}
-    </appContext.Provider>
+    </AppContext.Provider>
   );
 }
