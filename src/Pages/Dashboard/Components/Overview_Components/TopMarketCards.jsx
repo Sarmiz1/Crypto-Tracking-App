@@ -1,6 +1,6 @@
 import CustomDashboardMarketCards from "./TopMarket_Components/CustomDashboardMarketCards";
 import { useContext } from "react";
-import { appContext } from "../../../../Context/AppContextProvider";
+import { appContext } from "../../../../Context/appContext";
 
 export default function TopMarketCards({ setSelectedCoin }) {
   const {currency, cryptoListing, mode} = useContext(appContext)
