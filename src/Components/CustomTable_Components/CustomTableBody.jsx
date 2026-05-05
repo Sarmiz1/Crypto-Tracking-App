@@ -12,31 +12,21 @@ import { useTheme } from "@mui/material/styles";
 import { LineChart, Line, ResponsiveContainer, XAxis, YAxis } from "recharts";
 import currencyFormat from "../../utils/currencyFormat";
 import { formatLargeDigits } from "../../utils/formatLargeDigits";
-import { useContext } from "react";
-import { appContext } from "../../Context/AppContextProvider";
+import { memo } from "react";
 
-export default function CustomTableBody({
+const CustomTableBody = memo(function CustomTableBody({
   coins,
   stickyBg,
   currency,
+  watchlist,
+  onWatchlistToggle,
   section = "table",
 }) {
   const theme = useTheme();
   const isDark = theme.palette.mode === "dark";
 
-  const {
-    watchList: { watchlist, setWatchlist },
-  } = useContext(appContext);
-
   const { symbol: currencySymbol } = currency || {};
 
-  const handleWatchlistToggle = (coin) => {
-    if (watchlist.some((c) => c.id === coin.id)) {
-      setWatchlist(watchlist.filter((c) => c.id !== coin.id));
-    } else {
-      setWatchlist([...watchlist, coin]);
-    }
-  };
 
   return (
     <TableBody>
@@ -88,7 +78,7 @@ export default function CustomTableBody({
               >
                 <IconButton
                   size="small"
-                  onClick={() => handleWatchlistToggle(coin)}
+                  onClick={() => onWatchlistToggle(coin)}
                 >
                   {isWatched ? (
                     <StarIcon sx={{ color: "#FFD700" }} fontSize="small" />
@@ -189,4 +179,6 @@ export default function CustomTableBody({
       })}
     </TableBody>
   );
-}
+});
+
+export default CustomTableBody;
