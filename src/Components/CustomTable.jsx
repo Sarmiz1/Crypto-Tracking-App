@@ -12,11 +12,27 @@ import { useRef, useState, useEffect } from "react";
 
 import CustomTableHead from "./CustomTable_Components/CustomTableHead";
 import CustomTableBody from "./CustomTable_Components/CustomTableBody";
+import { useContext, useCallback } from "react";
+import { appContext } from "../Context/AppContextProvider";
 
 export default function CustomTable({ coins, currency, section }) {
   const theme = useTheme();
   const isDark = theme.palette.mode === "dark";
   const stickyBg = theme.palette.background.paper;
+
+  const {
+    watchList: { watchlist, setWatchlist },
+  } = useContext(appContext);
+
+  const handleWatchlistToggle = useCallback((coin) => {
+    setWatchlist(prev => {
+      if (prev.some((c) => c.id === coin.id)) {
+        return prev.filter((c) => c.id !== coin.id);
+      } else {
+        return [...prev, coin];
+      }
+    });
+  }, [setWatchlist]);
 
   const containerRef = useRef(null);
   const [canScrollUp, setCanScrollUp] = useState(false);
@@ -151,6 +167,8 @@ export default function CustomTable({ coins, currency, section }) {
             stickyBg={stickyBg}
             coins={coins}
             currency={currency}
+            watchlist={watchlist}
+            onWatchlistToggle={handleWatchlistToggle}
             section={section}
           />
         </Table>
