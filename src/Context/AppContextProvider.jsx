@@ -1,6 +1,7 @@
-import { createContext, useState, useMemo, useEffect } from "react";
+import { createContext, useState, useMemo, useEffect, useCallback } from "react";
 import { useFetch } from "../Hooks/useFetch";
 
+/* eslint-disable-next-line react-refresh/only-export-components */
 export const appContext = createContext();
 
 export default function AppContextProvider({ children }) {
@@ -36,9 +37,9 @@ export default function AppContextProvider({ children }) {
   const [currency, setCurrency] = useState({ name: "USD", symbol: "$" });
   const [watchlist, setWatchlist] = useState([]);
 
-  const handleTabChange = (event, newValue) => {
+  const handleTabChange = useCallback((event, newValue) => {
     setTabValue(newValue);
-  };
+  }, []);
 
   /* ---------------- TOP 100 (refetch when currency changes) ---------------- */
 
@@ -99,7 +100,7 @@ export default function AppContextProvider({ children }) {
 
   /* ---------------- CONTEXT VALUE ---------------- */
 
-  const value = {
+  const value = useMemo(() => ({
     tabValue,
     setTabValue,
     handleTabChange,
@@ -154,7 +155,22 @@ export default function AppContextProvider({ children }) {
     },
 
     watchList: { watchlist, setWatchlist }
-  };
+  }), [
+    tabValue,
+    handleTabChange,
+    mode,
+    currency,
+    watchlist,
+    topCoinsFetch,
+    globalFetch,
+    fearGreedFetch,
+    trendingFetch,
+    trendingWithSparkline,
+    predictionFetch,
+    defiFetch,
+    stablecoinsFetch,
+    bitcoinFetch
+  ]);
 
   return (
     <appContext.Provider value={value}>
