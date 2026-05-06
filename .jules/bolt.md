@@ -1,0 +1,3 @@
+## 2025-05-15 - React Context Re-render Bottleneck
+**Learning:** In this codebase, the `AppContextProvider` was passing a new object literal as its context value on every render. Because many heavy components (like `CustomTableBody` with 100 rows) consume this context, any state change in the provider (e.g., theme toggle) triggered a full re-render of the entire dashboard, even if the consumed data hadn't changed. Standard `React.memo` on children is bypassed if they consume context directly.
+**Action:** Always memoize context values using `useMemo` and event handlers with `useCallback`. To make `React.memo` effective for large lists, lift the `useContext` call to a parent component and pass the required stable values as props to the memoized child.
