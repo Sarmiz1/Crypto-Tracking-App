@@ -1,6 +1,7 @@
-import { lazy, Suspense } from "react";
+import { lazy, Suspense, useContext } from "react";
 import { Box } from "@mui/material";
 import { TablesFallbackPage } from "../../../Suspense/TablesFallBackPage";
+import { appContext } from "../../../Context/AppContextProvider";
 
 // Lazy Loaded Components
 const TopCoinTable = lazy(() => import("./CoinTable_Components/TopCoinTable"));
@@ -12,10 +13,18 @@ const PredictionMarket = lazy(() => import("./CoinTable_Components/PredictionMar
 
 
 export default function CoinTable({ tabValue = 0 }) {
+  const { cryptoListing, currency } = useContext(appContext);
+
   return (
     <Box sx={{ my: 2 }}>
       <Suspense fallback={<TablesFallbackPage />}>
-        {tabValue === 0 && <TopCoinTable value={tabValue} />}
+        {tabValue === 0 && (
+          <TopCoinTable
+            value={tabValue}
+            cryptoListing={cryptoListing}
+            currency={currency}
+          />
+        )}
         {tabValue === 1 && <TrendingCoinTable value={tabValue} />}
         {tabValue === 2 && <WatchlistTable value={tabValue} />}
         {tabValue === 3 && <PredictionMarket value={tabValue} />}
