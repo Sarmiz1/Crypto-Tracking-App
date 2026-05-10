@@ -1,0 +1,3 @@
+## 2025-05-15 - Context and Hook Memoization
+**Learning:** In this codebase, AppContextProvider relies on a custom useFetch hook. If useFetch returns a new object on every render, any useMemo in the provider that depends on that hook's result will also re-calculate, defeating the purpose of memoization and causing tree-wide re-renders.
+**Action:** Always memoize the return object of custom hooks (like useFetch) that are consumed by context providers or used in other memoized computations. Ensure the dependency array of the hook's useMemo correctly includes the stateful values (data, loading, error).
