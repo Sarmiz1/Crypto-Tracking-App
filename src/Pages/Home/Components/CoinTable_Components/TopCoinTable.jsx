@@ -1,7 +1,7 @@
 import { Typography, Alert, Box, CircularProgress } from "@mui/material";
 import CustomTable from "../../../../Components/CustomTable";
 import CustomTabPanel from "../../../../Components/CustomTabPanel";
-import { useContext } from "react";
+import { useContext, useMemo } from "react";
 import { appContext } from "../../../../Context/AppContextProvider";
 
 export default function TopCoinTable({ value }) {
@@ -11,7 +11,12 @@ export default function TopCoinTable({ value }) {
 
 
   // Map CoinGecko data to match your table
-  const mappedData = topCoins?.map((coin) => ({
+  /*
+   * Performance Optimization: Memoizing the mapped data prevents expensive array
+   * transformations on every render. This ensures stable props for the CustomTable
+   * component, allowing it to potentially use React.memo effectively.
+   */
+  const mappedData = useMemo(() => topCoins?.map((coin) => ({
     id: coin.id,
     symbol: coin.symbol,
     market_cap_rank: coin.market_cap_rank,
@@ -23,7 +28,7 @@ export default function TopCoinTable({ value }) {
     total_volume: coin.total_volume,
     total_supply: coin.total_supply,
     chart: coin.sparkline_in_7d?.price || [], // line chart
-  }));
+  })), [topCoins]);
 
 
   return (
