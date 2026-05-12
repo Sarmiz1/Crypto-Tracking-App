@@ -1,6 +1,7 @@
-import { createContext, useState, useMemo, useEffect } from "react";
+import { createContext, useState, useMemo, useEffect, useCallback } from "react";
 import { useFetch } from "../Hooks/useFetch";
 
+/* eslint-disable-next-line react-refresh/only-export-components */
 export const appContext = createContext();
 
 export default function AppContextProvider({ children }) {
@@ -36,9 +37,9 @@ export default function AppContextProvider({ children }) {
   const [currency, setCurrency] = useState({ name: "USD", symbol: "$" });
   const [watchlist, setWatchlist] = useState([]);
 
-  const handleTabChange = (event, newValue) => {
+  const handleTabChange = useCallback((event, newValue) => {
     setTabValue(newValue);
-  };
+  }, []);
 
   /* ---------------- TOP 100 (refetch when currency changes) ---------------- */
 
@@ -97,9 +98,60 @@ export default function AppContextProvider({ children }) {
       .filter(Boolean);
   }, [topCoinsFetch.data, trendingFetch.data]);
 
+  /* ---------------- MEMOIZED SUB-OBJECTS ---------------- */
+
+  const cryptoListing = useMemo(() => ({
+    data: topCoinsFetch.data,
+    loading: topCoinsFetch.loading,
+    error: topCoinsFetch.error,
+  }), [topCoinsFetch.data, topCoinsFetch.loading, topCoinsFetch.error]);
+
+  const globalMetrics = useMemo(() => ({
+    data: globalFetch.data?.data,
+    loading: globalFetch.loading || fearGreedFetch.loading,
+    error: globalFetch.error || fearGreedFetch.error,
+    fearGreed: fearGreedFetch.data?.data?.[0] || null,
+    topCoins: topCoinsFetch.data, // Needed for MetricCards
+  }), [globalFetch.data, globalFetch.loading, globalFetch.error, fearGreedFetch.data, fearGreedFetch.loading, fearGreedFetch.error, topCoinsFetch.data]);
+
+  const trendingCryptos = useMemo(() => ({
+    data: trendingWithSparkline,
+    loading: trendingFetch.loading || topCoinsFetch.loading,
+    error: trendingFetch.error || topCoinsFetch.error,
+  }), [trendingWithSparkline, trendingFetch.loading, topCoinsFetch.loading, trendingFetch.error, topCoinsFetch.error]);
+
+  const predictionMarkets = useMemo(() => ({
+    data: predictionFetch.data,
+    loading: predictionFetch.loading,
+    error: predictionFetch.error,
+  }), [predictionFetch.data, predictionFetch.loading, predictionFetch.error]);
+
+  const defi = useMemo(() => ({
+    data: defiFetch.data,
+    loading: defiFetch.loading,
+    error: defiFetch.error,
+  }), [defiFetch.data, defiFetch.loading, defiFetch.error]);
+
+  const stableCoins = useMemo(() => ({
+    data: stablecoinsFetch.data,
+    loading: stablecoinsFetch.loading,
+    error: stablecoinsFetch.error,
+  }), [stablecoinsFetch.data, stablecoinsFetch.loading, stablecoinsFetch.error]);
+
+  const bitcoin = useMemo(() => ({
+    data: bitcoinFetch.data,
+    loading: bitcoinFetch.loading,
+    error: bitcoinFetch.error,
+  }), [bitcoinFetch.data, bitcoinFetch.loading, bitcoinFetch.error]);
+
+  const watchListValue = useMemo(() => ({
+    watchlist,
+    setWatchlist
+  }), [watchlist]);
+
   /* ---------------- CONTEXT VALUE ---------------- */
 
-  const value = {
+  const value = useMemo(() => ({
     tabValue,
     setTabValue,
     handleTabChange,
@@ -110,51 +162,29 @@ export default function AppContextProvider({ children }) {
     watchlist,
     setWatchlist,
 
-    cryptoListing: {
-      data: topCoinsFetch.data,
-      loading: topCoinsFetch.loading,
-      error: topCoinsFetch.error,
-    },
-
-    globalMetrics: {
-      data: globalFetch.data?.data,
-      loading: globalFetch.loading || fearGreedFetch.loading,
-      error: globalFetch.error || fearGreedFetch.error,
-      fearGreed: fearGreedFetch.data?.data?.[0] || null,
-    },
-
-    trendingCryptos: {
-      data: trendingWithSparkline,
-      loading: trendingFetch.loading || topCoinsFetch.loading,
-      error: trendingFetch.error || topCoinsFetch.error,
-    },
-
-    predictionMarkets: {
-      data: predictionFetch.data,
-      loading: predictionFetch.loading,
-      error: predictionFetch.error,
-    },
-
-    defi: {
-      data: defiFetch.data,
-      loading: defiFetch.loading,
-      error: defiFetch.error,
-    },
-
-    stableCoins: {
-      data: stablecoinsFetch.data,
-      loading: stablecoinsFetch.loading,
-      error: stablecoinsFetch.error,
-    },
-
-    bitcoin: {
-      data: bitcoinFetch.data,
-      loading: bitcoinFetch.loading,
-      error: bitcoinFetch.error,
-    },
-
-    watchList: { watchlist, setWatchlist }
-  };
+    cryptoListing,
+    globalMetrics,
+    trendingCryptos,
+    predictionMarkets,
+    defi,
+    stableCoins,
+    bitcoin,
+    watchList: watchListValue
+  }), [
+    tabValue,
+    handleTabChange,
+    mode,
+    currency,
+    watchlist,
+    cryptoListing,
+    globalMetrics,
+    trendingCryptos,
+    predictionMarkets,
+    defi,
+    stableCoins,
+    bitcoin,
+    watchListValue
+  ]);
 
   return (
     <appContext.Provider value={value}>
