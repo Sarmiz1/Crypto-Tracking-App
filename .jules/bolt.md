@@ -1,0 +1,3 @@
+## 2025-05-15 - Context Stabilization and Component Memoization
+**Learning:** In a dashboard with heavy table components and a central context, unmemoized context values cause a re-render cascade across the entire app whenever any state (like active tab or theme mode) changes. Stabilization requires memoizing not just the final context object, but also any sub-objects to maintain reference stability for children using `React.memo`.
+**Action:** Always memoize context values and sub-objects using `useMemo` and event handlers using `useCallback`. Move `useContext` hooks as high as possible to allow siblings/children to be wrapped in `React.memo` effectively.
