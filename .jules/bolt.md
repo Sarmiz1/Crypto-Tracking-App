@@ -1,0 +1,3 @@
+## 2024-05-14 - Context value memoization and child component optimization
+**Learning:** In a global context provider, a non-memoized value object causes every consumer to re-render whenever any state in the provider changes. By splitting the context into memoized sub-objects and using React.memo on children that receive these stable references as props, we can significantly reduce re-render cascades.
+**Action:** Always memoize context values and callbacks. For high-traffic components, prefer passing memoized context members as props to React.memo'ed children rather than using useContext directly inside the children.

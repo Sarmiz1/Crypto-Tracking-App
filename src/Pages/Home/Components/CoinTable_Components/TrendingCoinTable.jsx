@@ -1,16 +1,13 @@
-import { Typography, Alert } from "@mui/material";
+import { Typography, Alert, Box, CircularProgress } from "@mui/material";
 import CustomTabPanel from "../../../../Components/CustomTabPanel";
 import CustomTable from "../../../../Components/CustomTable";
-import { useContext } from "react";
-import { appContext } from "../../../../Context/AppContextProvider";
+import { memo, useMemo } from "react";
 
-export default function TrendingCoinTable({ value }) {
-  const { trendingCryptos, currency } = useContext(appContext);
-
-  const { data, loading, error } = trendingCryptos;
+const TrendingCoinTable = memo(({ value, trendingCryptos, currency }) => {
+  const { data, loading, error } = trendingCryptos || {};
 
   // Map CoinGecko data to match your table
-  const trendingCoin = data?.map((coin) => ({
+  const trendingCoin = useMemo(() => data?.map((coin) => ({
     id: coin.id,
     market_cap_rank: coin.market_cap_rank,
     name: coin.name,
@@ -21,7 +18,7 @@ export default function TrendingCoinTable({ value }) {
     total_volume: coin.total_volume,
     total_supply: coin.total_supply,
     chart: coin.sparkline_in_7d?.price || [], // line chart
-  }));
+  })), [data]);
 
 
   return (
@@ -40,4 +37,6 @@ export default function TrendingCoinTable({ value }) {
       }
     </CustomTabPanel>
   );
-}
+});
+
+export default TrendingCoinTable;
