@@ -1,27 +1,25 @@
-import { useState, useContext } from "react";
+import { useState, memo, useMemo } from "react";
 import { Box, Typography, CircularProgress, Alert } from "@mui/material";
 import CustomTabPanel from "../../../../Components/CustomTabPanel";
-import { appContext } from "../../../../Context/AppContextProvider";
 import { categoryKeywords } from "../../Features/categoriesKeywords";
 import TopTabs from "./PredictionMarkets_Components/TopTabs";
 import DrawerForMobile from "./PredictionMarkets_Components/DrawerForMobile";
 import GridContainer from "./PredictionMarkets_Components/GridContainer";
 
 
-export default function PredictionMarket({ value }) {
+const PredictionMarket = memo(({ value, predictionMarkets, mode }) => {
   const [tab, setTab] = useState(0);
   const [openDrawer, setOpenDrawer] = useState(false);
 
-  const { mode, predictionMarkets } = useContext(appContext);
   const {
     data: predictionMarket,
     loading: predictionLoading,
     error: predictionError,
   } = predictionMarkets || {};
 
-  const categories = ["all", "crypto", "politics", "economy", "sports"];
+  const categories = useMemo(() => ["all", "crypto", "politics", "economy", "sports"], []);
 
-  const filteredMarkets =
+  const filteredMarkets = useMemo(() =>
     categories[tab] === "all"
       ? predictionMarket || []
       : (predictionMarket || []).filter((market) => {
@@ -29,7 +27,7 @@ export default function PredictionMarket({ value }) {
         return categoryKeywords[categories[tab]].some((kw) =>
           questionLower.includes(kw),
         );
-      });
+      }), [categories, tab, predictionMarket]);
 
 
 
@@ -83,4 +81,6 @@ export default function PredictionMarket({ value }) {
       </Box>
     </CustomTabPanel>
   );
-}
+});
+
+export default PredictionMarket;
