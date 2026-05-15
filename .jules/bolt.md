@@ -1,0 +1,3 @@
+## 2026-05-15 - [Referential Stability in Global Context]
+**Learning:** In a global context provider like `AppContextProvider.jsx`, not memoizing the context value or its sub-objects causes an application-wide re-render cascade whenever any piece of state (like theme mode or tab value) changes. Even if children use `React.memo`, they still re-render because the context value they consume is a new object reference.
+**Action:** Always memoize the context value and its complex sub-objects using `useMemo`. Wrap event handlers in `useCallback`. Ensure custom hooks like `useFetch` return stable references to prevent triggering downstream `useMemo` or `useEffect` hooks unnecessarily.
