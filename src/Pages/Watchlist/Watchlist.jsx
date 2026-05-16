@@ -1,11 +1,11 @@
 import { Box, Typography } from "@mui/material";
 import CustomTable from "../../Components/CustomTable";
-import { useContext } from "react";
+import { useContext, memo } from "react";
 import { appContext } from "../../Context/AppContextProvider";
 
-export default function Watchlist() {
+const Watchlist = () => {
   const {
-    watchList: { watchlist },
+    watchList: { watchlist, setWatchlist },
     currency,
   } = useContext(appContext);
 
@@ -20,8 +20,12 @@ export default function Watchlist() {
           coins={watchlist}
           currency={currency}
           section="watchlist"
+          watchlist={watchlist}
+          setWatchlist={setWatchlist}
         />
       )}
     </Box>
   );
 }
+
+export default memo(Watchlist);

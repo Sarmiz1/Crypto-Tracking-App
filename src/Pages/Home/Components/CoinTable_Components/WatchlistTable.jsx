@@ -1,12 +1,12 @@
 import CustomTabPanel from "../../../../Components/CustomTabPanel";
 import CustomTable from "../../../../Components/CustomTable";
-import { useContext } from "react";
+import { useContext, memo } from "react";
 import { appContext } from "../../../../Context/AppContextProvider";
 import { Typography, Box } from "@mui/material";
 
-export default function WatchlistTable({ value }) {
+const WatchlistTable = ({ value }) => {
   const {
-    watchList: { watchlist },
+    watchList: { watchlist, setWatchlist },
     currency,
   } = useContext(appContext);
 
@@ -33,8 +33,12 @@ export default function WatchlistTable({ value }) {
           coins={watchlist}
           currency={currency}
           section="watchlist"
+          watchlist={watchlist}
+          setWatchlist={setWatchlist}
         />
       )}
     </CustomTabPanel>
   );
 }
+
+export default memo(WatchlistTable);
