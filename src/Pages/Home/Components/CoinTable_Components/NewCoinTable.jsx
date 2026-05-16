@@ -1,11 +1,11 @@
 import CustomTable from "../../../../Components/CustomTable";
 import CustomTabPanel from "../../../../Components/CustomTabPanel";
-import { useContext, useMemo } from "react";
+import { useContext, useMemo, memo } from "react";
 import { appContext } from "../../../../Context/AppContextProvider";
 import { CircularProgress, Box, Alert, Typography } from "@mui/material";
 
-export default function NewCoinTable({ value }) { 
-  const { currency, cryptoListing } = useContext(appContext);
+const NewCoinTable = ({ value }) => {
+  const { currency, cryptoListing, watchList: { watchlist, setWatchlist } } = useContext(appContext);
   const { data, loading, error } = cryptoListing || {};
 
   // Sort by highest market_cap_rank (newest/lowest ranked coins)
@@ -38,8 +38,16 @@ export default function NewCoinTable({ value }) {
       ) 
       
       : (
-        <CustomTable coins={newCoins} currency={currency} section='new' />
+        <CustomTable
+          coins={newCoins}
+          currency={currency}
+          section='new'
+          watchlist={watchlist}
+          setWatchlist={setWatchlist}
+        />
       )}
     </CustomTabPanel>
   );
 }
+
+export default memo(NewCoinTable);
