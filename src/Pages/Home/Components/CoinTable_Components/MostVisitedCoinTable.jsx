@@ -1,10 +1,10 @@
 import CustomTabPanel from "../../../../Components/CustomTabPanel";
 import CustomTable from "../../../../Components/CustomTable";
-import { useContext, useMemo } from "react";
+import { useContext, useMemo, memo } from "react";
 import { appContext } from "../../../../Context/AppContextProvider";
 import { CircularProgress, Box, Alert, Typography } from "@mui/material";
 
-export default function MostVisitedCoinTable({ value }) {
+const MostVisitedCoinTable = memo(function MostVisitedCoinTable({ value }) {
   const { currency, cryptoListing } = useContext(appContext);
   const { data, loading, error } = cryptoListing || {};
 
@@ -43,4 +43,6 @@ export default function MostVisitedCoinTable({ value }) {
       }
     </CustomTabPanel>
   );
-}
+});
+
+export default MostVisitedCoinTable;
