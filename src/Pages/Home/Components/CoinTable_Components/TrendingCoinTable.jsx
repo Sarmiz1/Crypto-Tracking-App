@@ -1,10 +1,10 @@
-import { Typography, Alert } from "@mui/material";
+import { Typography, Alert, Box, CircularProgress } from "@mui/material";
 import CustomTabPanel from "../../../../Components/CustomTabPanel";
 import CustomTable from "../../../../Components/CustomTable";
-import { useContext } from "react";
+import { useContext, memo } from "react";
 import { appContext } from "../../../../Context/AppContextProvider";
 
-export default function TrendingCoinTable({ value }) {
+const TrendingCoinTable = memo(function TrendingCoinTable({ value }) {
   const { trendingCryptos, currency } = useContext(appContext);
 
   const { data, loading, error } = trendingCryptos;
@@ -40,4 +40,6 @@ export default function TrendingCoinTable({ value }) {
       }
     </CustomTabPanel>
   );
-}
+});
+
+export default TrendingCoinTable;
