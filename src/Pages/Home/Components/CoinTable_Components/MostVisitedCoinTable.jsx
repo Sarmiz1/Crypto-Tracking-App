@@ -5,7 +5,8 @@ import { appContext } from "../../../../Context/AppContextProvider";
 import { CircularProgress, Box, Alert, Typography } from "@mui/material";
 
 export default function MostVisitedCoinTable({ value }) {
-  const { currency, cryptoListing } = useContext(appContext);
+  const { currency, cryptoListing, watchList } = useContext(appContext);
+  const { watchlist, setWatchlist } = watchList;
   const { data, loading, error } = cryptoListing || {};
 
   // Sort by useMemo (Most Visited Coin)
@@ -38,7 +39,7 @@ export default function MostVisitedCoinTable({ value }) {
           )
 
             : (
-              <CustomTable coins={newCoins} currency={currency} section='most-visited' />
+              <CustomTable coins={newCoins} currency={currency} section='most-visited' watchlist={watchlist} setWatchlist={setWatchlist} />
             )
       }
     </CustomTabPanel>

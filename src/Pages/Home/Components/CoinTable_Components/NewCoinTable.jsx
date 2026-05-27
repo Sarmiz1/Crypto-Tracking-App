@@ -5,7 +5,8 @@ import { appContext } from "../../../../Context/AppContextProvider";
 import { CircularProgress, Box, Alert, Typography } from "@mui/material";
 
 export default function NewCoinTable({ value }) { 
-  const { currency, cryptoListing } = useContext(appContext);
+  const { currency, cryptoListing, watchList } = useContext(appContext);
+  const { watchlist, setWatchlist } = watchList;
   const { data, loading, error } = cryptoListing || {};
 
   // Sort by highest market_cap_rank (newest/lowest ranked coins)
@@ -38,7 +39,7 @@ export default function NewCoinTable({ value }) {
       ) 
       
       : (
-        <CustomTable coins={newCoins} currency={currency} section='new' />
+        <CustomTable coins={newCoins} currency={currency} section='new' watchlist={watchlist} setWatchlist={setWatchlist} />
       )}
     </CustomTabPanel>
   );
