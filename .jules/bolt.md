@@ -1,0 +1,3 @@
+## 2025-05-15 - Context Value Memoization & Component Decoupling
+**Learning:** In a context-heavy application, simply memoizing the context value is often insufficient if components consume the entire context object. Decoupling expensive components (like tables) by passing specific values as props and wrapping them in `React.memo` is far more effective. In this app, `tabValue` updates were triggering re-renders of the entire table and metric cards because they were bundled in the same context object.
+**Action:** When optimizing context performance, always check if UI state (like `tabValue`) is bundled with data. If so, either split the context or pass data via props to memoized child components.
