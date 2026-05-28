@@ -1,0 +1,3 @@
+## 2025-05-15 - Context and Hook Memoization
+**Learning:** In a context-heavy application (like a crypto dashboard), failing to memoize the context `value` object causes all consumers to re-render on every state change (e.g., tab switching), even if they don't use that specific state. Memoizing the context value and its sub-objects, along with the return values of custom hooks like `useFetch`, is critical for performance. Coupling this with `React.memo` on expensive components further isolates them from unrelated context updates.
+**Action:** Always memoize context providers and custom hooks that return objects. Use wrapper components to extract only necessary data from context for `React.memo`'d children.
