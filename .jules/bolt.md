@@ -1,0 +1,4 @@
+## 2025-05-14 - Global Context Re-render Isolation
+**Learning:** In applications using a single global context for both heavy data (like API responses) and frequent UI state (like tab values), every tab change triggers a full application re-render because the context provider value reference changes. Component-level `React.memo` is ineffective unless the context data passed as props is also stable and the component itself is decoupled from the direct `useContext` call.
+
+**Action:** 1. Wrap the context provider's `value` in `useMemo`. 2. Use a "Wrapper/Content" pattern: a thin wrapper component consumes the context and passes specific, stable data as props to a `React.memo`-wrapped internal component. 3. Ensure any mock data generated during render (like sparklines) is deterministic (e.g., using `Math.sin(index)`) to maintain component purity and memoization stability.

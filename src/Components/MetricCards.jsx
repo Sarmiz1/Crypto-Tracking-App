@@ -1,11 +1,13 @@
-import { useEffect, useRef, useState, useContext, useMemo } from "react";
+import React, { useEffect, useRef, useState, useContext, useMemo } from "react";
 import { Stack, Box } from "@mui/material";
 import { appContext } from "../Context/AppContextProvider";
 import { MetricCard } from "./MetricCards_Components/MetricCard";
 
-export default function MetricCards() {
-  const { globalMetrics, currency } = useContext(appContext);
-
+/**
+ * MetricCardsContent is memoized to prevent re-renders when
+ * unrelated context fields (like tabValue) change.
+ */
+const MetricCardsContent = React.memo(({ globalMetrics, currency }) => {
   // ------------------------
   // Track mobile/desktop dynamically
   // ------------------------
@@ -56,8 +58,9 @@ export default function MetricCards() {
         title: "Fear & Greed",
         value: globalMetrics.fearGreed?.value || 0,
         change: 0,
-        data: Array.from({ length: 7 }, () =>
-          (parseInt(globalMetrics.fearGreed?.value) || 0) + Math.random() * 5 - 2
+        // Deterministic mock data to avoid lint issues and keep it pure
+        data: Array.from({ length: 7 }, (_, i) =>
+          (parseInt(globalMetrics.fearGreed?.value) || 0) + Math.sin(i) * 2
         ),
       },
     ];
@@ -103,7 +106,7 @@ export default function MetricCards() {
       slider.removeEventListener("mouseleave", handleMouseLeave);
       slider.removeEventListener("mousemove", handleMouseMove);
     };
-  }, [isMobile]); // reattach if isMobile changes
+  }, [isMobile]);
 
   return (
     <Box sx={{ overflow: "hidden" }}>
@@ -146,4 +149,9 @@ export default function MetricCards() {
       </Stack>
     </Box>
   );
+});
+
+export default function MetricCards() {
+  const { globalMetrics, currency } = useContext(appContext);
+  return <MetricCardsContent globalMetrics={globalMetrics} currency={currency} />;
 }
