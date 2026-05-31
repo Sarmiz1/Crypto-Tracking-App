@@ -1,0 +1,3 @@
+## 2026-05-31 - Context Memoization and Component Decoupling
+**Learning:** Bundling frequently changing UI state (like `tabValue`) with stable application data in a single context provider triggers re-render cascades across all consumers, even if the sub-objects are memoized. Reference stability of the main context `value` object is critical.
+**Action:** Always memoize the context `value` object and its sub-objects. For performance-critical components, use a "Wrapper-Content" pattern where the wrapper extracts context values and passes them as props to a `React.memo` content component to effectively prune the render tree.
