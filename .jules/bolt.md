@@ -1,0 +1,3 @@
+## 2025-05-14 - Global Context Re-render Cascade
+**Learning:** In applications using a central Context Provider (like AppContextProvider), storing frequently-changing UI state (e.g., tabValue) alongside stable data (e.g., globalMetrics) without memoization causes every consumer to re-render on every interaction. Even with memoized sub-objects, if the final context 'value' object is not memoized, it's a new reference every time.
+**Action:** Always memoize the context 'value' object. For performance-critical consumers, use a wrapper pattern to extract only necessary context fields and pass them as props to a React.memo() wrapped 'Content' component.
