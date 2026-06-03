@@ -1,0 +1,3 @@
+## 2025-05-15 - Context Value Memoization
+**Learning:** In applications using a single large context (like `appContext` here), state updates for UI-only variables (like `tabValue`) cause every consumer of that context to re-render. Memoizing the context value and splitting it into smaller `useMemo` blocks for data sets (metrics, listings) ensures that components only re-render if their specific data reference changes. Combining this with a "Wrapper-Content" pattern (`MetricCards` -> `MetricCardsContent` with `React.memo`) is highly effective for isolating expensive components from global state noise.
+**Action:** Always memoize context providers and use the wrapper pattern for performance-critical context consumers.
