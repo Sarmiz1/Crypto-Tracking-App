@@ -1,3 +1,4 @@
+import React from "react";
 import {
   TableBody,
   TableCell,
@@ -15,19 +16,15 @@ import { formatLargeDigits } from "../../utils/formatLargeDigits";
 import { useContext } from "react";
 import { appContext } from "../../Context/AppContextProvider";
 
-export default function CustomTableBody({
+const CustomTableBodyContent = React.memo(({
   coins,
   stickyBg,
   currency,
   section = "table",
-}) {
-  const theme = useTheme();
-  const isDark = theme.palette.mode === "dark";
-
-  const {
-    watchList: { watchlist, setWatchlist },
-  } = useContext(appContext);
-
+  watchlist,
+  setWatchlist,
+  isDark
+}) => {
   const { symbol: currencySymbol } = currency || {};
 
   const handleWatchlistToggle = (coin) => {
@@ -57,7 +54,7 @@ export default function CustomTableBody({
 
         return (
           <TableRow
-            key={coin.id}
+            key={`${section}-${coin.id}`}
             hover
             sx={{
               "&:hover": {
@@ -188,5 +185,31 @@ export default function CustomTableBody({
         );
       })}
     </TableBody>
+  );
+});
+
+export default function CustomTableBody({
+  coins,
+  stickyBg,
+  currency,
+  section = "table",
+}) {
+  const theme = useTheme();
+  const isDark = theme.palette.mode === "dark";
+
+  const {
+    watchList: { watchlist, setWatchlist },
+  } = useContext(appContext);
+
+  return (
+    <CustomTableBodyContent
+      coins={coins}
+      stickyBg={stickyBg}
+      currency={currency}
+      section={section}
+      watchlist={watchlist}
+      setWatchlist={setWatchlist}
+      isDark={isDark}
+    />
   );
 }
