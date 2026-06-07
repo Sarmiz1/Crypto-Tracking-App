@@ -1,4 +1,4 @@
-import { useState, useContext } from "react";
+import { useState, useContext, memo } from "react";
 import { Box, Typography } from "@mui/material";
 import CustomTextBox from "../../../Components/CustomTextBox";
 import { textFile } from "../../../Data/text";
@@ -8,7 +8,7 @@ import CollapseSection from "./InfoSection_Components/CollapseSection";
 import ToggleSection from "./InfoSection_Components/ToggleSection";
 import { useMarketInfo } from "../../../utils/useMarketInfo";
 
-export default function InfoSection() {
+const InfoSection = memo(function InfoSection() {
   const { mode } = useContext(appContext);
   const { marketCap, marketCapChange } = useMarketInfo() 
   const [expanded, setExpanded] = useState(false);
@@ -58,4 +58,6 @@ export default function InfoSection() {
       <CustomTextBox text={textFile} />
     </Box>
   );
-}
+});
+
+export default InfoSection;

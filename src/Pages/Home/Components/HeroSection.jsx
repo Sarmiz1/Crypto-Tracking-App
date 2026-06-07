@@ -1,8 +1,9 @@
 import  Box from "@mui/material/Box";
+import { memo } from "react";
 import AnimatedInfinity from "./HeroSection_Components/AnimatedInfinity";
 import Content from "./HeroSection_Components/Content";
 
-export default function HeroSection() {
+const HeroSection = memo(function HeroSection() {
   return (
     <Box
       sx={{
@@ -27,4 +28,6 @@ export default function HeroSection() {
       <Content />
     </Box>
   );
-}
+});
+
+export default HeroSection;
