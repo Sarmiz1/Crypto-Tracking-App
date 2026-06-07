@@ -9,7 +9,7 @@ import SubscribeSection from "./Components/SubscribeSection";
 import CoinTable from "./Components/CoinTable";
 
 export default function HomePage() {
-  const { tabValue, handleTabChange } = useContext(appContext);
+  const { tabValue, handleTabChange, globalMetrics, currency } = useContext(appContext);
 
 
   return (
@@ -19,7 +19,7 @@ export default function HomePage() {
       <Container maxWidth="xl" sx={{ mt: 3 }}>
         <TabsSection value={tabValue} handleChange={handleTabChange} />
 
-        <MetricCards />
+        <MetricCards globalMetrics={globalMetrics} currency={currency} />
 
         <CoinTable tabValue={tabValue} />
 

@@ -1,10 +1,11 @@
 import { useTheme } from "@mui/material/styles";
 import  Box  from "@mui/material/Box";
+import { memo } from "react";
 import TextContainer from "./SubscribeSection_Components/TextContainer";
 import FormContainer from "./SubscribeSection_Components/FormContainer";
 
 
-export default function SubscribeSection() {
+const SubscribeSection = memo(function SubscribeSection() {
   const theme = useTheme();
   const isDark = theme.palette.mode === "dark";
 
@@ -60,4 +61,6 @@ export default function SubscribeSection() {
       </Box>
     </Box>
   );
-}
+});
+
+export default SubscribeSection;
