@@ -6,7 +6,7 @@ import { Typography, Box } from "@mui/material";
 
 export default function WatchlistTable({ value }) {
   const {
-    watchList: { watchlist },
+    watchList: { watchlist, setWatchlist },
     currency,
   } = useContext(appContext);
 
@@ -33,6 +33,8 @@ export default function WatchlistTable({ value }) {
           coins={watchlist}
           currency={currency}
           section="watchlist"
+          watchlist={watchlist}
+          setWatchlist={setWatchlist}
         />
       )}
     </CustomTabPanel>

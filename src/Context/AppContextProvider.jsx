@@ -1,6 +1,7 @@
 import { createContext, useState, useMemo, useEffect } from "react";
 import { useFetch } from "../Hooks/useFetch";
 
+/* eslint-disable-next-line react-refresh/only-export-components */
 export const appContext = createContext();
 
 export default function AppContextProvider({ children }) {
