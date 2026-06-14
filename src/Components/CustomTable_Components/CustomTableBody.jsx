@@ -1,3 +1,4 @@
+import React, { useContext } from "react";
 import {
   TableBody,
   TableCell,
@@ -12,15 +13,14 @@ import { useTheme } from "@mui/material/styles";
 import { LineChart, Line, ResponsiveContainer, XAxis, YAxis } from "recharts";
 import currencyFormat from "../../utils/currencyFormat";
 import { formatLargeDigits } from "../../utils/formatLargeDigits";
-import { useContext } from "react";
 import { appContext } from "../../Context/AppContextProvider";
 
-export default function CustomTableBody({
+const CustomTableBody = React.memo(({
   coins,
   stickyBg,
   currency,
   section = "table",
-}) {
+}) => {
   const theme = useTheme();
   const isDark = theme.palette.mode === "dark";
 
@@ -189,4 +189,6 @@ export default function CustomTableBody({
       })}
     </TableBody>
   );
-}
+});
+
+export default CustomTableBody;
