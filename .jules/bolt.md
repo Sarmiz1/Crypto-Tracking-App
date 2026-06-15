@@ -1,0 +1,3 @@
+## 2026-06-15 - Context and Component Memoization
+**Learning:** Bundling frequently changing UI state (like `tabValue`) with stable application data in a single context `value` object triggers unnecessary re-renders in all context consumers. Splitting the context or memoizing sub-objects and the main value is required for effective optimization. Additionally, to leverage `React.memo` for context consumers, a wrapper component pattern is needed to isolate context extraction from the memoized presentation logic.
+**Action:** Always memoize context values and use the "Split Component" pattern (wrapper + memoized content) when a component consumes global context but should not re-render on every context update.
