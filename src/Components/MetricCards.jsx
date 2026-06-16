@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState, useContext, useMemo } from "react";
+import { useEffect, useRef, useState, useContext, useMemo, memo } from "react";
 import { Stack, Box } from "@mui/material";
 import { appContext } from "../Context/AppContextProvider";
 import { MetricCard } from "./MetricCards_Components/MetricCard";
@@ -6,6 +6,15 @@ import { MetricCard } from "./MetricCards_Components/MetricCard";
 export default function MetricCards() {
   const { globalMetrics, currency } = useContext(appContext);
 
+  return (
+    <MetricCardsContent
+      globalMetrics={globalMetrics}
+      currency={currency}
+    />
+  );
+}
+
+const MetricCardsContent = memo(({ globalMetrics, currency }) => {
   // ------------------------
   // Track mobile/desktop dynamically
   // ------------------------
@@ -56,8 +65,8 @@ export default function MetricCards() {
         title: "Fear & Greed",
         value: globalMetrics.fearGreed?.value || 0,
         change: 0,
-        data: Array.from({ length: 7 }, () =>
-          (parseInt(globalMetrics.fearGreed?.value) || 0) + Math.random() * 5 - 2
+        data: Array.from({ length: 7 }, (_, i) =>
+          (parseInt(globalMetrics.fearGreed?.value) || 0) + Math.sin(i) * 5
         ),
       },
     ];
@@ -146,4 +155,4 @@ export default function MetricCards() {
       </Stack>
     </Box>
   );
-}
+});

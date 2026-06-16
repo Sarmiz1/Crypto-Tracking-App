@@ -12,21 +12,33 @@ import { useTheme } from "@mui/material/styles";
 import { LineChart, Line, ResponsiveContainer, XAxis, YAxis } from "recharts";
 import currencyFormat from "../../utils/currencyFormat";
 import { formatLargeDigits } from "../../utils/formatLargeDigits";
-import { useContext } from "react";
+import { useContext, memo } from "react";
 import { appContext } from "../../Context/AppContextProvider";
 
-export default function CustomTableBody({
+export default function CustomTableBody(props) {
+  const {
+    watchList: { watchlist, setWatchlist },
+  } = useContext(appContext);
+
+  return (
+    <CustomTableBodyContent
+      {...props}
+      watchlist={watchlist}
+      setWatchlist={setWatchlist}
+    />
+  );
+}
+
+const CustomTableBodyContent = memo(({
   coins,
   stickyBg,
   currency,
   section = "table",
-}) {
+  watchlist,
+  setWatchlist
+}) => {
   const theme = useTheme();
   const isDark = theme.palette.mode === "dark";
-
-  const {
-    watchList: { watchlist, setWatchlist },
-  } = useContext(appContext);
 
   const { symbol: currencySymbol } = currency || {};
 
@@ -189,4 +201,4 @@ export default function CustomTableBody({
       })}
     </TableBody>
   );
-}
+});

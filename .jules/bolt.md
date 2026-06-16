@@ -1,0 +1,3 @@
+## 2025-05-14 - Context-Driven Re-render Cascades
+**Learning:** In applications using a single global context for both stable data (API responses) and frequent UI state (tab selections), every UI state update triggers a re-render of all context consumers unless the context value is memoized and consumers are decoupled using `React.memo` and specific prop extraction.
+**Action:** Always memoize the context `value` object and its sub-objects. For high-traffic components, use a wrapper to extract needed data and pass it to a `React.memo`'d inner component to isolate it from unrelated context changes.
