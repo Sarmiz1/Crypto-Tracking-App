@@ -1,0 +1,3 @@
+## 2025-05-15 - Context Value Bundling Bottleneck
+**Learning:** In this application, frequently changing UI state like `tabValue` is bundled in the same global context as stable data (like `globalMetrics`). Even with `useMemo` on the context provider's value, all context consumers re-render whenever *any* field in the context object changes. Simply memoizing the context value is insufficient for components that don't need the changing fields.
+**Action:** Use a "Wrapper-Content" pattern where a wrapper consumes the context and passes specific, stable values to a memoized `Content` sub-component. This effectively isolates the component from unrelated global state changes.
