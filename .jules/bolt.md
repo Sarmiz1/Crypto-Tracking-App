@@ -1,0 +1,3 @@
+## 2025-05-14 - [Optimizing Context and Component Rendering]
+**Learning:** In this application, bundling frequently changing UI state (like `tabValue`) with stable application data in a single context `value` object triggers unnecessary re-renders in all context consumers. Effective memoization requires splitting the context value into independent sub-objects and using wrapper components to extract only necessary data for memoized children.
+**Action:** Always memoize individual data objects in `AppContextProvider` and use the memoized 'Content' sub-component pattern for heavy consumers like `MetricCards` and `CustomTableBody` to isolate them from unrelated context updates.
