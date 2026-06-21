@@ -1,14 +1,11 @@
-import { useEffect, useRef, useState, useContext, useMemo } from "react";
+import React, { useEffect, useRef, useState, useContext, useMemo } from "react";
 import { Stack, Box } from "@mui/material";
 import { appContext } from "../Context/AppContextProvider";
 import { MetricCard } from "./MetricCards_Components/MetricCard";
 
-export default function MetricCards() {
-  const { globalMetrics, currency } = useContext(appContext);
-
-  // ------------------------
-  // Track mobile/desktop dynamically
-  // ------------------------
+// Inner component wrapped in React.memo to prevent re-renders when context updates
+// but relevant props haven't changed.
+const MetricCardsContent = React.memo(({ globalMetrics, currency, topCoins }) => {
   const [isMobile, setIsMobile] = useState(window.innerWidth < 900);
   useEffect(() => {
     const handleResize = () => {
@@ -23,14 +20,8 @@ export default function MetricCards() {
   const startXRef = useRef(0);
   const scrollLeftRef = useRef(0);
 
-  // ------------------------
-  // Loading check
-  // ------------------------
   const isLoading = !globalMetrics?.data;
 
-  // ------------------------
-  // Metrics memo
-  // ------------------------
   const metrics = useMemo(() => {
     if (isLoading) return [];
     const globalData = globalMetrics.data;
@@ -42,7 +33,7 @@ export default function MetricCards() {
           globalData.total_market_cap?.[currency?.name?.toLowerCase?.()] || 0,
         change: globalData.market_cap_change_percentage_24h_usd || 0,
         data:
-          globalMetrics.topCoins?.map(
+          topCoins?.map(
             (c) => c.sparkline_in_7d?.price?.[0] || 0
           ) || [],
       },
@@ -50,22 +41,19 @@ export default function MetricCards() {
         title: "Active Cryptos",
         value: globalData.active_cryptocurrencies || 0,
         change: 0,
-        data: globalMetrics.topCoins?.map((c) => c.market_cap || 0) || [],
+        data: topCoins?.map((c) => c.market_cap || 0) || [],
       },
       {
         title: "Fear & Greed",
         value: globalMetrics.fearGreed?.value || 0,
         change: 0,
-        data: Array.from({ length: 7 }, () =>
-          (parseInt(globalMetrics.fearGreed?.value) || 0) + Math.random() * 5 - 2
+        data: Array.from({ length: 7 }, (_, i) =>
+          (parseInt(globalMetrics.fearGreed?.value) || 0) + Math.sin(i) * 5
         ),
       },
     ];
-  }, [globalMetrics, currency, isLoading]);
+  }, [globalMetrics, currency, isLoading, topCoins]);
 
-  // ------------------------
-  // Dragging logic for desktop
-  // ------------------------
   useEffect(() => {
     const slider = scrollRef.current;
     if (!slider || isMobile) return;
@@ -103,7 +91,7 @@ export default function MetricCards() {
       slider.removeEventListener("mouseleave", handleMouseLeave);
       slider.removeEventListener("mousemove", handleMouseMove);
     };
-  }, [isMobile]); // reattach if isMobile changes
+  }, [isMobile]);
 
   return (
     <Box sx={{ overflow: "hidden" }}>
@@ -145,5 +133,19 @@ export default function MetricCards() {
             ))}
       </Stack>
     </Box>
+  );
+});
+
+MetricCardsContent.displayName = "MetricCardsContent";
+
+export default function MetricCards() {
+  const { globalMetrics, currency, cryptoListing } = useContext(appContext);
+
+  return (
+    <MetricCardsContent
+      globalMetrics={globalMetrics}
+      currency={currency}
+      topCoins={cryptoListing.data}
+    />
   );
 }

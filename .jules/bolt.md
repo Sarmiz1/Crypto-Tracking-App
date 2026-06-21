@@ -1,0 +1,3 @@
+## 2025-05-15 - Context Re-render Cascade Optimization
+**Learning:** In applications using a large global context, updating a frequently-changing UI state (like `tabValue`) triggers a re-render of ALL context consumers, even if they only use stable data. Standard `useMemo` on the context value is insufficient if any part of the value object changes.
+**Action:** Use a combination of: 1) Granular memoization of context sub-objects. 2) The "Memoized Content" pattern (wrapping a component's inner logic in `React.memo` and passing context values as props) to isolate consumers from unrelated context updates.
