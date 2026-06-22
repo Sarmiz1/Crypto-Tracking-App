@@ -1,3 +1,4 @@
+import React, { memo } from "react";
 import {
   TableBody,
   TableCell,
@@ -15,19 +16,15 @@ import { formatLargeDigits } from "../../utils/formatLargeDigits";
 import { useContext } from "react";
 import { appContext } from "../../Context/AppContextProvider";
 
-export default function CustomTableBody({
+const CustomTableBodyContent = memo(({
   coins,
   stickyBg,
   currency,
   section = "table",
-}) {
-  const theme = useTheme();
-  const isDark = theme.palette.mode === "dark";
-
-  const {
-    watchList: { watchlist, setWatchlist },
-  } = useContext(appContext);
-
+  watchlist,
+  setWatchlist,
+  isDark,
+}) => {
   const { symbol: currencySymbol } = currency || {};
 
   const handleWatchlistToggle = (coin) => {
@@ -188,5 +185,23 @@ export default function CustomTableBody({
         );
       })}
     </TableBody>
+  );
+});
+
+export default function CustomTableBody(props) {
+  const theme = useTheme();
+  const isDark = theme.palette.mode === "dark";
+
+  const {
+    watchList: { watchlist, setWatchlist },
+  } = useContext(appContext);
+
+  return (
+    <CustomTableBodyContent
+      {...props}
+      watchlist={watchlist}
+      setWatchlist={setWatchlist}
+      isDark={isDark}
+    />
   );
 }
