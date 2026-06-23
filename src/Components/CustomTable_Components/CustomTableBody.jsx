@@ -1,3 +1,4 @@
+import React, { useContext } from "react";
 import {
   TableBody,
   TableCell,
@@ -12,31 +13,18 @@ import { useTheme } from "@mui/material/styles";
 import { LineChart, Line, ResponsiveContainer, XAxis, YAxis } from "recharts";
 import currencyFormat from "../../utils/currencyFormat";
 import { formatLargeDigits } from "../../utils/formatLargeDigits";
-import { useContext } from "react";
 import { appContext } from "../../Context/AppContextProvider";
 
-export default function CustomTableBody({
+const CustomTableBodyContent = React.memo(({
   coins,
   stickyBg,
-  currency,
-  section = "table",
-}) {
+  currencySymbol,
+  section,
+  watchlist,
+  handleWatchlistToggle
+}) => {
   const theme = useTheme();
   const isDark = theme.palette.mode === "dark";
-
-  const {
-    watchList: { watchlist, setWatchlist },
-  } = useContext(appContext);
-
-  const { symbol: currencySymbol } = currency || {};
-
-  const handleWatchlistToggle = (coin) => {
-    if (watchlist.some((c) => c.id === coin.id)) {
-      setWatchlist(watchlist.filter((c) => c.id !== coin.id));
-    } else {
-      setWatchlist([...watchlist, coin]);
-    }
-  };
 
   return (
     <TableBody>
@@ -188,5 +176,41 @@ export default function CustomTableBody({
         );
       })}
     </TableBody>
+  );
+});
+
+CustomTableBodyContent.displayName = "CustomTableBodyContent";
+
+export default function CustomTableBody({
+  coins,
+  stickyBg,
+  currency,
+  section = "table",
+}) {
+  const {
+    watchList: { watchlist, setWatchlist },
+  } = useContext(appContext);
+
+  const { symbol: currencySymbol } = currency || {};
+
+  const handleWatchlistToggle = React.useCallback((coin) => {
+    setWatchlist((currentWatchlist) => {
+      if (currentWatchlist.some((c) => c.id === coin.id)) {
+        return currentWatchlist.filter((c) => c.id !== coin.id);
+      } else {
+        return [...currentWatchlist, coin];
+      }
+    });
+  }, [setWatchlist]);
+
+  return (
+    <CustomTableBodyContent
+      coins={coins}
+      stickyBg={stickyBg}
+      currencySymbol={currencySymbol}
+      section={section}
+      watchlist={watchlist}
+      handleWatchlistToggle={handleWatchlistToggle}
+    />
   );
 }
