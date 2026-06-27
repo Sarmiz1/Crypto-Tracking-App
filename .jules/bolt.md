@@ -1,0 +1,3 @@
+## 2026-06-27 - Multi-layered React Context Optimization
+**Learning:** In applications using a large global context, memoizing the context value object is essential but often insufficient. Even with a memoized `value`, all consumers re-render if ANY dependency in the `useMemo` changes. Refactoring components into memoized 'Content' sub-components that take specific props (extracted from context) is the most effective way to skip re-renders for stable UI sections.
+**Action:** Prioritize splitting the context value into smaller, independent memoized objects and use the 'Content' sub-component pattern for performance-critical components.
