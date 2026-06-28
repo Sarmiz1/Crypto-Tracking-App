@@ -1,28 +1,18 @@
-import { useEffect, useRef, useState, useContext, useMemo } from "react";
+import React, { useEffect, useRef, useState, useContext, useMemo } from "react";
 import { Stack, Box } from "@mui/material";
 import { appContext } from "../Context/AppContextProvider";
 import { MetricCard } from "./MetricCards_Components/MetricCard";
 
-export default function MetricCards() {
-  const { globalMetrics, currency } = useContext(appContext);
-
-  // ------------------------
-  // Track mobile/desktop dynamically
-  // ------------------------
-  const [isMobile, setIsMobile] = useState(window.innerWidth < 900);
-  useEffect(() => {
-    const handleResize = () => {
-      setIsMobile(window.innerWidth < 900);
-    };
-    window.addEventListener("resize", handleResize);
-    return () => window.removeEventListener("resize", handleResize);
-  }, []);
-
-  const scrollRef = useRef(null);
-  const isDraggingRef = useRef(false);
-  const startXRef = useRef(0);
-  const scrollLeftRef = useRef(0);
-
+const MetricCardsContent = React.memo(({
+  globalMetrics,
+  currency,
+  isMobile,
+  scrollRef,
+  onMouseDown,
+  onMouseUp,
+  onMouseLeave,
+  onMouseMove
+}) => {
   // ------------------------
   // Loading check
   // ------------------------
@@ -56,94 +46,122 @@ export default function MetricCards() {
         title: "Fear & Greed",
         value: globalMetrics.fearGreed?.value || 0,
         change: 0,
-        data: Array.from({ length: 7 }, () =>
-          (parseInt(globalMetrics.fearGreed?.value) || 0) + Math.random() * 5 - 2
+        // Deterministic sparkline data to ensure purity
+        data: Array.from({ length: 7 }, (_, i) =>
+          (parseInt(globalMetrics.fearGreed?.value) || 0) + Math.sin(i) * 5
         ),
       },
     ];
   }, [globalMetrics, currency, isLoading]);
 
+  return (
+    <Stack
+      ref={scrollRef}
+      direction="row"
+      spacing={3}
+      onMouseDown={onMouseDown}
+      onMouseUp={onMouseUp}
+      onMouseLeave={onMouseLeave}
+      onMouseMove={onMouseMove}
+      sx={{
+        overflowX: "auto",
+        scrollBehavior: "smooth",
+        cursor: isMobile ? "auto" : "grab",
+        "&:active": { cursor: "grabbing" },
+        "&::-webkit-scrollbar": { display: "none" },
+        scrollSnapType: isMobile ? "x mandatory" : "none",
+      }}
+    >
+      {isLoading
+        ? Array.from({ length: 3 }).map((_, i) => (
+            <Box
+              key={i}
+              sx={{
+                minWidth: 280,
+                height: 180,
+                bgcolor: "#ccc",
+                borderRadius: 2,
+              }}
+            />
+          ))
+        : metrics.map((metric, index) => (
+            <Box
+              key={index}
+              sx={{
+                flex: "0 0 auto",
+                scrollSnapAlign: isMobile ? "start" : "none",
+              }}
+            >
+              <MetricCard metric={metric} />
+            </Box>
+          ))}
+    </Stack>
+  );
+});
+
+// Set display name for debugging
+MetricCardsContent.displayName = "MetricCardsContent";
+
+export default function MetricCards() {
+  const { globalMetrics, currency } = useContext(appContext);
+
+  // ------------------------
+  // Track mobile/desktop dynamically
+  // ------------------------
+  const [isMobile, setIsMobile] = useState(window.innerWidth < 900);
+  useEffect(() => {
+    const handleResize = () => {
+      setIsMobile(window.innerWidth < 900);
+    };
+    window.addEventListener("resize", handleResize);
+    return () => window.removeEventListener("resize", handleResize);
+  }, []);
+
+  const scrollRef = useRef(null);
+  const isDraggingRef = useRef(false);
+  const startXRef = useRef(0);
+  const scrollLeftRef = useRef(0);
+
   // ------------------------
   // Dragging logic for desktop
   // ------------------------
-  useEffect(() => {
-    const slider = scrollRef.current;
-    if (!slider || isMobile) return;
+  const dragHandlers = useMemo(() => {
+    if (isMobile) return {};
 
-    const handleMouseDown = (e) => {
-      isDraggingRef.current = true;
-      startXRef.current = e.pageX - slider.offsetLeft;
-      scrollLeftRef.current = slider.scrollLeft;
+    return {
+      onMouseDown: (e) => {
+        const slider = scrollRef.current;
+        if (!slider) return;
+        isDraggingRef.current = true;
+        startXRef.current = e.pageX - slider.offsetLeft;
+        scrollLeftRef.current = slider.scrollLeft;
+      },
+      onMouseUp: () => {
+        isDraggingRef.current = false;
+      },
+      onMouseLeave: () => {
+        isDraggingRef.current = false;
+      },
+      onMouseMove: (e) => {
+        const slider = scrollRef.current;
+        if (!isDraggingRef.current || !slider) return;
+        e.preventDefault();
+        const x = e.pageX - slider.offsetLeft;
+        const walk = (x - startXRef.current) * 1.5;
+        slider.scrollLeft = scrollLeftRef.current - walk;
+      }
     };
-
-    const handleMouseUp = () => {
-      isDraggingRef.current = false;
-    };
-
-    const handleMouseLeave = () => {
-      isDraggingRef.current = false;
-    };
-
-    const handleMouseMove = (e) => {
-      if (!isDraggingRef.current) return;
-      e.preventDefault();
-      const x = e.pageX - slider.offsetLeft;
-      const walk = (x - startXRef.current) * 1.5;
-      slider.scrollLeft = scrollLeftRef.current - walk;
-    };
-
-    slider.addEventListener("mousedown", handleMouseDown);
-    slider.addEventListener("mouseup", handleMouseUp);
-    slider.addEventListener("mouseleave", handleMouseLeave);
-    slider.addEventListener("mousemove", handleMouseMove);
-
-    return () => {
-      slider.removeEventListener("mousedown", handleMouseDown);
-      slider.removeEventListener("mouseup", handleMouseUp);
-      slider.removeEventListener("mouseleave", handleMouseLeave);
-      slider.removeEventListener("mousemove", handleMouseMove);
-    };
-  }, [isMobile]); // reattach if isMobile changes
+  }, [isMobile]);
 
   return (
     <Box sx={{ overflow: "hidden" }}>
-      <Stack
-        ref={scrollRef}
-        direction="row"
-        spacing={3}
-        sx={{
-          overflowX: "auto",
-          scrollBehavior: "smooth",
-          cursor: isMobile ? "auto" : "grab",
-          "&:active": { cursor: "grabbing" },
-          "&::-webkit-scrollbar": { display: "none" },
-          scrollSnapType: isMobile ? "x mandatory" : "none",
-        }}
-      >
-        {isLoading
-          ? Array.from({ length: 3 }).map((_, i) => (
-              <Box
-                key={i}
-                sx={{
-                  minWidth: 280,
-                  height: 180,
-                  bgcolor: "#ccc",
-                  borderRadius: 2,
-                }}
-              />
-            ))
-          : metrics.map((metric, index) => (
-              <Box
-                key={index}
-                sx={{
-                  flex: "0 0 auto",
-                  scrollSnapAlign: isMobile ? "start" : "none",
-                }}
-              >
-                <MetricCard metric={metric} />
-              </Box>
-            ))}
-      </Stack>
+      <MetricCardsContent
+        globalMetrics={globalMetrics}
+        currency={currency}
+        isMobile={isMobile}
+        scrollRef={scrollRef}
+        {...dragHandlers}
+      />
     </Box>
   );
 }
