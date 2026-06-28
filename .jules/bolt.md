@@ -1,0 +1,3 @@
+## 2025-05-15 - Preserving functionality during memoization refactoring
+**Learning:** Refactoring components into memoized 'Content' sub-components to isolate them from context-induced re-renders can accidentally break features if internal state or refs (like dragging logic) are not correctly bridged. Specifically, mouse event handlers attached to parent components will no longer affect the child's DOM if they aren't explicitly passed down.
+**Action:** Always verify interactive features (dragging, scrolling, inputs) after refactoring for memoization, and ensure event handlers are memoized and passed as props to the inner component.
