@@ -1,6 +1,7 @@
+import React from "react";
 import { TableCell, TableHead, TableRow } from "@mui/material";
 
-export default function CustomTableHead({ stickyBg }) {
+const CustomTableHead = React.memo(({ stickyBg }) => {
   return (
     <TableHead>
       <TableRow>
@@ -41,4 +42,8 @@ export default function CustomTableHead({ stickyBg }) {
       </TableRow>
     </TableHead>
   );
-}
+});
+
+CustomTableHead.displayName = "CustomTableHead";
+
+export default CustomTableHead;
