@@ -1,0 +1,3 @@
+## 2025-05-15 - Context Isolation and Render Optimization
+**Learning:** Components consuming a context will re-render whenever the context provider's `value` changes, even if the specific fields they use haven't changed. Bundling frequently changing state (like `tabValue`) with stable data (like `cryptoListing`) in a single context triggers application-wide re-renders.
+**Action:** Use a memoized 'Content' sub-component pattern. The outer component consumes the context and passes specific, stable props (ideally primitives or memoized sub-objects) to the inner memoized component. This successfully blocks the re-render cascade.
