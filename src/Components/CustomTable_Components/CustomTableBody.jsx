@@ -1,3 +1,4 @@
+import React, { useCallback } from "react";
 import {
   TableBody,
   TableCell,
@@ -15,29 +16,15 @@ import { formatLargeDigits } from "../../utils/formatLargeDigits";
 import { useContext } from "react";
 import { appContext } from "../../Context/AppContextProvider";
 
-export default function CustomTableBody({
+const CustomTableBodyContent = React.memo(({
   coins,
   stickyBg,
-  currency,
-  section = "table",
-}) {
-  const theme = useTheme();
-  const isDark = theme.palette.mode === "dark";
-
-  const {
-    watchList: { watchlist, setWatchlist },
-  } = useContext(appContext);
-
-  const { symbol: currencySymbol } = currency || {};
-
-  const handleWatchlistToggle = (coin) => {
-    if (watchlist.some((c) => c.id === coin.id)) {
-      setWatchlist(watchlist.filter((c) => c.id !== coin.id));
-    } else {
-      setWatchlist([...watchlist, coin]);
-    }
-  };
-
+  currencySymbol,
+  section,
+  isDark,
+  watchlist,
+  handleWatchlistToggle
+}) => {
   return (
     <TableBody>
       {coins.map((coin, index) => {
@@ -188,5 +175,45 @@ export default function CustomTableBody({
         );
       })}
     </TableBody>
+  );
+});
+
+CustomTableBodyContent.displayName = "CustomTableBodyContent";
+
+export default function CustomTableBody({
+  coins,
+  stickyBg,
+  currency,
+  section = "table",
+}) {
+  const theme = useTheme();
+  const isDark = theme.palette.mode === "dark";
+
+  const {
+    watchList: { watchlist, setWatchlist },
+  } = useContext(appContext);
+
+  const { symbol: currencySymbol } = currency || {};
+
+  const handleWatchlistToggle = useCallback((coin) => {
+    setWatchlist((prevWatchlist) => {
+      if (prevWatchlist.some((c) => c.id === coin.id)) {
+        return prevWatchlist.filter((c) => c.id !== coin.id);
+      } else {
+        return [...prevWatchlist, coin];
+      }
+    });
+  }, [setWatchlist]);
+
+  return (
+    <CustomTableBodyContent
+      coins={coins}
+      stickyBg={stickyBg}
+      currencySymbol={currencySymbol}
+      section={section}
+      isDark={isDark}
+      watchlist={watchlist}
+      handleWatchlistToggle={handleWatchlistToggle}
+    />
   );
 }
