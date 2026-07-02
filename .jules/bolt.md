@@ -1,0 +1,3 @@
+## 2026-07-02 - Optimize context consumption and reduce unnecessary re-renders
+**Learning:** In a context-heavy application, bundling UI state (like `tabValue`) with data causes all consumers to re-render on every interaction. Splitting the context into memoized sub-objects and using the "Wrapper/Content" pattern with `React.memo` effectively isolates expensive components from unrelated state updates.
+**Action:** Always measure re-render counts during interactions when using global context. Use `React.memo` on inner 'Content' components while destructuring context in outer wrapper components to ensure stable props.

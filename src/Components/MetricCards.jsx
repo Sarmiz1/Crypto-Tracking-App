@@ -1,36 +1,11 @@
-import { useEffect, useRef, useState, useContext, useMemo } from "react";
+import { useEffect, useRef, useState, useContext, useMemo, memo } from "react";
 import { Stack, Box } from "@mui/material";
 import { appContext } from "../Context/AppContextProvider";
 import { MetricCard } from "./MetricCards_Components/MetricCard";
 
-export default function MetricCards() {
-  const { globalMetrics, currency } = useContext(appContext);
-
-  // ------------------------
-  // Track mobile/desktop dynamically
-  // ------------------------
-  const [isMobile, setIsMobile] = useState(window.innerWidth < 900);
-  useEffect(() => {
-    const handleResize = () => {
-      setIsMobile(window.innerWidth < 900);
-    };
-    window.addEventListener("resize", handleResize);
-    return () => window.removeEventListener("resize", handleResize);
-  }, []);
-
-  const scrollRef = useRef(null);
-  const isDraggingRef = useRef(false);
-  const startXRef = useRef(0);
-  const scrollLeftRef = useRef(0);
-
-  // ------------------------
-  // Loading check
-  // ------------------------
+const MetricCardsContent = memo(({ globalMetrics, currency, isMobile, scrollRef }) => {
   const isLoading = !globalMetrics?.data;
 
-  // ------------------------
-  // Metrics memo
-  // ------------------------
   const metrics = useMemo(() => {
     if (isLoading) return [];
     const globalData = globalMetrics.data;
@@ -56,12 +31,78 @@ export default function MetricCards() {
         title: "Fear & Greed",
         value: globalMetrics.fearGreed?.value || 0,
         change: 0,
-        data: Array.from({ length: 7 }, () =>
-          (parseInt(globalMetrics.fearGreed?.value) || 0) + Math.random() * 5 - 2
+        data: Array.from({ length: 7 }, (_, i) =>
+          (parseInt(globalMetrics.fearGreed?.value) || 0) + Math.sin(i) * 2
         ),
       },
     ];
   }, [globalMetrics, currency, isLoading]);
+
+  return (
+    <Box sx={{ overflow: "hidden" }}>
+      <Stack
+        ref={scrollRef}
+        direction="row"
+        spacing={3}
+        sx={{
+          overflowX: "auto",
+          scrollBehavior: "smooth",
+          cursor: isMobile ? "auto" : "grab",
+          "&:active": { cursor: "grabbing" },
+          "&::-webkit-scrollbar": { display: "none" },
+          scrollSnapType: isMobile ? "x mandatory" : "none",
+        }}
+      >
+        {isLoading
+          ? Array.from({ length: 3 }).map((_, i) => (
+              <Box
+                key={i}
+                sx={{
+                  minWidth: 280,
+                  height: 180,
+                  bgcolor: "#ccc",
+                  borderRadius: 2,
+                }}
+              />
+            ))
+          : metrics.map((metric, index) => (
+              <Box
+                key={index}
+                sx={{
+                  flex: "0 0 auto",
+                  scrollSnapAlign: isMobile ? "start" : "none",
+                }}
+              >
+                <MetricCard metric={metric} />
+              </Box>
+            ))}
+      </Stack>
+    </Box>
+  );
+});
+
+// Explicitly set display name for debugging if needed
+MetricCardsContent.displayName = "MetricCardsContent";
+
+export default function MetricCards() {
+  const { globalMetrics, currency } = useContext(appContext);
+
+  // ------------------------
+  // Track mobile/desktop dynamically
+  // ------------------------
+  const [isMobile, setIsMobile] = useState(window.innerWidth < 900);
+  useEffect(() => {
+    const handleResize = () => {
+      setIsMobile(window.innerWidth < 900);
+    };
+    window.addEventListener("resize", handleResize);
+    return () => window.removeEventListener("resize", handleResize);
+  }, []);
+
+  const scrollRef = useRef(null);
+  const isDraggingRef = useRef(false);
+  const startXRef = useRef(0);
+  const scrollLeftRef = useRef(0);
 
   // ------------------------
   // Dragging logic for desktop
@@ -106,44 +147,11 @@ export default function MetricCards() {
   }, [isMobile]); // reattach if isMobile changes
 
   return (
-    <Box sx={{ overflow: "hidden" }}>
-      <Stack
-        ref={scrollRef}
-        direction="row"
-        spacing={3}
-        sx={{
-          overflowX: "auto",
-          scrollBehavior: "smooth",
-          cursor: isMobile ? "auto" : "grab",
-          "&:active": { cursor: "grabbing" },
-          "&::-webkit-scrollbar": { display: "none" },
-          scrollSnapType: isMobile ? "x mandatory" : "none",
-        }}
-      >
-        {isLoading
-          ? Array.from({ length: 3 }).map((_, i) => (
-              <Box
-                key={i}
-                sx={{
-                  minWidth: 280,
-                  height: 180,
-                  bgcolor: "#ccc",
-                  borderRadius: 2,
-                }}
-              />
-            ))
-          : metrics.map((metric, index) => (
-              <Box
-                key={index}
-                sx={{
-                  flex: "0 0 auto",
-                  scrollSnapAlign: isMobile ? "start" : "none",
-                }}
-              >
-                <MetricCard metric={metric} />
-              </Box>
-            ))}
-      </Stack>
-    </Box>
+    <MetricCardsContent
+      globalMetrics={globalMetrics}
+      currency={currency}
+      isMobile={isMobile}
+      scrollRef={scrollRef}
+    />
   );
 }
