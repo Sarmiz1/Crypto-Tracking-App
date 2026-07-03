@@ -1,0 +1,3 @@
+## 2025-05-15 - Context Optimization and Memoized 'Content' Components
+**Learning:** Bundling frequently changing UI state (like tabValue) with stable application data in a single context value object triggers unnecessary re-renders in all consumers. Splitting the context or using memoized 'Content' sub-components that consume stable props is required for effective performance isolation.
+**Action:** Always verify if a context consumer actually needs every piece of data in the context. If it only needs a subset, consider refactoring into a memoized 'Content' component or using a selector-like pattern to prevent re-renders when unrelated context state changes.

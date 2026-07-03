@@ -1,3 +1,4 @@
+import React, { useContext, useCallback } from "react";
 import {
   TableBody,
   TableCell,
@@ -12,31 +13,17 @@ import { useTheme } from "@mui/material/styles";
 import { LineChart, Line, ResponsiveContainer, XAxis, YAxis } from "recharts";
 import currencyFormat from "../../utils/currencyFormat";
 import { formatLargeDigits } from "../../utils/formatLargeDigits";
-import { useContext } from "react";
 import { appContext } from "../../Context/AppContextProvider";
 
-export default function CustomTableBody({
+const CustomTableBodyContent = React.memo(({
   coins,
   stickyBg,
-  currency,
-  section = "table",
-}) {
-  const theme = useTheme();
-  const isDark = theme.palette.mode === "dark";
-
-  const {
-    watchList: { watchlist, setWatchlist },
-  } = useContext(appContext);
-
-  const { symbol: currencySymbol } = currency || {};
-
-  const handleWatchlistToggle = (coin) => {
-    if (watchlist.some((c) => c.id === coin.id)) {
-      setWatchlist(watchlist.filter((c) => c.id !== coin.id));
-    } else {
-      setWatchlist([...watchlist, coin]);
-    }
-  };
+  currencySymbol,
+  section,
+  watchlist,
+  onWatchlistToggle,
+  isDark
+}) => {
 
   return (
     <TableBody>
@@ -88,7 +75,7 @@ export default function CustomTableBody({
               >
                 <IconButton
                   size="small"
-                  onClick={() => handleWatchlistToggle(coin)}
+                  onClick={() => onWatchlistToggle(coin)}
                 >
                   {isWatched ? (
                     <StarIcon sx={{ color: "#FFD700" }} fontSize="small" />
@@ -188,5 +175,43 @@ export default function CustomTableBody({
         );
       })}
     </TableBody>
+  );
+});
+
+export default function CustomTableBody({
+  coins,
+  stickyBg,
+  currency,
+  section = "table",
+}) {
+  const theme = useTheme();
+  const isDark = theme.palette.mode === "dark";
+
+  const {
+    watchList: { watchlist, setWatchlist },
+  } = useContext(appContext);
+
+  const { symbol: currencySymbol } = currency || {};
+
+  const handleWatchlistToggle = useCallback((coin) => {
+    setWatchlist((prev) => {
+      if (prev.some((c) => c.id === coin.id)) {
+        return prev.filter((c) => c.id !== coin.id);
+      } else {
+        return [...prev, coin];
+      }
+    });
+  }, [setWatchlist]);
+
+  return (
+    <CustomTableBodyContent
+      coins={coins}
+      stickyBg={stickyBg}
+      currencySymbol={currencySymbol}
+      section={section}
+      watchlist={watchlist}
+      onWatchlistToggle={handleWatchlistToggle}
+      isDark={isDark}
+    />
   );
 }
