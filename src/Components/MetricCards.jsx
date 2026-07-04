@@ -1,31 +1,18 @@
-import { useEffect, useRef, useState, useContext, useMemo } from "react";
+import React, { useEffect, useRef, useState, useContext, useMemo } from "react";
 import { Stack, Box } from "@mui/material";
 import { appContext } from "../Context/AppContextProvider";
 import { MetricCard } from "./MetricCards_Components/MetricCard";
 
-export default function MetricCards() {
-  const { globalMetrics, currency } = useContext(appContext);
-
-  // ------------------------
-  // Track mobile/desktop dynamically
-  // ------------------------
-  const [isMobile, setIsMobile] = useState(window.innerWidth < 900);
-  useEffect(() => {
-    const handleResize = () => {
-      setIsMobile(window.innerWidth < 900);
-    };
-    window.addEventListener("resize", handleResize);
-    return () => window.removeEventListener("resize", handleResize);
-  }, []);
-
+/**
+ * MetricCardsContent is memoized to prevent re-renders when the parent (MetricCards)
+ * re-renders due to unrelated context changes (like tabValue).
+ */
+const MetricCardsContent = React.memo(({ globalMetrics, currencyName, isMobile }) => {
   const scrollRef = useRef(null);
   const isDraggingRef = useRef(false);
   const startXRef = useRef(0);
   const scrollLeftRef = useRef(0);
 
-  // ------------------------
-  // Loading check
-  // ------------------------
   const isLoading = !globalMetrics?.data;
 
   // ------------------------
@@ -39,7 +26,7 @@ export default function MetricCards() {
       {
         title: "Market Cap",
         value:
-          globalData.total_market_cap?.[currency?.name?.toLowerCase?.()] || 0,
+          globalData.total_market_cap?.[currencyName?.toLowerCase?.()] || 0,
         change: globalData.market_cap_change_percentage_24h_usd || 0,
         data:
           globalMetrics.topCoins?.map(
@@ -56,12 +43,12 @@ export default function MetricCards() {
         title: "Fear & Greed",
         value: globalMetrics.fearGreed?.value || 0,
         change: 0,
-        data: Array.from({ length: 7 }, () =>
-          (parseInt(globalMetrics.fearGreed?.value) || 0) + Math.random() * 5 - 2
+        data: Array.from({ length: 7 }, (_, i) =>
+          (parseInt(globalMetrics.fearGreed?.value) || 0) + Math.sin(i) * 5
         ),
       },
     ];
-  }, [globalMetrics, currency, isLoading]);
+  }, [globalMetrics, currencyName, isLoading]);
 
   // ------------------------
   // Dragging logic for desktop
@@ -103,7 +90,7 @@ export default function MetricCards() {
       slider.removeEventListener("mouseleave", handleMouseLeave);
       slider.removeEventListener("mousemove", handleMouseMove);
     };
-  }, [isMobile]); // reattach if isMobile changes
+  }, [isMobile]);
 
   return (
     <Box sx={{ overflow: "hidden" }}>
@@ -145,5 +132,32 @@ export default function MetricCards() {
             ))}
       </Stack>
     </Box>
+  );
+});
+
+// Add display name for debugging
+MetricCardsContent.displayName = "MetricCardsContent";
+
+export default function MetricCards() {
+  const { globalMetrics, currency } = useContext(appContext);
+
+  // ------------------------
+  // Track mobile/desktop dynamically
+  // ------------------------
+  const [isMobile, setIsMobile] = useState(window.innerWidth < 900);
+  useEffect(() => {
+    const handleResize = () => {
+      setIsMobile(window.innerWidth < 900);
+    };
+    window.addEventListener("resize", handleResize);
+    return () => window.removeEventListener("resize", handleResize);
+  }, []);
+
+  return (
+    <MetricCardsContent
+      globalMetrics={globalMetrics}
+      currencyName={currency?.name}
+      isMobile={isMobile}
+    />
   );
 }

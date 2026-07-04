@@ -12,24 +12,18 @@ import { useTheme } from "@mui/material/styles";
 import { LineChart, Line, ResponsiveContainer, XAxis, YAxis } from "recharts";
 import currencyFormat from "../../utils/currencyFormat";
 import { formatLargeDigits } from "../../utils/formatLargeDigits";
-import { useContext } from "react";
+import React, { useContext } from "react";
 import { appContext } from "../../Context/AppContextProvider";
 
-export default function CustomTableBody({
+const CustomTableBodyContent = React.memo(({
   coins,
   stickyBg,
-  currency,
-  section = "table",
-}) {
-  const theme = useTheme();
-  const isDark = theme.palette.mode === "dark";
-
-  const {
-    watchList: { watchlist, setWatchlist },
-  } = useContext(appContext);
-
-  const { symbol: currencySymbol } = currency || {};
-
+  isDark,
+  watchlist,
+  setWatchlist,
+  currencySymbol,
+  section
+}) => {
   const handleWatchlistToggle = (coin) => {
     if (watchlist.some((c) => c.id === coin.id)) {
       setWatchlist(watchlist.filter((c) => c.id !== coin.id));
@@ -188,5 +182,35 @@ export default function CustomTableBody({
         );
       })}
     </TableBody>
+  );
+});
+
+CustomTableBodyContent.displayName = "CustomTableBodyContent";
+
+export default function CustomTableBody({
+  coins,
+  stickyBg,
+  currency,
+  section = "table",
+}) {
+  const theme = useTheme();
+  const isDark = theme.palette.mode === "dark";
+
+  const {
+    watchList: { watchlist, setWatchlist },
+  } = useContext(appContext);
+
+  const { symbol: currencySymbol } = currency || {};
+
+  return (
+    <CustomTableBodyContent
+      coins={coins}
+      stickyBg={stickyBg}
+      isDark={isDark}
+      watchlist={watchlist}
+      setWatchlist={setWatchlist}
+      currencySymbol={currencySymbol}
+      section={section}
+    />
   );
 }
