@@ -13,7 +13,13 @@ import { useRef, useState, useEffect } from "react";
 import CustomTableHead from "./CustomTable_Components/CustomTableHead";
 import CustomTableBody from "./CustomTable_Components/CustomTableBody";
 
-export default function CustomTable({ coins, currency, section }) {
+export default function CustomTable({
+  coins,
+  currency,
+  watchlist,
+  setWatchlist,
+  section,
+}) {
   const theme = useTheme();
   const isDark = theme.palette.mode === "dark";
   const stickyBg = theme.palette.background.paper;
@@ -151,6 +157,8 @@ export default function CustomTable({ coins, currency, section }) {
             stickyBg={stickyBg}
             coins={coins}
             currency={currency}
+            watchlist={watchlist}
+            setWatchlist={setWatchlist}
             section={section}
           />
         </Table>
