@@ -1,23 +1,9 @@
-import { useEffect, useRef, useState, useContext, useMemo } from "react";
+import React, { useEffect, useRef, useState, useContext, useMemo, useCallback } from "react";
 import { Stack, Box } from "@mui/material";
 import { appContext } from "../Context/AppContextProvider";
 import { MetricCard } from "./MetricCards_Components/MetricCard";
 
-export default function MetricCards() {
-  const { globalMetrics, currency } = useContext(appContext);
-
-  // ------------------------
-  // Track mobile/desktop dynamically
-  // ------------------------
-  const [isMobile, setIsMobile] = useState(window.innerWidth < 900);
-  useEffect(() => {
-    const handleResize = () => {
-      setIsMobile(window.innerWidth < 900);
-    };
-    window.addEventListener("resize", handleResize);
-    return () => window.removeEventListener("resize", handleResize);
-  }, []);
-
+const MetricCardsContent = React.memo(({ globalMetrics, currency, isMobile }) => {
   const scrollRef = useRef(null);
   const isDraggingRef = useRef(false);
   const startXRef = useRef(0);
@@ -56,8 +42,8 @@ export default function MetricCards() {
         title: "Fear & Greed",
         value: globalMetrics.fearGreed?.value || 0,
         change: 0,
-        data: Array.from({ length: 7 }, () =>
-          (parseInt(globalMetrics.fearGreed?.value) || 0) + Math.random() * 5 - 2
+        data: Array.from({ length: 7 }, (_, i) =>
+          (parseInt(globalMetrics.fearGreed?.value) || 0) + (Math.sin(i) * 5)
         ),
       },
     ];
@@ -66,49 +52,37 @@ export default function MetricCards() {
   // ------------------------
   // Dragging logic for desktop
   // ------------------------
-  useEffect(() => {
-    const slider = scrollRef.current;
-    if (!slider || isMobile) return;
+  const handleMouseDown = useCallback((e) => {
+    if (isMobile || !scrollRef.current) return;
+    isDraggingRef.current = true;
+    startXRef.current = e.pageX - scrollRef.current.offsetLeft;
+    scrollLeftRef.current = scrollRef.current.scrollLeft;
+  }, [isMobile]);
 
-    const handleMouseDown = (e) => {
-      isDraggingRef.current = true;
-      startXRef.current = e.pageX - slider.offsetLeft;
-      scrollLeftRef.current = slider.scrollLeft;
-    };
+  const handleMouseUp = useCallback(() => {
+    isDraggingRef.current = false;
+  }, []);
 
-    const handleMouseUp = () => {
-      isDraggingRef.current = false;
-    };
+  const handleMouseLeave = useCallback(() => {
+    isDraggingRef.current = false;
+  }, []);
 
-    const handleMouseLeave = () => {
-      isDraggingRef.current = false;
-    };
-
-    const handleMouseMove = (e) => {
-      if (!isDraggingRef.current) return;
-      e.preventDefault();
-      const x = e.pageX - slider.offsetLeft;
-      const walk = (x - startXRef.current) * 1.5;
-      slider.scrollLeft = scrollLeftRef.current - walk;
-    };
-
-    slider.addEventListener("mousedown", handleMouseDown);
-    slider.addEventListener("mouseup", handleMouseUp);
-    slider.addEventListener("mouseleave", handleMouseLeave);
-    slider.addEventListener("mousemove", handleMouseMove);
-
-    return () => {
-      slider.removeEventListener("mousedown", handleMouseDown);
-      slider.removeEventListener("mouseup", handleMouseUp);
-      slider.removeEventListener("mouseleave", handleMouseLeave);
-      slider.removeEventListener("mousemove", handleMouseMove);
-    };
-  }, [isMobile]); // reattach if isMobile changes
+  const handleMouseMove = useCallback((e) => {
+    if (!isDraggingRef.current || !scrollRef.current) return;
+    e.preventDefault();
+    const x = e.pageX - scrollRef.current.offsetLeft;
+    const walk = (x - startXRef.current) * 1.5;
+    scrollRef.current.scrollLeft = scrollLeftRef.current - walk;
+  }, []);
 
   return (
     <Box sx={{ overflow: "hidden" }}>
       <Stack
         ref={scrollRef}
+        onMouseDown={handleMouseDown}
+        onMouseUp={handleMouseUp}
+        onMouseLeave={handleMouseLeave}
+        onMouseMove={handleMouseMove}
         direction="row"
         spacing={3}
         sx={{
@@ -145,5 +119,32 @@ export default function MetricCards() {
             ))}
       </Stack>
     </Box>
+  );
+});
+
+// Explicit display name for debugging/linting
+MetricCardsContent.displayName = "MetricCardsContent";
+
+export default function MetricCards() {
+  const { globalMetrics, currency } = useContext(appContext);
+
+  // ------------------------
+  // Track mobile/desktop dynamically
+  // ------------------------
+  const [isMobile, setIsMobile] = useState(window.innerWidth < 900);
+  useEffect(() => {
+    const handleResize = () => {
+      setIsMobile(window.innerWidth < 900);
+    };
+    window.addEventListener("resize", handleResize);
+    return () => window.removeEventListener("resize", handleResize);
+  }, []);
+
+  return (
+    <MetricCardsContent
+      globalMetrics={globalMetrics}
+      currency={currency}
+      isMobile={isMobile}
+    />
   );
 }
