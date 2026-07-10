@@ -1,0 +1,3 @@
+## 2025-05-22 - Optimize AppContext and Component Renders
+**Learning:** Bundling frequently changing UI state (like `tabValue`) with stable application data in a single context `value` object triggers unnecessary re-renders in all context consumers. Splitting the context or using memoized 'Content' sub-components that receive only necessary props is required for effective performance isolation.
+**Action:** Lift context consumption to stable parent components and pass data via props to inner components wrapped in `React.memo`. Memoize the context value and its sub-objects in `AppContextProvider` to maintain reference stability for consumers.
