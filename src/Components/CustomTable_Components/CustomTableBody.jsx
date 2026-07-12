@@ -1,3 +1,4 @@
+import React from "react";
 import {
   TableBody,
   TableCell,
@@ -12,31 +13,30 @@ import { useTheme } from "@mui/material/styles";
 import { LineChart, Line, ResponsiveContainer, XAxis, YAxis } from "recharts";
 import currencyFormat from "../../utils/currencyFormat";
 import { formatLargeDigits } from "../../utils/formatLargeDigits";
-import { useContext } from "react";
+import { useContext, useCallback } from "react";
 import { appContext } from "../../Context/AppContextProvider";
 
-export default function CustomTableBody({
+// Optimization: Wrapped in React.memo to skip re-rendering this large table body
+// when the parent component re-renders due to unrelated context updates.
+const CustomTableBodyContent = React.memo(({
   coins,
   stickyBg,
   currency,
-  section = "table",
-}) {
+  section,
+  watchlist,
+  setWatchlist
+}) => {
   const theme = useTheme();
   const isDark = theme.palette.mode === "dark";
-
-  const {
-    watchList: { watchlist, setWatchlist },
-  } = useContext(appContext);
-
   const { symbol: currencySymbol } = currency || {};
 
-  const handleWatchlistToggle = (coin) => {
+  const handleWatchlistToggle = useCallback((coin) => {
     if (watchlist.some((c) => c.id === coin.id)) {
       setWatchlist(watchlist.filter((c) => c.id !== coin.id));
     } else {
       setWatchlist([...watchlist, coin]);
     }
-  };
+  }, [watchlist, setWatchlist]);
 
   return (
     <TableBody>
@@ -188,5 +188,27 @@ export default function CustomTableBody({
         );
       })}
     </TableBody>
+  );
+});
+
+export default function CustomTableBody({
+  coins,
+  stickyBg,
+  currency,
+  section = "table",
+}) {
+  const {
+    watchList: { watchlist, setWatchlist },
+  } = useContext(appContext);
+
+  return (
+    <CustomTableBodyContent
+      coins={coins}
+      stickyBg={stickyBg}
+      currency={currency}
+      section={section}
+      watchlist={watchlist}
+      setWatchlist={setWatchlist}
+    />
   );
 }
