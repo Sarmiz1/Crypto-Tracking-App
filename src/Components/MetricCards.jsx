@@ -1,23 +1,11 @@
-import { useEffect, useRef, useState, useContext, useMemo } from "react";
+import React, { useEffect, useRef, useState, useContext, useMemo } from "react";
 import { Stack, Box } from "@mui/material";
 import { appContext } from "../Context/AppContextProvider";
 import { MetricCard } from "./MetricCards_Components/MetricCard";
 
-export default function MetricCards() {
-  const { globalMetrics, currency } = useContext(appContext);
-
-  // ------------------------
-  // Track mobile/desktop dynamically
-  // ------------------------
-  const [isMobile, setIsMobile] = useState(window.innerWidth < 900);
-  useEffect(() => {
-    const handleResize = () => {
-      setIsMobile(window.innerWidth < 900);
-    };
-    window.addEventListener("resize", handleResize);
-    return () => window.removeEventListener("resize", handleResize);
-  }, []);
-
+// Optimization: Wrapped in React.memo to prevent re-renders when the parent (MetricCards)
+// re-renders due to unrelated context changes.
+const MetricCardsContent = React.memo(({ globalMetrics, currency, isMobile }) => {
   const scrollRef = useRef(null);
   const isDraggingRef = useRef(false);
   const startXRef = useRef(0);
@@ -57,7 +45,7 @@ export default function MetricCards() {
         value: globalMetrics.fearGreed?.value || 0,
         change: 0,
         data: Array.from({ length: 7 }, () =>
-          (parseInt(globalMetrics.fearGreed?.value) || 0) + Math.random() * 5 - 2
+          (parseInt(globalMetrics.fearGreed?.value) || 0) + 2 // Use index or stable value instead of Math.random for purity
         ),
       },
     ];
@@ -146,4 +134,22 @@ export default function MetricCards() {
       </Stack>
     </Box>
   );
+});
+
+export default function MetricCards() {
+  const { globalMetrics, currency } = useContext(appContext);
+
+  // ------------------------
+  // Track mobile/desktop dynamically
+  // ------------------------
+  const [isMobile, setIsMobile] = useState(window.innerWidth < 900);
+  useEffect(() => {
+    const handleResize = () => {
+      setIsMobile(window.innerWidth < 900);
+    };
+    window.addEventListener("resize", handleResize);
+    return () => window.removeEventListener("resize", handleResize);
+  }, []);
+
+  return <MetricCardsContent globalMetrics={globalMetrics} currency={currency} isMobile={isMobile} />;
 }
