@@ -6,7 +6,7 @@ import { appContext } from "../../../../Context/AppContextProvider";
 
 export default function TopCoinTable({ value }) {
 
-  const { cryptoListing, currency } = useContext(appContext);
+  const { cryptoListing, currency, watchList: { watchlist, setWatchlist } } = useContext(appContext);
   const { data: topCoins, loading: topLoading, error: topError } = cryptoListing;
 
 
@@ -40,7 +40,7 @@ export default function TopCoinTable({ value }) {
             No coin found
           </Typography>)
 
-          : mappedData && <CustomTable coins={mappedData} currency={currency} />
+          : mappedData && <CustomTable coins={mappedData} currency={currency} watchlist={watchlist} setWatchlist={setWatchlist} section="top" />
       }
 
 
