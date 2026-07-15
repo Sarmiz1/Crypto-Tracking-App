@@ -1,23 +1,14 @@
-import { useEffect, useRef, useState, useContext, useMemo } from "react";
+import React, { useEffect, useRef, useState, useContext, useMemo, useCallback } from "react";
 import { Stack, Box } from "@mui/material";
 import { appContext } from "../Context/AppContextProvider";
 import { MetricCard } from "./MetricCards_Components/MetricCard";
 
-export default function MetricCards() {
-  const { globalMetrics, currency } = useContext(appContext);
-
-  // ------------------------
-  // Track mobile/desktop dynamically
-  // ------------------------
-  const [isMobile, setIsMobile] = useState(window.innerWidth < 900);
-  useEffect(() => {
-    const handleResize = () => {
-      setIsMobile(window.innerWidth < 900);
-    };
-    window.addEventListener("resize", handleResize);
-    return () => window.removeEventListener("resize", handleResize);
-  }, []);
-
+/**
+ * MetricCardsContent is memoized to prevent expensive re-renders when the parent
+ * AppContextProvider re-renders (e.g., during tab switches). It only re-renders
+ * when its specific data props (globalMetrics, topCoins, currency, isMobile) change.
+ */
+const MetricCardsContent = React.memo(({ globalMetrics, topCoins, currency, isMobile }) => {
   const scrollRef = useRef(null);
   const isDraggingRef = useRef(false);
   const startXRef = useRef(0);
@@ -42,7 +33,7 @@ export default function MetricCards() {
           globalData.total_market_cap?.[currency?.name?.toLowerCase?.()] || 0,
         change: globalData.market_cap_change_percentage_24h_usd || 0,
         data:
-          globalMetrics.topCoins?.map(
+          topCoins?.map(
             (c) => c.sparkline_in_7d?.price?.[0] || 0
           ) || [],
       },
@@ -50,60 +41,65 @@ export default function MetricCards() {
         title: "Active Cryptos",
         value: globalData.active_cryptocurrencies || 0,
         change: 0,
-        data: globalMetrics.topCoins?.map((c) => c.market_cap || 0) || [],
+        data: topCoins?.map((c) => c.market_cap || 0) || [],
       },
       {
         title: "Fear & Greed",
         value: globalMetrics.fearGreed?.value || 0,
         change: 0,
-        data: Array.from({ length: 7 }, () =>
-          (parseInt(globalMetrics.fearGreed?.value) || 0) + Math.random() * 5 - 2
+        data: Array.from({ length: 7 }, (_, i) =>
+          (parseInt(globalMetrics.fearGreed?.value) || 0) + Math.sin(i) * 2
         ),
       },
     ];
-  }, [globalMetrics, currency, isLoading]);
+  }, [globalMetrics, topCoins, currency, isLoading]);
 
   // ------------------------
   // Dragging logic for desktop
   // ------------------------
+  const handleMouseDown = useCallback((e) => {
+    if (isMobile) return;
+    const slider = scrollRef.current;
+    if (!slider) return;
+    isDraggingRef.current = true;
+    startXRef.current = e.pageX - slider.offsetLeft;
+    scrollLeftRef.current = slider.scrollLeft;
+  }, [isMobile]);
+
+  const handleMouseUp = useCallback(() => {
+    isDraggingRef.current = false;
+  }, []);
+
+  const handleMouseLeave = useCallback(() => {
+    isDraggingRef.current = false;
+  }, []);
+
+  const handleMouseMove = useCallback((e) => {
+    if (!isDraggingRef.current || isMobile) return;
+    const slider = scrollRef.current;
+    if (!slider) return;
+    e.preventDefault();
+    const x = e.pageX - slider.offsetLeft;
+    const walk = (x - startXRef.current) * 1.5;
+    slider.scrollLeft = scrollLeftRef.current - walk;
+  }, [isMobile]);
+
   useEffect(() => {
     const slider = scrollRef.current;
     if (!slider || isMobile) return;
 
-    const handleMouseDown = (e) => {
-      isDraggingRef.current = true;
-      startXRef.current = e.pageX - slider.offsetLeft;
-      scrollLeftRef.current = slider.scrollLeft;
-    };
-
-    const handleMouseUp = () => {
-      isDraggingRef.current = false;
-    };
-
-    const handleMouseLeave = () => {
-      isDraggingRef.current = false;
-    };
-
-    const handleMouseMove = (e) => {
-      if (!isDraggingRef.current) return;
-      e.preventDefault();
-      const x = e.pageX - slider.offsetLeft;
-      const walk = (x - startXRef.current) * 1.5;
-      slider.scrollLeft = scrollLeftRef.current - walk;
-    };
-
     slider.addEventListener("mousedown", handleMouseDown);
-    slider.addEventListener("mouseup", handleMouseUp);
+    window.addEventListener("mouseup", handleMouseUp);
     slider.addEventListener("mouseleave", handleMouseLeave);
     slider.addEventListener("mousemove", handleMouseMove);
 
     return () => {
       slider.removeEventListener("mousedown", handleMouseDown);
-      slider.removeEventListener("mouseup", handleMouseUp);
+      window.removeEventListener("mouseup", handleMouseUp);
       slider.removeEventListener("mouseleave", handleMouseLeave);
       slider.removeEventListener("mousemove", handleMouseMove);
     };
-  }, [isMobile]); // reattach if isMobile changes
+  }, [isMobile, handleMouseDown, handleMouseUp, handleMouseLeave, handleMouseMove]);
 
   return (
     <Box sx={{ overflow: "hidden" }}>
@@ -145,5 +141,30 @@ export default function MetricCards() {
             ))}
       </Stack>
     </Box>
+  );
+});
+
+export default function MetricCards() {
+  const { globalMetrics, cryptoListing, currency } = useContext(appContext);
+
+  // ------------------------
+  // Track mobile/desktop dynamically
+  // ------------------------
+  const [isMobile, setIsMobile] = useState(window.innerWidth < 900);
+  useEffect(() => {
+    const handleResize = () => {
+      setIsMobile(window.innerWidth < 900);
+    };
+    window.addEventListener("resize", handleResize);
+    return () => window.removeEventListener("resize", handleResize);
+  }, []);
+
+  return (
+    <MetricCardsContent
+      globalMetrics={globalMetrics}
+      topCoins={cryptoListing.data}
+      currency={currency}
+      isMobile={isMobile}
+    />
   );
 }
