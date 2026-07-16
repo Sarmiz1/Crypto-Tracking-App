@@ -1,11 +1,12 @@
-import { Typography, Alert } from "@mui/material";
+import { Typography, Alert, Box, CircularProgress } from "@mui/material";
 import CustomTabPanel from "../../../../Components/CustomTabPanel";
 import CustomTable from "../../../../Components/CustomTable";
 import { useContext } from "react";
 import { appContext } from "../../../../Context/AppContextProvider";
 
 export default function TrendingCoinTable({ value }) {
-  const { trendingCryptos, currency } = useContext(appContext);
+  const { trendingCryptos, currency, watchList } = useContext(appContext);
+  const { watchlist, setWatchlist } = watchList;
 
   const { data, loading, error } = trendingCryptos;
 
@@ -36,7 +37,7 @@ export default function TrendingCoinTable({ value }) {
           <Typography sx={{ textAlign: "center", py: 8, my: -5 }}>
             No coin found
           </Typography>)
-          : trendingCoin && <CustomTable coins={trendingCoin} currency={currency} />
+          : trendingCoin && <CustomTable coins={trendingCoin} currency={currency} watchlist={watchlist} setWatchlist={setWatchlist} />
       }
     </CustomTabPanel>
   );
