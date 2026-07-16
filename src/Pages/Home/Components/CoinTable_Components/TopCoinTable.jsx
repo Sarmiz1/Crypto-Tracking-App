@@ -6,8 +6,9 @@ import { appContext } from "../../../../Context/AppContextProvider";
 
 export default function TopCoinTable({ value }) {
 
-  const { cryptoListing, currency } = useContext(appContext);
+  const { cryptoListing, currency, watchList } = useContext(appContext);
   const { data: topCoins, loading: topLoading, error: topError } = cryptoListing;
+  const { watchlist, setWatchlist } = watchList;
 
 
   // Map CoinGecko data to match your table
@@ -40,13 +41,10 @@ export default function TopCoinTable({ value }) {
             No coin found
           </Typography>)
 
-          : mappedData && <CustomTable coins={mappedData} currency={currency} />
+          : mappedData && <CustomTable coins={mappedData} currency={currency} watchlist={watchlist} setWatchlist={setWatchlist} section="top" />
       }
 
 
     </CustomTabPanel>
   );
 }
-
-
-
