@@ -1,0 +1,5 @@
+# Bolt's Journal
+
+## 2026-07-17 - Global Context Memoization and Reference Isolation
+**Learning:** Returning unmemoized object literals from a central React Context Provider causes application-wide re-render cascades whenever any single slice of state (such as theme mode, currency, or local UI tabs) updates. By dividing context properties into memoized sub-objects (e.g., `cryptoListing`, `globalMetrics`) and wrapping the final `value` in `useMemo`, we establish strict referential stability. Furthermore, replacing impure functions like `Math.random()` with stable mathematical sequences (`Math.sin(i)`) in render loops is critical to satisfy strict React component purity rules (e.g. `react-hooks/purity`) while maintaining stable visual sparklines.
+**Action:** When working with context-heavy React applications, always audit and memoize the final context value. Ensure all event handlers passed down are stabilized via `useCallback`, and eliminate impure render-time generators to allow React's virtual DOM diffing to optimize renders efficiently.
