@@ -2,8 +2,9 @@ import { Box, Card, Typography } from "@mui/material";
 import { useTheme } from "@mui/material/styles";
 import { LineChart, Line, ResponsiveContainer } from "recharts";
 import { CountUp } from "./CountUp";
+import { memo } from "react";
 
-export function MetricCard({ metric }) {
+export const MetricCard = memo(function MetricCard({ metric }) {
   const theme = useTheme();
   const isPositive = metric.change >= 0;
 
@@ -63,4 +64,4 @@ export function MetricCard({ metric }) {
       </Box>
     </Card>
   );
-}
+});
