@@ -1,11 +1,9 @@
-import { useEffect, useRef, useState, useContext, useMemo } from "react";
+import { useEffect, useRef, useState, useContext, useMemo, memo } from "react";
 import { Stack, Box } from "@mui/material";
 import { appContext } from "../Context/AppContextProvider";
 import { MetricCard } from "./MetricCards_Components/MetricCard";
 
-export default function MetricCards() {
-  const { globalMetrics, currency } = useContext(appContext);
-
+const MetricCardsContent = memo(function MetricCardsContent({ metrics, isLoading }) {
   // ------------------------
   // Track mobile/desktop dynamically
   // ------------------------
@@ -22,46 +20,6 @@ export default function MetricCards() {
   const isDraggingRef = useRef(false);
   const startXRef = useRef(0);
   const scrollLeftRef = useRef(0);
-
-  // ------------------------
-  // Loading check
-  // ------------------------
-  const isLoading = !globalMetrics?.data;
-
-  // ------------------------
-  // Metrics memo
-  // ------------------------
-  const metrics = useMemo(() => {
-    if (isLoading) return [];
-    const globalData = globalMetrics.data;
-
-    return [
-      {
-        title: "Market Cap",
-        value:
-          globalData.total_market_cap?.[currency?.name?.toLowerCase?.()] || 0,
-        change: globalData.market_cap_change_percentage_24h_usd || 0,
-        data:
-          globalMetrics.topCoins?.map(
-            (c) => c.sparkline_in_7d?.price?.[0] || 0
-          ) || [],
-      },
-      {
-        title: "Active Cryptos",
-        value: globalData.active_cryptocurrencies || 0,
-        change: 0,
-        data: globalMetrics.topCoins?.map((c) => c.market_cap || 0) || [],
-      },
-      {
-        title: "Fear & Greed",
-        value: globalMetrics.fearGreed?.value || 0,
-        change: 0,
-        data: Array.from({ length: 7 }, () =>
-          (parseInt(globalMetrics.fearGreed?.value) || 0) + Math.random() * 5 - 2
-        ),
-      },
-    ];
-  }, [globalMetrics, currency, isLoading]);
 
   // ------------------------
   // Dragging logic for desktop
@@ -146,4 +104,50 @@ export default function MetricCards() {
       </Stack>
     </Box>
   );
+});
+
+export default function MetricCards() {
+  const { globalMetrics, currency, cryptoListing } = useContext(appContext);
+
+  // ------------------------
+  // Loading check
+  // ------------------------
+  const isLoading = !globalMetrics?.data;
+
+  // ------------------------
+  // Metrics memo
+  // ------------------------
+  const metrics = useMemo(() => {
+    if (isLoading) return [];
+    const globalData = globalMetrics.data;
+
+    return [
+      {
+        title: "Market Cap",
+        value:
+          globalData.total_market_cap?.[currency?.name?.toLowerCase?.()] || 0,
+        change: globalData.market_cap_change_percentage_24h_usd || 0,
+        data:
+          cryptoListing.data?.map(
+            (c) => c.sparkline_in_7d?.price?.[0] || 0
+          ) || [],
+      },
+      {
+        title: "Active Cryptos",
+        value: globalData.active_cryptocurrencies || 0,
+        change: 0,
+        data: cryptoListing.data?.map((c) => c.market_cap || 0) || [],
+      },
+      {
+        title: "Fear & Greed",
+        value: globalMetrics.fearGreed?.value || 0,
+        change: 0,
+        data: Array.from({ length: 7 }, (_, i) =>
+          (parseInt(globalMetrics.fearGreed?.value) || 0) + Math.sin(i) * 5
+        ),
+      },
+    ];
+  }, [globalMetrics, currency, cryptoListing, isLoading]);
+
+  return <MetricCardsContent metrics={metrics} isLoading={isLoading} />;
 }
