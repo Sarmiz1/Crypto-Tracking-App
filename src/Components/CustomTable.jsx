@@ -8,12 +8,17 @@ import {
 import { useTheme } from "@mui/material/styles";
 import KeyboardArrowUpIcon from "@mui/icons-material/KeyboardArrowUp";
 import KeyboardArrowDownIcon from "@mui/icons-material/KeyboardArrowDown";
-import { useRef, useState, useEffect } from "react";
+import { useRef, useState, useEffect, useContext } from "react";
 
 import CustomTableHead from "./CustomTable_Components/CustomTableHead";
 import CustomTableBody from "./CustomTable_Components/CustomTableBody";
+import { appContext } from "../Context/AppContextProvider";
 
 export default function CustomTable({ coins, currency, section }) {
+  const {
+    watchList: { watchlist, setWatchlist },
+  } = useContext(appContext);
+
   const theme = useTheme();
   const isDark = theme.palette.mode === "dark";
   const stickyBg = theme.palette.background.paper;
@@ -152,6 +157,8 @@ export default function CustomTable({ coins, currency, section }) {
             coins={coins}
             currency={currency}
             section={section}
+            watchlist={watchlist}
+            setWatchlist={setWatchlist}
           />
         </Table>
       </TableContainer>
