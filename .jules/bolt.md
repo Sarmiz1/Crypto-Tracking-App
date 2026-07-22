@@ -1,0 +1,3 @@
+## 2026-03-05 - Avoid Recharts ResponsiveContainer in Table Rows
+**Learning:** Using Recharts `ResponsiveContainer` inside mapped rows (like `CustomTableBody` or `SpotTable`) introduces high rendering and layout overhead because it instantiates an active `ResizeObserver` for each row, severely slowing down render/scroll/layout calculations. If the parent container has fixed dimensions, specifying `width` and `height` directly on `<LineChart>` completely bypasses ResizeObserver creation and drastically improves rendering speeds.
+**Action:** When drawing sparklines or small charts inside tables or grids with fixed size containers, specify the exact dimensions directly on `<LineChart>` and never wrap them in `<ResponsiveContainer>`.
