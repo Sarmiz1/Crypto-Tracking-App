@@ -1,0 +1,3 @@
+## 2026-07-23 - Eliminating ResponsiveContainer layout cost in list components
+**Learning:** Instantiating Recharts `<ResponsiveContainer>` inside repeating row/list structures (such as `CustomTableBody` or `SpotTable`) introduces severe CPU overhead. This is because every single row spins up a dynamic browser `ResizeObserver` listener. When list sizes grow (e.g., to 100 rows), this triggers heavy render loops, layout thrashing, and scroll lag.
+**Action:** Always prefer rendering `<LineChart>` directly with fixed dimensions (e.g., matching the static dimensions of its parent container) inside lists or repeating maps to completely bypass `ResizeObserver` creation.
