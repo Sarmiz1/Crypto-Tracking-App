@@ -62,7 +62,7 @@ export default function SpotTable({
 
         setSpotMarkets(enriched);
         setError(null);
-      } catch (err) {
+      } catch {
         if (!mounted) return;
         setError("Failed to fetch spot market");
       } finally {
@@ -164,17 +164,21 @@ export default function SpotTable({
                   </TableCell>
 
                   <TableCell width={120}>
-                    <ResponsiveContainer width="100%" height={40}>
-                      <LineChart data={row.chart}>
-                        <Line
-                          type="monotone"
-                          dataKey="value"
-                          stroke="#16c784"
-                          dot={false}
-                          strokeWidth={2}
-                        />
-                      </LineChart>
-                    </ResponsiveContainer>
+                    {/*
+                      ⚡ Bolt: Removed <ResponsiveContainer> inside the table row.
+                      ResponsiveContainer relies on ResizeObserver, which incurs huge layout and performance overhead
+                      when instantiated for each row in a table.
+                      Passing fixed dimensions directly to LineChart eliminates layout trashing and lag.
+                    */}
+                    <LineChart data={row.chart} width={120} height={40}>
+                      <Line
+                        type="monotone"
+                        dataKey="value"
+                        stroke="#16c784"
+                        dot={false}
+                        strokeWidth={2}
+                      />
+                    </LineChart>
                   </TableCell>
                 </TableRow>
               ))
