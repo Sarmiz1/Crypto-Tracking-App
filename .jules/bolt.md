@@ -1,0 +1,3 @@
+## 2025-07-24 - [ResponsiveContainer Overhead inside Map Loops]
+**Learning:** Instantiating `<ResponsiveContainer>` from Recharts inside a mapped list/table row (like `CustomTableBody` or `SpotTable`) incurs massive performance overhead. This occurs because each `<ResponsiveContainer>` sets up its own `ResizeObserver` to dynamically track dimensions. When rendering 30 to 100 rows, this triggers severe layout thrashing, CPU overhead, and scroll stuttering.
+**Action:** When drawing sparklines or micro-charts within repeated list items or table cells where columns have fixed or predictable sizes, bypass `<ResponsiveContainer>` entirely. Instead, pass fixed `width` and `height` properties directly to `<LineChart>` to optimize rendering speed.
