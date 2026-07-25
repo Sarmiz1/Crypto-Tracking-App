@@ -1,0 +1,3 @@
+## 2025-07-25 - ResponsiveContainer Overhead in List Rendering
+**Learning:** Using Recharts `ResponsiveContainer` inside mapped rows/lists creates a massive bottleneck. Each instance sets up an active `ResizeObserver` on the DOM node. When scrolling or switching tabs in large tables (e.g., 100 rows), this leads to layout thrashing, scroll jitter, and CPU-intensive rendering loops.
+**Action:** Always prefer setting static `width` and `height` dimensions directly on `<LineChart>` or similar Recharts chart components when they are rendered inside mapped table rows, lists, or grids where container dimensions are predefined or constrained.
