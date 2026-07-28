@@ -1,0 +1,3 @@
+## 2025-03-02 - Recharts ResponsiveContainer Row Overhead
+**Learning:** Using Recharts `ResponsiveContainer` inside lists or mapped table rows introduces high rendering and layout overhead because it instantiates an active `ResizeObserver` for each row, resulting in layout thrashing and scroll lag. Bypassing it by specifying explicit, fixed dimensions directly on `<LineChart>` completely removes this overhead when the parent container's dimensions are known.
+**Action:** Always avoid `ResponsiveContainer` inside repeating loops or table rows; specify explicit width and height props directly on the chart components.
