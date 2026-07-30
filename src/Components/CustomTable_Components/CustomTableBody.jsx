@@ -169,19 +169,22 @@ export default function CustomTableBody({
             {/* Sparkline chart */}
             <TableCell align="right">
               <Box sx={{ height: 50, width: 120 }}>
-                <ResponsiveContainer width="100%" height="100%">
-                  <LineChart data={chartData}>
-                    <XAxis dataKey="time" hide />
-                    <YAxis hide domain={["dataMin", "dataMax"]} />
-                    <Line
-                      type="monotone"
-                      dataKey="value"
-                      stroke={isPositive ? "#00c853" : "#d32f2f"}
-                      strokeWidth={2}
-                      dot={false}
-                    />
-                  </LineChart>
-                </ResponsiveContainer>
+                {/*
+                  Optimization: Removed ResponsiveContainer inside table rows because it instantiates
+                  an active ResizeObserver per row, causing severe render/scrolling overhead.
+                  Using static width and height directly on LineChart completely avoids this.
+                */}
+                <LineChart width={120} height={50} data={chartData}>
+                  <XAxis dataKey="time" hide />
+                  <YAxis hide domain={["dataMin", "dataMax"]} />
+                  <Line
+                    type="monotone"
+                    dataKey="value"
+                    stroke={isPositive ? "#00c853" : "#d32f2f"}
+                    strokeWidth={2}
+                    dot={false}
+                  />
+                </LineChart>
               </Box>
             </TableCell>
           </TableRow>
