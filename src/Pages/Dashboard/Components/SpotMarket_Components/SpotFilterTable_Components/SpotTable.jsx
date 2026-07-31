@@ -10,7 +10,7 @@ import {
   Box,
   TablePagination,
 } from "@mui/material";
-import { LineChart, Line, ResponsiveContainer } from "recharts";
+import { LineChart, Line } from "recharts";
 import { useEffect, useState, useMemo } from "react";
 import { formatLargeDigits } from '../../../../../utils/formatLargeDigits'
 import currencyFormat  from '../../../../../utils/currencyFormat'
@@ -62,7 +62,7 @@ export default function SpotTable({
 
         setSpotMarkets(enriched);
         setError(null);
-      } catch (err) {
+      } catch {
         if (!mounted) return;
         setError("Failed to fetch spot market");
       } finally {
@@ -164,17 +164,20 @@ export default function SpotTable({
                   </TableCell>
 
                   <TableCell width={120}>
-                    <ResponsiveContainer width="100%" height={40}>
-                      <LineChart data={row.chart}>
-                        <Line
-                          type="monotone"
-                          dataKey="value"
-                          stroke="#16c784"
-                          dot={false}
-                          strokeWidth={2}
-                        />
-                      </LineChart>
-                    </ResponsiveContainer>
+                    {/*
+                      Optimization: Removed ResponsiveContainer to avoid creating multiple active ResizeObservers per row.
+                      Specifying width and height directly on LineChart completely bypasses ResizeObserver creation,
+                      significantly improving rendering performance of the table rows.
+                    */}
+                    <LineChart data={row.chart} width={120} height={40}>
+                      <Line
+                        type="monotone"
+                        dataKey="value"
+                        stroke="#16c784"
+                        dot={false}
+                        strokeWidth={2}
+                      />
+                    </LineChart>
                   </TableCell>
                 </TableRow>
               ))
