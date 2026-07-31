@@ -1,0 +1,3 @@
+## 2025-07-31 - Recharts ResponsiveContainer in List Render Loop
+**Learning:** Using Recharts `ResponsiveContainer` inside list or table row mapping introduces high rendering and layout overhead because it instantiates an active `ResizeObserver` for each row; when the parent container has fixed dimensions, removing `ResponsiveContainer` and specifying `width` and `height` directly on `<LineChart>` completely bypasses ResizeObserver creation, significantly optimizing rendering speeds and preventing scroll lag.
+**Action:** Always avoid `ResponsiveContainer` within dynamic lists or table row mappings. Specify fixed dimensions on the charts directly if parent dimensions are constant, preventing excessive ResizeObservers.
