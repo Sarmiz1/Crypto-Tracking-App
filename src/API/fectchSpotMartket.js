@@ -36,8 +36,8 @@ export async function fetchSpotMarket(
 }
 
 export function generateSparkline(price) {
-  return Array.from({ length: 7 }, () => ({
-    value: price * (1 + (Math.random() - 0.5) * 0.02),
+  return Array.from({ length: 7 }, (_, i) => ({
+    value: price * (1 + Math.sin(i) * 0.01),
   }));
 }
 
