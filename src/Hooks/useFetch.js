@@ -29,7 +29,9 @@ export const useFetch = (url, options = {}, deps = []) => {
   }, [url]);
 
   useEffect(() => {
+    /* eslint-disable-next-line react-hooks/set-state-in-effect */
     fetchData();
+    /* eslint-disable-next-line react-hooks/exhaustive-deps */
   }, [fetchData, ...deps]);
 
   return { data, loading, error, refetch: fetchData };
