@@ -31,7 +31,7 @@ export default function IndexIconsButton({ type, scrollRef }) {
       el.removeEventListener("scroll", updateButtons);
       window.removeEventListener("resize", updateButtons);
     };
-  }, [updateButtons]);
+  }, [updateButtons, scrollRef]);
 
   const scroll = (dir) => {
     const el = scrollRef.current;
