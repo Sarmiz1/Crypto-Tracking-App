@@ -1,0 +1,3 @@
+## 2025-03-05 - Avoid ResponsiveContainer in Large Lists or Tables
+**Learning:** Using Recharts `ResponsiveContainer` inside mapped list components or table rows (like `CustomTableBody` or `SpotTable`) introduces massive rendering and layout overhead. This is because a separate active `ResizeObserver` is instantiated for each and every row in the browser, causing substantial scrolling and rendering lag.
+**Action:** Remove `ResponsiveContainer` and specify fixed `width` and `height` dimensions directly on `<LineChart>` inside table row mappings. This completely bypasses ResizeObserver creation and drastically improves scroll/rendering performance.
