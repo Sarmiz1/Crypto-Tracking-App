@@ -1,0 +1,3 @@
+## 2025-02-18 - Avoid ResponsiveContainer inside mapped rows
+**Learning:** Using Recharts `ResponsiveContainer` inside maps or table row arrays (such as in `CustomTableBody` or `SpotTable`) introduces massive rendering and layout overhead because it creates and registers a fresh active `ResizeObserver` for each row. This results in heavy layout thrashing and sluggish scroll performance.
+**Action:** When mapping lists of static charts with fixed dimensions, bypass `ResizeObserver` creation entirely by omitting `ResponsiveContainer` and specifying `width` and `height` props directly on the `<LineChart>` component.

@@ -4,7 +4,7 @@ import { appContext } from "../Context/AppContextProvider";
 import { MetricCard } from "./MetricCards_Components/MetricCard";
 
 export default function MetricCards() {
-  const { globalMetrics, currency } = useContext(appContext);
+  const { globalMetrics, cryptoListing, currency } = useContext(appContext);
 
   // ------------------------
   // Track mobile/desktop dynamically
@@ -42,7 +42,7 @@ export default function MetricCards() {
           globalData.total_market_cap?.[currency?.name?.toLowerCase?.()] || 0,
         change: globalData.market_cap_change_percentage_24h_usd || 0,
         data:
-          globalMetrics.topCoins?.map(
+          cryptoListing.data?.map(
             (c) => c.sparkline_in_7d?.price?.[0] || 0
           ) || [],
       },
@@ -50,18 +50,19 @@ export default function MetricCards() {
         title: "Active Cryptos",
         value: globalData.active_cryptocurrencies || 0,
         change: 0,
-        data: globalMetrics.topCoins?.map((c) => c.market_cap || 0) || [],
+        data: cryptoListing.data?.map((c) => c.market_cap || 0) || [],
       },
       {
         title: "Fear & Greed",
         value: globalMetrics.fearGreed?.value || 0,
         change: 0,
-        data: Array.from({ length: 7 }, () =>
-          (parseInt(globalMetrics.fearGreed?.value) || 0) + Math.random() * 5 - 2
+        // Using stable Math.sin(i) instead of impure Math.random() to satisfy strict React purity linting
+        data: Array.from({ length: 7 }, (_, i) =>
+          (parseInt(globalMetrics.fearGreed?.value) || 0) + Math.sin(i) * 5
         ),
       },
     ];
-  }, [globalMetrics, currency, isLoading]);
+  }, [globalMetrics, currency, isLoading, cryptoListing.data]);
 
   // ------------------------
   // Dragging logic for desktop
