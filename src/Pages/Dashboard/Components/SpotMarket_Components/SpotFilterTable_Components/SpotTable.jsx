@@ -62,7 +62,7 @@ export default function SpotTable({
 
         setSpotMarkets(enriched);
         setError(null);
-      } catch (err) {
+      } catch {
         if (!mounted) return;
         setError("Failed to fetch spot market");
       } finally {
@@ -164,17 +164,15 @@ export default function SpotTable({
                   </TableCell>
 
                   <TableCell width={120}>
-                    <ResponsiveContainer width="100%" height={40}>
-                      <LineChart data={row.chart}>
-                        <Line
-                          type="monotone"
-                          dataKey="value"
-                          stroke="#16c784"
-                          dot={false}
-                          strokeWidth={2}
-                        />
-                      </LineChart>
-                    </ResponsiveContainer>
+                    <LineChart width={120} height={40} data={row.chart}>
+                      <Line
+                        type="monotone"
+                        dataKey="value"
+                        stroke="#16c784"
+                        dot={false}
+                        strokeWidth={2}
+                      />
+                    </LineChart>
                   </TableCell>
                 </TableRow>
               ))
