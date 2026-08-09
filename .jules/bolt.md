@@ -1,0 +1,3 @@
+## 2025-08-09 - Memoization of Core React Context Provider Values
+**Learning:** Returning a newly created object literal as the context value in a root provider like `AppContextProvider` causes all consumer components to re-render on any state change inside the provider, even if the consumed sub-fields have not changed. Memoizing the core context value and its individual domain sub-objects using `useMemo` prevents unnecessary downstream re-renders and keeps the application lightning fast.
+**Action:** Always wrap the value of a high-level React Context Provider in `useMemo`, and wrap its action handler functions (e.g., `handleTabChange`) in `useCallback` to ensure reference stability across renders.
