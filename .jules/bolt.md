@@ -1,0 +1,3 @@
+## 2026-08-14 - Sparkline ResponsiveContainer Optimization
+**Learning:** Recharts ResponsiveContainer inside mapping functions (like SpotTable) creates active ResizeObserver instances for each row, resulting in high rendering and layout overhead and causing visible lag during scroll or page transition. Removing ResponsiveContainer and specifying fixed width and height directly on the LineChart inside mapped list items bypasses active ResizeObservers, significantly optimizing rendering speeds and removing scroll lag.
+**Action:** Replace ResponsiveContainer with static dimensions on LineChart within SpotTable list rows and custom table list rows.
