@@ -1,13 +1,12 @@
-import PropTypes from 'prop-types';
 import CircularProgress from '@mui/material/CircularProgress';
 import Typography from '@mui/material/Typography';
 import Box from '@mui/material/Box';
 import { useState, useEffect } from 'react';
 
-function CircularProgressWithLabel(props) {
+function CircularProgressWithLabel({ value, ...props }) {
   return (
     <Box sx={{ position: 'relative', display: 'inline-flex' }}>
-      <CircularProgress variant="determinate" {...props} />
+      <CircularProgress variant="determinate" value={value} {...props} />
       <Box
         sx={{
           top: 0,
@@ -25,21 +24,12 @@ function CircularProgressWithLabel(props) {
           component="div"
           sx={{ color: 'text.secondary' }}
         >
-          {`${Math.round(props.value)}%`}
+          {`${Math.round(value)}%`}
         </Typography>
       </Box>
     </Box>
   );
 }
-
-CircularProgressWithLabel.propTypes = {
-  /**
-   * The value of the progress indicator for the determinate variant.
-   * Value between 0 and 100.
-   * @default 0
-   */
-  value: PropTypes.number.isRequired,
-};
 
 export const TablesFallbackPage = () => {
   const [progress, setProgress] = useState(10);
