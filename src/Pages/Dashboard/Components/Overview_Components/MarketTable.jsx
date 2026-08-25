@@ -8,7 +8,7 @@ import {
   TableContainer,
   Box,
 } from "@mui/material";
-import { useContext } from "react";
+import { useContext, useMemo } from "react";
 import { appContext } from "../../../../Context/AppContextProvider";
 import { formatLargeDigits } from "../../../../utils/formatLargeDigits";
 import currencyFormat from "../../../../utils/currencyFormat";
@@ -19,15 +19,20 @@ export default function MarketTable() {
   const { cryptoListing, currency } = useContext(appContext);
   const { symbol: currencySymbol } = currency || {};
   const { data, loading, error } = cryptoListing || {};
-  const markets = data?.slice(12, 35).map((coin) => ({
-    id: coin.id,
-    price: coin.current_price,
-    name: coin.name,
-    image: coin.image,
-    volume: coin.total_volume,
-    symbol: coin.symbol,
-    changePercent_24: coin.price_change_percentage_24h,
-  }));
+
+  // ⚡ Bolt Optimization: Memoize markets array transformation to prevent
+  // unnecessary array re-allocations on unrelated context re-renders.
+  const markets = useMemo(() => {
+    return data?.slice(12, 35).map((coin) => ({
+      id: coin.id,
+      price: coin.current_price,
+      name: coin.name,
+      image: coin.image,
+      volume: coin.total_volume,
+      symbol: coin.symbol,
+      changePercent_24: coin.price_change_percentage_24h,
+    }));
+  }, [data]);
 
   if (loading) return <LoadingState />
 
