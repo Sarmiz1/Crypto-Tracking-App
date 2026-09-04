@@ -4,10 +4,11 @@ export const generateETFData = (days) => {
   let base = 200;
 
   for (let i = 0; i < days; i++) {
-    const randomVolatility = (Math.random() - 0.5) * 800;
+    // Deterministic pseudo-volatility using Math.sin to ensure React purity
+    const pseudoVolatility = Math.sin(i * 12.9898 + days) * 400;
     const trend = Math.sin(i / 20) * 300;
 
-    const flow = Math.round(base + randomVolatility + trend);
+    const flow = Math.round(base + pseudoVolatility + trend);
 
     const date = new Date();
     date.setDate(date.getDate() - (days - i));

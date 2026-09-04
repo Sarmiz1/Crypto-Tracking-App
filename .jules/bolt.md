@@ -1,0 +1,3 @@
+## 2025-05-18 - Memoize ETF Net Flow Dataset Generation
+**Learning:** `generateETFData` was generating 2,220 objects with date string conversions synchronously on every render and tab switch in `CryptoETFsNetFlow`. In React components rendering large mock datasets across timeframes (30d, 1y, 5y), wrapping array generator functions in `useMemo` prevents synchronous main thread blocking and memory reallocation. Replacing `Math.random()` with deterministic trigonometric formulas (`Math.sin()`) maintains React component purity while enabling memoization.
+**Action:** Wrap synchronous mock/synthetic dataset generation functions in `useMemo` and ensure underlying generator functions are pure and deterministic.
