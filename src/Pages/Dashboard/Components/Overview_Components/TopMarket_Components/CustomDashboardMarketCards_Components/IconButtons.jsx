@@ -31,7 +31,7 @@ export default function IconButtons({ mode, scrollRef, type }) {
       el.removeEventListener("scroll", updateScroll);
       window.removeEventListener("resize", updateScroll);
     };
-  }, [updateScroll]);
+  }, [updateScroll, scrollRef]);
 
   const scroll = (direction) => {
     const el = scrollRef.current;
