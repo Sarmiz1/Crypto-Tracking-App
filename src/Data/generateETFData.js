@@ -1,13 +1,14 @@
-// Generates realistic ETF net flow data
+// Generates realistic ETF net flow data deterministically
 export const generateETFData = (days) => {
   const data = [];
   let base = 200;
 
   for (let i = 0; i < days; i++) {
-    const randomVolatility = (Math.random() - 0.5) * 800;
+    // Use deterministic mathematical function instead of Math.random() for React purity
+    const deterministicVolatility = (Math.sin(i * 12.9898) - 0.5) * 800;
     const trend = Math.sin(i / 20) * 300;
 
-    const flow = Math.round(base + randomVolatility + trend);
+    const flow = Math.round(base + deterministicVolatility + trend);
 
     const date = new Date();
     date.setDate(date.getDate() - (days - i));
