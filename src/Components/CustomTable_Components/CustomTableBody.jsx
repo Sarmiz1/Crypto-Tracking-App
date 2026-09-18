@@ -9,7 +9,7 @@ import {
 import StarBorderIcon from "@mui/icons-material/StarBorder";
 import StarIcon from "@mui/icons-material/Star";
 import { useTheme } from "@mui/material/styles";
-import { LineChart, Line, ResponsiveContainer, XAxis, YAxis } from "recharts";
+import { LineChart, Line, XAxis, YAxis } from "recharts";
 import currencyFormat from "../../utils/currencyFormat";
 import { formatLargeDigits } from "../../utils/formatLargeDigits";
 import { useContext } from "react";
@@ -169,19 +169,18 @@ export default function CustomTableBody({
             {/* Sparkline chart */}
             <TableCell align="right">
               <Box sx={{ height: 50, width: 120 }}>
-                <ResponsiveContainer width="100%" height="100%">
-                  <LineChart data={chartData}>
-                    <XAxis dataKey="time" hide />
-                    <YAxis hide domain={["dataMin", "dataMax"]} />
-                    <Line
-                      type="monotone"
-                      dataKey="value"
-                      stroke={isPositive ? "#00c853" : "#d32f2f"}
-                      strokeWidth={2}
-                      dot={false}
-                    />
-                  </LineChart>
-                </ResponsiveContainer>
+                {/* Bypassing ResponsiveContainer for fixed-dimension cell sparkline to avoid creating ResizeObserver per table row */}
+                <LineChart width={120} height={50} data={chartData}>
+                  <XAxis dataKey="time" hide />
+                  <YAxis hide domain={["dataMin", "dataMax"]} />
+                  <Line
+                    type="monotone"
+                    dataKey="value"
+                    stroke={isPositive ? "#00c853" : "#d32f2f"}
+                    strokeWidth={2}
+                    dot={false}
+                  />
+                </LineChart>
               </Box>
             </TableCell>
           </TableRow>
