@@ -1,0 +1,3 @@
+## 2026-03-29 - Memoizing synchronous dataset generation in CryptoETFsNetFlow
+**Learning:** In `CryptoETFsNetFlow.jsx`, data generation functions (`generateETFData`) were called synchronously on every render for three windows (30d, 365d, 1825d), generating 2,220 objects and formatted date strings per render frame. Wrapping these calls in `useMemo` avoids redundant allocation and string formatting on component re-renders.
+**Action:** When components generate dynamic or mock datasets, always memoize dataset allocation or generate data on demand for the active tab view to prevent main thread blocking during re-renders.
