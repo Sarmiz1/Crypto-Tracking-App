@@ -4,7 +4,9 @@ export const generateETFData = (days) => {
   let base = 200;
 
   for (let i = 0; i < days; i++) {
-    const randomVolatility = (Math.random() - 0.5) * 800;
+    // Deterministic pseudo-random volatility to ensure purity and avoid re-render purity errors
+    const pseudoRandom = Math.sin(i * 12.9898) * 0.5;
+    const randomVolatility = pseudoRandom * 800;
     const trend = Math.sin(i / 20) * 300;
 
     const flow = Math.round(base + randomVolatility + trend);
