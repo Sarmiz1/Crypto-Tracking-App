@@ -5,7 +5,7 @@ import TabSection from "./CryptoETFsNetFlow_Components/Tabs";
 import CurrentValue from "./CryptoETFsNetFlow_Components/CurrentValue";
 import Chart from "./CryptoETFsNetFlow_Components/Chart";
 import Footer from "./CryptoETFsNetFlow_Components/Footer";
-import { useState } from "react";
+import { useState, useMemo } from "react";
 
 export default function CryptoETFsNetFlow({ mode }) {
   const [tabValue, setTabValue] = useState(0);
@@ -14,9 +14,11 @@ export default function CryptoETFsNetFlow({ mode }) {
     setTabValue(newValue);
   };
 
-  const etf30d = generateETFData(30);
-  const etf1y = generateETFData(365);
-  const etfAll = generateETFData(5 * 365);
+  // Performance Optimization: Memoize ETF datasets across re-renders to prevent
+  // allocating over 2,200 objects synchronously on every tab switch or render.
+  const etf30d = useMemo(() => generateETFData(30), []);
+  const etf1y = useMemo(() => generateETFData(365), []);
+  const etfAll = useMemo(() => generateETFData(5 * 365), []);
 
   const getChartData = () => {
     switch (tabValue) {
