@@ -1,0 +1,3 @@
+## 2025-05-18 - Bypassing ResponsiveContainer in List Row Charts
+**Learning:** Using `ResponsiveContainer` inside mapped table or list rows (such as `SpotTable`) introduces high layout and observer overhead because it attaches a `ResizeObserver` listener to every rendered row. Bypassing `ResponsiveContainer` and setting `width` and `height` explicitly on `<LineChart>` avoids creating redundant observers and eliminates scroll lag and layout thrashing.
+**Action:** Always check if chart dimensions in table/list rows are fixed or predictable, and specify explicit dimensions directly on `<LineChart>` instead of wrapping each row chart in `ResponsiveContainer`.
