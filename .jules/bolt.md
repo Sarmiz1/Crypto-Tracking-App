@@ -1,0 +1,3 @@
+## 2025-09-28 - Memoizing Synchronous Data Generators in Components
+**Learning:** Generating large datasets (2,200+ objects) synchronously within component bodies during render blocks the main thread on every parent re-render or state change (e.g. tab switches). Using `useMemo` alongside deterministic calculations (using `Math.sin` instead of `Math.random()`) eliminates 2,200 object allocations per render and satisfies React purity ESLint rules.
+**Action:** When components calculate mock/chart datasets locally, wrap dataset creation in `useMemo` and ensure data generators use deterministic pure math functions.
