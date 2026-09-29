@@ -1,0 +1,3 @@
+## 2025-02-18 - Memoize mock/synthetic dataset generation in component bodies
+**Learning:** In components rendering data charts or lists (like `CryptoETFsNetFlow.jsx`), dataset generator functions (`generateETFData`) that construct hundreds or thousands of object instances with string/date formatting synchronously during render allocate thousands of objects and execute date calculations on every component state update or tab switch.
+**Action:** Wrap heavy mock or calculated data generators in `useMemo(() => generateData(...), [])` to ensure datasets are initialized once on mount instead of reallocating memory on every re-render.
