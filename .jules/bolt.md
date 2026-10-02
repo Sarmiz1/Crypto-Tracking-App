@@ -1,0 +1,3 @@
+## 2025-05-20 - [Memoizing large dynamic dataset generation in CryptoETFsNetFlow]
+**Learning:** Generating mock or dynamic data synchronously inside component bodies (like `generateETFData` producing >2,200 objects) on every render creates severe allocation overhead during minor state changes like tab switching. Wrapping data generation in `useMemo` and making data generator functions deterministic satisfies React purity requirements and avoids redundant array/object creations.
+**Action:** Always check component render loops for synchronous data generator functions and wrap them in `useMemo` with deterministic math inputs (`Math.sin` instead of `Math.random`).
