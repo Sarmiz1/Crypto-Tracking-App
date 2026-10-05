@@ -1,0 +1,3 @@
+## 2025-05-18 - ETF Dataset Allocation & Pure Generator Memoization
+**Learning:** In dashboard components like `CryptoETFsNetFlow`, mock/generated datasets (`generateETFData`) can create over 2,200 object instances across multiple timeframes (30d, 1y, 5y) per render. Combining `useMemo` for dataset references with pure, index-deterministic math functions (`Math.sin(i)`) prevents unnecessary GC allocation while maintaining strict React 19 purity compliance.
+**Action:** Always wrap data-generation helpers in `useMemo` in parent components and replace dynamic functions like `Math.random()` or dynamic `new Date()` calls with index-based functions to satisfy ESLint purity rules without triggering re-render overhead.
