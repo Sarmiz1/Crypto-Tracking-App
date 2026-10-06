@@ -1,5 +1,5 @@
 import { Box } from "@mui/material";
-import { keyframes } from "@mui/system";
+import { keyframes } from "@mui/material";
 
 export default function AnimatedInfinity() {
   
