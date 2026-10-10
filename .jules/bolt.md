@@ -1,0 +1,3 @@
+## 2025-05-20 - Memoization and Purity in ETF Net Flow Dataset
+**Learning:** Generating mock or historical series datasets (e.g. over 2,200 objects for 30d, 1y, 5y) directly within render functions without `useMemo` triggers heavy synchronous object allocations on every UI state update (like tab switches). Additionally, using `Math.random()` during data generation breaks React 19 component purity rules in ESLint.
+**Action:** Use deterministic mathematical functions like `Math.sin(i)` for mock series data and wrap multi-timeframe dataset generation in `useMemo` with empty dependency arrays to maintain stable references and eliminate redundant allocations.
