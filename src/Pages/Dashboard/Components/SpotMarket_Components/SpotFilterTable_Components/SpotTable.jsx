@@ -10,7 +10,8 @@ import {
   Box,
   TablePagination,
 } from "@mui/material";
-import { LineChart, Line, ResponsiveContainer } from "recharts";
+// ResponsiveContainer is omitted in table row mapping to prevent creating multiple ResizeObserver instances
+import { LineChart, Line } from "recharts";
 import { useEffect, useState, useMemo } from "react";
 import { formatLargeDigits } from '../../../../../utils/formatLargeDigits'
 import currencyFormat  from '../../../../../utils/currencyFormat'
@@ -62,7 +63,7 @@ export default function SpotTable({
 
         setSpotMarkets(enriched);
         setError(null);
-      } catch (err) {
+      } catch {
         if (!mounted) return;
         setError("Failed to fetch spot market");
       } finally {
@@ -163,18 +164,17 @@ export default function SpotTable({
                     {formatLargeDigits(row.volume, currencySymbol)}
                   </TableCell>
 
+                  {/* Sparkline chart - fixed dimensions directly on LineChart to avoid ResponsiveContainer ResizeObserver overhead per row */}
                   <TableCell width={120}>
-                    <ResponsiveContainer width="100%" height={40}>
-                      <LineChart data={row.chart}>
-                        <Line
-                          type="monotone"
-                          dataKey="value"
-                          stroke="#16c784"
-                          dot={false}
-                          strokeWidth={2}
-                        />
-                      </LineChart>
-                    </ResponsiveContainer>
+                    <LineChart width={120} height={40} data={row.chart}>
+                      <Line
+                        type="monotone"
+                        dataKey="value"
+                        stroke="#16c784"
+                        dot={false}
+                        strokeWidth={2}
+                      />
+                    </LineChart>
                   </TableCell>
                 </TableRow>
               ))
