@@ -1,4 +1,4 @@
-import { useState, useContext } from "react";
+import { useState, useContext, useMemo } from "react";
 import { Box, Typography, CircularProgress, Alert } from "@mui/material";
 import CustomTabPanel from "../../../../Components/CustomTabPanel";
 import { appContext } from "../../../../Context/AppContextProvider";
@@ -19,17 +19,20 @@ export default function PredictionMarket({ value }) {
     error: predictionError,
   } = predictionMarkets || {};
 
-  const categories = ["all", "crypto", "politics", "economy", "sports"];
+  const categories = useMemo(() => ["all", "crypto", "politics", "economy", "sports"], []);
 
-  const filteredMarkets =
-    categories[tab] === "all"
-      ? predictionMarket || []
-      : (predictionMarket || []).filter((market) => {
-        const questionLower = market.question?.toLowerCase() || "";
-        return categoryKeywords[categories[tab]].some((kw) =>
-          questionLower.includes(kw),
-        );
-      });
+  // Memoize filtered markets to prevent string matching and array filtering on unrelated re-renders
+  const filteredMarkets = useMemo(() => {
+    if (categories[tab] === "all") {
+      return predictionMarket || [];
+    }
+    return (predictionMarket || []).filter((market) => {
+      const questionLower = market.question?.toLowerCase() || "";
+      return categoryKeywords[categories[tab]].some((kw) =>
+        questionLower.includes(kw),
+      );
+    });
+  }, [categories, tab, predictionMarket]);
 
 
 
