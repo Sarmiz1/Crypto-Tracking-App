@@ -1,0 +1,3 @@
+## 2026-10-22 - Memoizing Heavy Data Generation Functions
+**Learning:** In components like `CryptoETFsNetFlow.jsx`, mock/chart dataset generation (`generateETFData`) generates 2,220+ date/flow objects synchronously on every render. If not memoized with `useMemo`, each render/tab switch incurs ~10ms of main thread blocking and garbage collection overhead.
+**Action:** Always wrap heavy synchronous data generation or mapping functions in `useMemo` and ensure data generation helpers use pure, deterministic mathematical functions (like sine/cosine) instead of `Math.random()` to satisfy React purity rules.

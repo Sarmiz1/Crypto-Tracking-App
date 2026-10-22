@@ -4,7 +4,7 @@ export const generateETFData = (days) => {
   let base = 200;
 
   for (let i = 0; i < days; i++) {
-    const randomVolatility = (Math.random() - 0.5) * 800;
+    const randomVolatility = Math.sin(i * 0.7) * Math.cos(i * 0.3) * 800;
     const trend = Math.sin(i / 20) * 300;
 
     const flow = Math.round(base + randomVolatility + trend);
