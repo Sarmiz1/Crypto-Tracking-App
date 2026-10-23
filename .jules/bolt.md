@@ -1,0 +1,3 @@
+## 2025-05-18 - ETF Dataset Memoization and Pure Functions
+**Learning:** In components rendering data charts over large historical windows (such as 30d, 1y, 5y), calling generator functions directly in the component render body forces synchronous re-allocation of thousands of data objects (and Date string formatting) on every render. Wrapping these generator calls in `useMemo` and making data generation pure/deterministic (using `Math.sin` rather than `Math.random`) yields significant rendering speedup and complies with React 19 purity rules.
+**Action:** Always check if mock/chart data generation logic is executed directly inside render functions without `useMemo`, and ensure all mock generator functions are pure and deterministic.
