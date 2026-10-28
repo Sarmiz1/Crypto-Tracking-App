@@ -5,33 +5,21 @@ import TabSection from "./CryptoETFsNetFlow_Components/Tabs";
 import CurrentValue from "./CryptoETFsNetFlow_Components/CurrentValue";
 import Chart from "./CryptoETFsNetFlow_Components/Chart";
 import Footer from "./CryptoETFsNetFlow_Components/Footer";
-import { useState } from "react";
+import { useState, useMemo, useCallback } from "react";
 
 export default function CryptoETFsNetFlow({ mode }) {
   const [tabValue, setTabValue] = useState(0);
 
-  const handleTabChange = (event, newValue) => {
+  const handleTabChange = useCallback((event, newValue) => {
     setTabValue(newValue);
-  };
+  }, []);
 
-  const etf30d = generateETFData(30);
-  const etf1y = generateETFData(365);
-  const etfAll = generateETFData(5 * 365);
-
-  const getChartData = () => {
-    switch (tabValue) {
-      case 0:
-        return etf30d;
-      case 1:
-        return etf1y;
-      case 2:
-        return etfAll;
-      default:
-        return etf30d;
-    }
-  };
-
-  const chartData = getChartData();
+  // Performance optimization: Generate ETF data on-demand for active tab only,
+  // memoizing the result to avoid recreating 2,200+ objects on every component re-render.
+  const chartData = useMemo(() => {
+    const days = tabValue === 0 ? 30 : tabValue === 1 ? 365 : 5 * 365;
+    return generateETFData(days);
+  }, [tabValue]);
   const latestFlow = chartData[chartData.length - 1]?.flow || 0;
   const isPositive = latestFlow >= 0;
 
